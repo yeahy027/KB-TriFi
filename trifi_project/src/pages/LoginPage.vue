@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -51,6 +51,14 @@ import Swal from 'sweetalert2'
 const email = ref('')
 const password = ref('')
 const router = useRouter()
+
+// 👉 이미 로그인된 사용자라면 /home으로 리다이렉트
+onMounted(() => {
+  const user = localStorage.getItem('user')
+  if (user) {
+    router.push('/home')
+  }
+})
 
 const login = async () => {
   try {
