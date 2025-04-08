@@ -13,9 +13,11 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
+app.mount('#app')
+
 // 🔥 윈도우 리사이즈 시 전체 차트 리사이즈
 window.addEventListener('resize', () => {
   resizeAllCharts()
 })
 
-app.mount('#app')
+
