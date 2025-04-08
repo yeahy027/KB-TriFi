@@ -7,20 +7,28 @@
         "category": "용돈",
         "amount": 500000,
         "type": "수입",
-        "memo": "용돈맛있당"
+        "memo": "알바비"
       },
       {
         "id": 2,
         "date": "25.4.7.(월)",
         "asset": "카드",
-        "category": "패션/미용",
+        "category": "쇼핑",
         "amount": 22909,
         "type": "지출",
         "memo": "무신사"
       },
       {
         "id": 3,
-        "date": "25.4.6.(월)",
+        "date": "25.4.6.(일)",
+        "asset": "현금",
+        "category": "식비",
+        "amount": 112222,
+        "type": "지출",
+        "memo": "아웃백"
+      },{
+        "id": 4,
+        "date": "25.3.6.(일)",
         "asset": "현금",
         "category": "식비",
         "amount": 112222,

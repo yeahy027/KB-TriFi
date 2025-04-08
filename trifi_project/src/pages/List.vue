@@ -3,14 +3,14 @@
       <div>
         <!-- 월 선택 및 날짜 -->
         <div class="d-flex align-items-center gap-2 mb-3">
-          <button class="btn btn-outline-secondary btn-sm">
+          <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
           <strong>{{ currentMonth }}</strong>
-          <button class="btn btn-outline-secondary btn-sm">
+          <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
-          <button class="btn btn-outline-primary btn-sm">이번 달</button>
+          <button class="btn btn-outline-primary btn-sm" @click="resetToThisMonth">📅이번 달</button>
         </div>
   
         <!-- 엑셀 다운로드 -->
@@ -25,34 +25,31 @@
           <div><strong>전체 내역 {{ filteredRecords.length }}건</strong></div>
           <div class="d-flex gap-3 align-items-center">
             <button class="btn btn-outline-danger btn-sm" @click="filterType = '지출'">
-              총 지출 {{ totalExpense.toLocaleString() }} 원
+                💸지출 {{ totalExpense.toLocaleString() }}원
             </button>
             <button class="btn btn-outline-primary btn-sm" @click="filterType = '수입'">
-              총 수입 {{ totalIncome.toLocaleString() }} 원
+                💰수입 {{ totalIncome.toLocaleString() }}원
             </button>
             <button class="btn btn-outline-secondary btn-sm" @click="filterType = ''">
-              전체 보기
+                📋전체 보기
             </button>
           </div>
         </div>
   
-        <!-- 날짜별로 묶은 내역 -->
+        <!-- 날짜별 내역 -->
         <div v-for="(dailyRecords, date) in groupedRecords" :key="date" class="mb-4">
-          <!-- 날짜 헤더 -->
           <div class="fw-bold border-bottom pb-1 mb-2">{{ date }}</div>
   
-          <!-- 각 내역 -->
           <div
             v-for="record in dailyRecords"
             :key="record.id"
             class="d-flex align-items-center justify-content-between py-2 px-3 border-bottom"
           >
-            <!-- 카테고리 뱃지 -->
-            <span class="badge me-3" :class="getCategoryClass(record.category)">
-              {{ record.category }}
-            </span>
-  
-            <!-- 내용 및 결제수단 -->
+            <!-- 카테고리 아이콘 + 뱃지 -->
+            <span class="badge me-3 d-flex align-items-center gap-1" :class="getCategoryClass(record.category)">
+  {{ categoryIcons[record.category] || '❓' }} {{ record.category }}
+</span>
+            <!-- 내용 + 자산 -->
             <div class="flex-grow-1">
               <div>{{ record.memo }}</div>
               <small class="text-muted">{{ record.asset }}</small>
@@ -68,71 +65,120 @@
     </AppLayout>
   </template>
   
+
+
   <script setup>
   import AppLayout from '@/components/AppLayout.vue'
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
   import axios from 'axios'
   import * as XLSX from 'xlsx'
   import { saveAs } from 'file-saver'
   
-  const currentMonth = ref('2025-04')
+  const currentMonth = ref(new Date())
   const records = ref([])
-  const filterType = ref('') // '', '수입', '지출'
+  const filterType = ref('')
+
+  let fetchInterval = null;
+
+//   월 형식 변환
+const formatMonth = (date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth()+1).padStart(2,'0')
+    return `${year}-${month}`
+}
+
+const prevMonth = () => {
+    const newDate = new Date(currentDate.value)
+    newDate.setMonth(newDate.getMonth()-1)
+    currentDate.value = newDate
+}
+
+const nextMonth = () => {
+    const newDate = new Date(currentDate.value)
+    newDate.setMonth(newDate.getMonth()+1)
+    currentDate.value = newDate
+}
+
+// 이번 달로 초기화
+const resetToThisMonth = ()=>{
+    currentDate.value = new Date()
+
+}
   
-  // 데이터 불러오기
+  // axios 데이터
   const fetchRecords = async () => {
     const res = await axios.get('http://localhost:3000/records')
     records.value = res.data
   }
-  onMounted(() => {
-    fetchRecords()
-  })
+  onMounted(() => {fetchRecords();
+
+    fetchInterval = setInterval(()=>{fetchRecords();})
+  });
+
+  onUnmounted(() => {
+    if (fetchInterval) {
+      clearInterval(fetchInterval);
+      fetchInterval = null;
+    }
+  });
   
-  // 필터링된 데이터
   const filteredRecords = computed(() => {
-    if (filterType.value === '') return records.value
+    if (!filterType.value) return records.value
     return records.value.filter(r => r.type === filterType.value)
   })
   
-  // 날짜별로 그룹화
+
   const groupedRecords = computed(() => {
     const groups = {}
     filteredRecords.value.forEach(record => {
-      if (!groups[record.date]) {
-        groups[record.date] = []
-      }
+      if (!groups[record.date]) groups[record.date] = []
       groups[record.date].push(record)
     })
   
-    // 날짜 내림차순 정렬
     return Object.fromEntries(
       Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0]))
     )
   })
   
-  // 카테고리 뱃지 스타일
+  // 카테고리 뱃지 색상
   const getCategoryClass = (category) => {
     const categoryMap = {
       '식비': 'bg-primary',
       '교통': 'bg-success',
-      '의류': 'bg-warning text-dark',
+      '쇼핑': 'bg-warning text-dark',
       '문화': 'bg-info text-dark',
       '기타': 'bg-secondary',
       '용돈': 'bg-danger',
+      '저축': 'bg-dark',
     }
-    return categoryMap[category] || 'bg-dark'
+    return categoryMap[category] || 'bg-secondary'
   }
   
-  // 총 수입/지출 계산
+  // 카테고리 아이콘
+  const categoryIcons = {
+  '식비': '🍔',
+  '교통': '🚌',
+  '쇼핑': '👗',
+  '미용': '💅',
+  '문화': '🎬',
+  '저축': '🏦',
+  '기타': '📝',
+  '급여': '💰',
+  '용돈': '💰',
+  '선물': '🎁',
+  '의료': '💊',
+  '공과금': '💡',
+}
+  
+  // 수입/지출 합계
   const totalIncome = computed(() =>
     records.value.filter(r => r.type === '수입').reduce((sum, r) => sum + Number(r.amount), 0)
   )
-  
   const totalExpense = computed(() =>
     records.value.filter(r => r.type === '지출').reduce((sum, r) => sum + Number(r.amount), 0)
   )
   
-  // 엑셀 저장
+  // 엑셀 변환
   const downloadExcel = () => {
     const excelData = records.value.map(record => ({
       날짜: record.date,
@@ -155,8 +201,7 @@
   
   <style scoped>
   .badge {
-    min-width: 50px;
-    text-align: center;
+    min-width: 60px;
     font-size: 0.8rem;
     padding: 0.5em 0.75em;
   }
