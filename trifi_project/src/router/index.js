@@ -1,28 +1,54 @@
 import AppLayout from '../components/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import RegisterEdit from '../pages/Register_edit.vue';
-
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: AppLayout,
-  },
-  {
-    path: '/register',
-    name: 'RegisterEdit',
-    component: RegisterEdit,
-  },
-];
-
+import Login from '../pages/LoginPage.vue';
 const router = createRouter({
-  history: createWebHistory(),
-  routes /*:  [
-     {
+  history: createWebHistory(import.meta.env.BASE_UR),
+  routes: [
+    {
       path: '/',
-      name: 'home',
-      component: AppLayout,
-    }, 
-  ], */,
+      name: 'login',
+      component: Login,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../pages/RegisterPage.vue'),
+    },
+    {
+      path: '/stat',
+      name: 'stat',
+      component: () => import('../pages/StatsPage.vue'),
+    },
+    {
+      path: '/home',
+      name: 'calender',
+      component: () => import('../pages/CalendarPage.vue'),
+    },
+    {
+      path: '/list',
+      name: 'list',
+      component: () => import('../pages/ListPage.vue'),
+    },
+    {
+      path: '/goal',
+      name: 'goal',
+      component: () => import('../pages/GoalPage.vue'),
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: () => import('../pages/MypagePage.vue'),
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: () => import('../pages/MypagePage.vue'),
+    },
+    {
+      path: '/registeredit',
+      name: 'RegisterEdit',
+      component: () => import('../pages/Register_edit.vue'),
+    },
+  ],
 });
 export default router;
