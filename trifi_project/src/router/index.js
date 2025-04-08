@@ -38,15 +38,11 @@ const router = createRouter({
       name: 'goal',
       component: () => import('../pages/GoalPage.vue'),
     },
+
     {
       path: '/mypage',
       name: 'mypage',
-      component: () => import('../pages/MypagePage.vue'),
-    },
-    {
-      path: '/mypage',
-      name: 'mypage',
-      component: () => import('../pages/MypagePage.vue'),
+      component: () => import('../pages/MyPage.vue'),
     },
     {
       path: '/registeredit',
