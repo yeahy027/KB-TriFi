@@ -2,11 +2,11 @@
     <AppLayout>
       <div>
         <!-- 월 선택 및 날짜 -->
-        <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
-          <strong>{{ currentMonth }}</strong>
+          <strong class="month-text mx-auto">{{ formattedMonth }}</strong>
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
@@ -81,11 +81,11 @@
   let fetchInterval = null;
 
 //   월 형식 변환
-const formatMonth = (date) => {
-    const year = date.getFullYear()
-    const month = String(date.getMonth()+1).padStart(2,'0')
-    return `${year}-${month}`
-}
+const formattedMonth = computed(() => {
+    const year = currentMonth.value.getFullYear()
+    const month = String(currentMonth.value.getMonth()+1).padStart(2,'0')
+    return `${year}년 ${month}월`
+})
 
 const prevMonth = () => {
     const newDate = new Date(currentDate.value)
