@@ -8,7 +8,7 @@
         <AppHeader />
         <main class="bg-light" style="padding-top: 64px; min-height: 100vh;">
           <div class="container py-4">
-            <slot />
+            <router-view />
           </div>
         </main>
       </div>
@@ -16,6 +16,8 @@
   </template>
   
   <script setup>
+  import { RouterLink, RouterView } from 'vue-router'
+
   import AppSidebar from './AppSidebar.vue'
   import AppHeader from './AppHeader.vue'
   </script>
