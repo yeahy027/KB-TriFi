@@ -88,20 +88,20 @@ const formattedMonth = computed(() => {
 })
 
 const prevMonth = () => {
-    const newDate = new Date(currentDate.value)
+    const newDate = new Date(currentMonth.value)
     newDate.setMonth(newDate.getMonth()-1)
     currentDate.value = newDate
 }
 
 const nextMonth = () => {
-    const newDate = new Date(currentDate.value)
+    const newDate = new Date(currentMonth.value)
     newDate.setMonth(newDate.getMonth()+1)
     currentDate.value = newDate
 }
 
 // 이번 달로 초기화
 const resetToThisMonth = ()=>{
-    currentDate.value = new Date()
+    currentMonth.value = new Date()
 
 }
   
