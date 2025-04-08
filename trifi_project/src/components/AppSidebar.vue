@@ -17,11 +17,11 @@
 
 <script setup>
 const menuItems = [
-  { label: '캘린더', to: '/home' },
-  { label: '내역', to: '/list' },
-  { label: '통계', to: '/stat' },
-  { label: '챌린지', to: '/goal' },
-  { label: '마이페이지', to: '/mypage' },
+  { label: '📅 캘린더', to: '/home' },
+  { label: '🧾 내역', to: '/list' },
+  { label: '📊 통계', to: '/stat' },
+  { label: '🏆 챌린지', to: '/goal' },
+  { label: '👤 마이페이지', to: '/mypage' },
 ]
 </script>
 

@@ -6,7 +6,9 @@
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
-          <strong class="month-text mx-auto">{{ formattedMonth }}</strong>
+          <strong class="month-text mx-auto"
+          style="cursor:pointer"
+          @click="goToCalender">{{ formattedMonth }}</strong>
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
@@ -74,13 +76,21 @@
   import axios from 'axios'
   import * as XLSX from 'xlsx'
   import { saveAs } from 'file-saver'
-  
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
+
+  const goToCalender = () => {
+    const year = currentMonth.value.getFullYear()
+    const month = String(currentMonth.value.getMonth()+1).padStart(2,'0');
+    router.push(`/home`)
+  }
   const currentMonth = ref(new Date())
   const records = ref([])
   const filterType = ref('')
   
   // 월 형식 변환
-  const formattedMonth = computed(() => {
+    const formattedMonth = computed(() => {
     const year = currentMonth.value.getFullYear()
     const month = String(currentMonth.value.getMonth() + 1).padStart(2, '0')
     return `${year}년 ${month}월`

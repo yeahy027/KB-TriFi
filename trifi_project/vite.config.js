@@ -13,9 +13,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000', // 실제 API 서버 주소
+        target: 'http://localhost:3000', // ✅ 너의 백엔드 주소
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ''), // "/api" 제거
       },
     },
   },

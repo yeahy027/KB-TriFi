@@ -66,7 +66,7 @@
       "fixed": true
     },
     {
-      "id": "2",
+      "id": 2,
       "userId": 1,
       "type": "expense",
       "date": "2025-04-03",
@@ -74,6 +74,125 @@
       "category": "식비",
       "payment": "카드",
       "description": "점심",
+      "fixed": false
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "type": "expense",
+      "date": "2025-04-07",
+      "amount": 18000,
+      "category": "교통",
+      "payment": "카드",
+      "description": "지하철 정기권",
+      "fixed": false
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "type": "expense",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "payment": "카드",
+      "description": "문구점",
+      "fixed": false
+    },
+    {
+      "id": 5,
+      "userId": 1,
+      "type": "income",
+      "date": "2025-04-11",
+      "amount": 1000,
+      "category": "교통",
+      "payment": "현금",
+      "description": "ㅁㅇㅁㅇ",
+      "fixed": false
+    },
+    {
+      "id": 6,
+      "userId": 1,
+      "type": "income",
+      "date": "2025-04-12",
+      "amount": 1000,
+      "category": "교통",
+      "payment": "현금",
+      "description": "ㅁㅇㅁㅇ",
+      "fixed": false
+    },
+    {
+      "id": "f2b9",
+      "type": "지출",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "paymentMethod": "카드",
+      "description": "문구점"
+    },
+    {
+      "id": "3656",
+      "type": "지출",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "paymentMethod": "카드",
+      "description": "문구점"
+    },
+    {
+      "id": "5e47",
+      "type": "지출",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "paymentMethod": "카드",
+      "description": "문구점"
+    },
+    {
+      "id": "bdfe",
+      "type": "지출",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "paymentMethod": "카드",
+      "description": "문구점"
+    },
+    {
+      "id": "9b25",
+      "type": "지출",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "paymentMethod": "카드",
+      "description": "문구점"
+    },
+    {
+      "id": "0b45",
+      "type": "수입",
+      "date": "",
+      "userId": 1,
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": true
+    },
+    {
+      "id": "f198",
+      "type": "이체",
+      "date": "",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "41fc",
+      "type": "지출",
+      "date": "2025-03-03",
+      "userId": 1,
+      "amount": 111,
+      "category": "식비",
+      "payment": "현금",
+      "description": "1111111",
       "fixed": false
     }
   ],
