@@ -10,7 +10,7 @@
       <div class="account-left">
         <img class="basic-img" src="../basic-img.png" alt="User profile" />
         <div class="user-info">
-          <h2>{{ user.nickName }}</h2>
+          <h2>{{ user.nickname }}</h2>
           <p>{{ user.email }}</p>
           <!-- <h2>TriFi</h2>
           <p>TriFi</p> -->
@@ -20,8 +20,10 @@
         <router-link to="/editprofile">
           <button class="yellow-btn">회원정보 수정 ></button>
         </router-link>
-        <button class="yellow-btn">로그아웃 ></button>
-        <button class="yellow-btn">회원탈퇴 ></button>
+        <button class="yellow-btn" @click="handleLogout">로그아웃 ></button>
+        <button class="yellow-btn" @click="handleDeleteAccount">
+          회원탈퇴 >
+        </button>
       </div>
     </div>
 
@@ -66,9 +68,31 @@
 
 <script setup>
 import { useUserStore } from '@/stores/userStore';
+import { computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore(); // Pinia store 가져오기
-const user = userStore.user; // 최신 user 데이터
+const user = computed(() => userStore.user); // 최신 user 데이터
+const router = useRouter();
+
+onMounted(() => {
+  userStore.checkLocalStorage();
+});
+
+const handleLogout = () => {
+  userStore.logoutUser();
+  // 예: 로그인 페이지로 이동
+  router.push('/');
+};
+
+const handleDeleteAccount = () => {
+  if (confirm('정말로 탈퇴하시겠습니까?')) {
+    userStore.deleteUser(() => {
+      alert('회원 탈퇴가 완료되었습니다.');
+      router.push('/'); // 홈이나 로그인 페이지 등으로 이동
+    });
+  }
+};
 </script>
 
 <style scoped>

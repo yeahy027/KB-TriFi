@@ -8,9 +8,11 @@ export const useUserStore = defineStore('user', () => {
   // 상태 변수
   const states = reactive({
     user: {
+      id: '',
       name: '',
       nickName: '',
       email: '',
+      password: '',
       country: '',
       language: '',
     },
@@ -51,15 +53,10 @@ export const useUserStore = defineStore('user', () => {
   // 액션 - 사용자 정보 삭제하기
   const deleteUser = async (successCallback) => {
     try {
-      const response = await axios.delete(BASEURI);
+      const response = await axios.delete(`/api/users/${states.user.id}`);
       if (response.status === 200) {
-        states.user = {
-          name: '',
-          nickName: '',
-          email: '',
-          country: '',
-          language: '',
-        }; // 초기화
+        logoutUser();
+
         successCallback(); // 성공 시 콜백 호출
       } else {
         alert('사용자 정보 삭제 실패');
@@ -69,10 +66,37 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
+  const loginUser = (user) => {
+    states.user = { ...user };
+  };
+
+  const checkLocalStorage = () => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      loginUser(JSON.parse(user));
+      return true;
+    }
+    return false;
+  };
+
+  const logoutUser = () => {
+    localStorage.removeItem('user'); // 저장된 유저 정보 삭제
+    states.user = {
+      name: '',
+      nickName: '',
+      email: '',
+      country: '',
+      language: '',
+    };
+  };
+
   return {
     user,
     fetchUser,
     updateUser,
     deleteUser,
+    loginUser,
+    checkLocalStorage,
+    logoutUser,
   };
 });

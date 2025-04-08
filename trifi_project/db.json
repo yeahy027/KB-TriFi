@@ -1,0 +1,102 @@
+{
+  "users": [
+    {
+      "id": "2",
+      "email": "test2@example.com",
+      "password": "12345678",
+      "name": "홍길순",
+      "nickname": "홍순이",
+      "country": "Korea",
+      "language": "Korean"
+    },
+    {
+      "id": "5da5",
+      "name": "김네비",
+      "nickname": "네비게이션",
+      "email": "test3@example.com",
+      "password": "1111",
+      "country": "Korea",
+      "language": "Korean"
+    },
+    {
+      "id": "aff3",
+      "name": "점다운",
+      "nickname": "다우니",
+      "email": "test4@example.com",
+      "password": "test4",
+      "country": "Korea",
+      "language": "Korean"
+    },
+    {
+      "id": "801d",
+      "name": "점다운",
+      "nickname": "다우니",
+      "email": "test4@example.com",
+      "password": "test4",
+      "country": "Korea",
+      "language": "Korean"
+    },
+    {
+      "id": "03b8",
+      "name": "송지호",
+      "nickname": "송송",
+      "email": "test5@example.com",
+      "password": "test5",
+      "country": "Korea",
+      "language": "Korean"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "userId": 1,
+      "type": "income",
+      "date": "2025-04-01",
+      "amount": 3000000,
+      "category": "월급",
+      "payment": "계좌이체(은행)",
+      "description": "4월 월급",
+      "fixed": true
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "type": "expense",
+      "date": "2025-04-03",
+      "amount": 15000,
+      "category": "식비",
+      "payment": "카드",
+      "description": "점심",
+      "fixed": false
+    }
+  ],
+  "fixedExpenses": [
+    {
+      "id": "1",
+      "userId": 1,
+      "category": "주거/통신",
+      "amount": 50000,
+      "payment": "계좌이체(은행)",
+      "description": "인터넷 요금",
+      "date": "2025-04-05"
+    }
+  ],
+  "cards": [
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "신한카드",
+      "number": "5789 •••• •••• 2847",
+      "cardholder_name": "Mike Smith",
+      "expiry_date": "06/21"
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "name": "삼성카드",
+      "number": "5789 •••• •••• 2847",
+      "cardholder_name": "Mike Smith",
+      "expiry_date": "06/21"
+    }
+  ]
+}

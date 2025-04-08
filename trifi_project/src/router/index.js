@@ -1,25 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AppLayout from '../components/AppLayout.vue';
-import MyPage from '@/pages/MyPage.vue';
-import EditProfile from '@/pages/EditProfile.vue';
+import Login from '../pages/LoginPage.vue';
 
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory(import.meta.env.BASE_UR),
   routes: [
     {
       path: '/',
+      name: 'login',
+      component: Login,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../pages/RegisterPage.vue'),
+    },
+    {
+      path: '/stat',
+      name: 'stat',
+      component: () => import('../pages/StatsPage.vue'),
+    },
+    {
+      path: '/home',
       name: 'home',
-      component: AppLayout,
+      component: () => import('../pages/CalendarPage.vue'),
     },
     {
       path: '/mypage',
       name: 'mypage',
-      component: MyPage,
+      component: () => import('../pages/MyPage.vue'),
     },
     {
       path: '/editprofile',
       name: 'editprofile',
-      component: EditProfile,
+      component: () => import('../pages/EditProfile.vue'),
     },
   ],
 });

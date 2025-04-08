@@ -8,9 +8,8 @@
     <div class="flex-grow-1">
       <AppHeader />
       <main class="bg-light" style="padding-top: 64px; min-height: 100vh">
-        <RouterView />
         <div class="container py-4">
-          <slot></slot>
+          <router-view />
         </div>
       </main>
     </div>
@@ -18,6 +17,8 @@
 </template>
 
 <script setup>
+import { RouterLink, RouterView } from 'vue-router';
+
 import AppSidebar from './AppSidebar.vue';
 import AppHeader from './AppHeader.vue';
 </script>

@@ -1,8 +1,10 @@
+<!-- App.vue -->
 <template>
-  <AppLayout> </AppLayout>
-  <!-- <RouterView /> -->
+  <div>
+    <router-view />
+  </div>
 </template>
 
 <script setup>
-import AppLayout from './components/AppLayout.vue';
+import { RouterLink, RouterView } from 'vue-router';
 </script>
