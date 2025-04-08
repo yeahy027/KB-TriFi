@@ -1,46 +1,56 @@
 {
   "users": [
     {
-      "id": "1",
-      "email": "test@example.com",
-      "password": "1234",
-      "name": "홍길동",
-      "nickname": "길동이"
-    },
-    {
       "id": "2",
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이"
+      "nickname": "홍순이",
+      "country": "Korea",
+      "language": "Korean"
     },
     {
       "id": "5da5",
       "name": "김네비",
       "nickname": "네비게이션",
       "email": "test3@example.com",
-      "password": "1111"
+      "password": "1111",
+      "country": "Korea",
+      "language": "Korean"
     },
     {
       "id": "aff3",
       "name": "점다운",
       "nickname": "다우니",
       "email": "test4@example.com",
-      "password": "test4"
+      "password": "test4",
+      "country": "Korea",
+      "language": "Korean"
     },
     {
       "id": "801d",
       "name": "점다운",
       "nickname": "다우니",
       "email": "test4@example.com",
-      "password": "test4"
+      "password": "test4",
+      "country": "Korea",
+      "language": "Korean"
     },
     {
       "id": "03b8",
       "name": "송지호",
       "nickname": "송송",
       "email": "test5@example.com",
-      "password": "test5"
+      "password": "test5",
+      "country": "Korea",
+      "language": "Korean"
+    },
+    {
+      "id": "2dee",
+      "name": "dd",
+      "nickname": "dd",
+      "email": "dd@naver.com",
+      "password": "1111"
     }
   ],
   "transactions": [
@@ -82,12 +92,88 @@
     {
       "id": "1",
       "userId": 1,
-      "name": "신한카드"
+      "name": "신한카드",
+      "number": "5789 •••• •••• 2847",
+      "cardholder_name": "Mike Smith",
+      "expiry_date": "06/21"
     },
     {
       "id": "2",
       "userId": 1,
-      "name": "삼성카드"
+      "name": "삼성카드",
+      "number": "5789 •••• •••• 2847",
+      "cardholder_name": "Mike Smith",
+      "expiry_date": "06/21"
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "date": "2025-04-07",
+      "type": "income",
+      "amount": 3000000
+    },
+    {
+      "id": 2,
+      "date": "2025-04-07",
+      "type": "expense",
+      "amount": 80000
+    },
+    {
+      "id": 3,
+      "date": "2025-04-08",
+      "type": "transfer",
+      "amount": 500000
+    },
+    {
+      "id": "bbb0"
+    }
+  ],
+  "records": [
+    {
+      "id": 1,
+      "date": "2025-04-01",
+      "asset": "은행",
+      "category": "용돈",
+      "amount": 500000,
+      "type": "수입",
+      "memo": "알바비"
+    },
+    {
+      "id": 2,
+      "date": "2025-04-01",
+      "asset": "카드",
+      "category": "쇼핑",
+      "amount": 22909,
+      "type": "지출",
+      "memo": "무신사"
+    },
+    {
+      "id": 3,
+      "date": "2025-04-01",
+      "asset": "현금",
+      "category": "식비",
+      "amount": 112222,
+      "type": "지출",
+      "memo": "아웃백"
+    },
+    {
+      "id": 4,
+      "date": "2025-03-10",
+      "asset": "현금",
+      "category": "식비",
+      "amount": 112222,
+      "type": "지출",
+      "memo": "아웃백"
+    },
+    {
+      "id": 5,
+      "date": "2025-04-03",
+      "asset": "현금",
+      "category": "식비",
+      "amount": 30000,
+      "type": "이체",
+      "memo": "아웃백"
     }
   ]
 }

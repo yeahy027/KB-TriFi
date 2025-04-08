@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../pages/LoginPage.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Login from '../pages/LoginPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_UR),
@@ -24,9 +24,29 @@ const router = createRouter({
     },
     {
       path: '/home',
-      name: 'home',
+      name: 'calender',
       component: () => import('../pages/CalendarPage.vue'),
       meta: { title: '캘린더' }
+    },
+    {
+      path: '/list',
+      name: 'list',
+      component: () => import('../pages/ListPage.vue'),
+    },
+    {
+      path: '/goal',
+      name: 'goal',
+      component: () => import('../pages/GoalPage.vue'),
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: () => import('../pages/MyPage.vue'),
+    },
+    {
+      path: '/editprofile',
+      name: 'editprofile',
+      component: () => import('../pages/EditProfile.vue'),
     },
   ],
 
