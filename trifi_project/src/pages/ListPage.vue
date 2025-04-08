@@ -15,6 +15,21 @@
           <button class="btn btn-outline-primary btn-sm" @click="resetToThisMonth">📅이번 달</button>
         </div>
   
+<!-- 날짜 선택 -->
+<div class="mb-3 text-end">
+  <input
+    type="date"
+    v-model="selectedDate"
+    class="form-control form-control-sm d-inline-block"
+    style="width: auto;"
+  />
+  <button class="btn btn-outline-secondary btn-sm ms-2" @click="clearSelectedDate">
+    전체 보기
+  </button>
+</div>
+
+
+
         <!-- 엑셀 다운로드 -->
         <div class="mb-3 text-end">
           <button class="btn btn-success btn-sm" @click="downloadExcel">
@@ -88,6 +103,13 @@
   const currentMonth = ref(new Date())
   const records = ref([])
   const filterType = ref('')
+
+  const selectedDate = ref('') // yyyy-mm-dd 형식
+
+const clearSelectedDate = () => {
+  selectedDate.value = ''
+}
+
   
   // 월 형식 변환
     const formattedMonth = computed(() => {
@@ -151,8 +173,8 @@
   
       const typeMatches = !filterType.value || record.type === filterType.value
       const monthMatches = recordYear === selectedYear && recordMonth === selectedMonth
-  
-      return typeMatches && monthMatches
+      const dateMatches = !selectedDate.value || record.date === selectedDate.value
+      return typeMatches && monthMatches && dateMatches
     })
   })
   
@@ -201,14 +223,15 @@
   
   // 합계 (필터 기준)
   const totalIncome = computed(() =>
-    filteredRecords.value.filter(r => r.type === '수입').reduce((sum, r) => sum + Number(r.amount), 0)
-  )
-  const totalExpense = computed(() =>
-    filteredRecords.value.filter(r => r.type === '지출').reduce((sum, r) => sum + Number(r.amount), 0)
-  )
-  const totalTransfer = computed(() =>
-    filteredRecords.value.filter(r => r.type === '이체').reduce((sum, r) => sum + Number(r.amount), 0)
-  )
+  records.value.filter(r => r.type === '수입').reduce((sum, r) => sum + Number(r.amount), 0)
+)
+const totalExpense = computed(() =>
+  records.value.filter(r => r.type === '지출').reduce((sum, r) => sum + Number(r.amount), 0)
+)
+const totalTransfer = computed(() =>
+  records.value.filter(r => r.type === '이체').reduce((sum, r) => sum + Number(r.amount), 0)
+)
+
   
   
   // 엑셀 변환
