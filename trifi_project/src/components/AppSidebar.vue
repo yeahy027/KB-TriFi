@@ -6,7 +6,7 @@
       <li><router-link class="nav-link text-dark" to="/list">내역</router-link></li>
       <li><router-link class="nav-link text-dark" to="/stat">통계</router-link></li>
       <li><router-link class="nav-link text-dark" to="/goal">챌린지</router-link></li>
-      <li><router-link class="nav-link text-dark" to="/homemypage">마이페이지</router-link></li>
+      <li><router-link class="nav-link text-dark" to="/mypage">마이페이지</router-link></li>
     </ul>
   </nav>
 </template>
