@@ -67,7 +67,13 @@ const login = async () => {
     })
 
     if (data.length > 0) {
+      // ✅ 사용자 정보 저장
       localStorage.setItem('user', JSON.stringify(data[0]))
+
+      // ✅ 로그인 시간 저장 (자동 로그아웃용)
+      localStorage.setItem('loginTime', new Date().toISOString())
+
+      // ✅ 홈으로 이동
       router.push('/home')
     } else {
       Swal.fire({
