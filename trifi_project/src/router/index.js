@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../pages/LoginPage.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Login from '../pages/LoginPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_UR),
@@ -37,9 +37,13 @@ const router = createRouter({
     {
       path: '/mypage',
       name: 'mypage',
-      component: () => import('../pages/MypagePage.vue'),
-    }
+      component: () => import('../pages/MyPage.vue'),
+    },
+    {
+      path: '/editprofile',
+      name: 'editprofile',
+      component: () => import('../pages/EditProfile.vue'),
+    },
   ],
-
-})
-export default router
+});
+export default router;
