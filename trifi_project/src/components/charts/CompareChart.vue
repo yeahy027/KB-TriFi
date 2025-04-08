@@ -1,4 +1,3 @@
-<!-- src/components/charts/CompareChart.vue -->
 <template>
     <div>
       <canvas ref="chartRef"></canvas>
@@ -6,8 +5,9 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { Chart, registerables } from 'chart.js'
+  import { registerChart, unregisterChart } from '@/utils/chartManager'
   
   Chart.register(...registerables)
   
@@ -19,11 +19,11 @@
   })
   
   const chartRef = ref(null)
+  let chartInstance = null
   
   onMounted(() => {
     const ctx = chartRef.value.getContext('2d')
-  
-    new Chart(ctx, {
+    chartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels: props.data.map(item => item.name),
@@ -52,6 +52,13 @@
         }
       }
     })
+  
+    registerChart(chartInstance)
+  })
+  
+  onBeforeUnmount(() => {
+    unregisterChart(chartInstance)
+    chartInstance.destroy()
   })
   </script>
   
