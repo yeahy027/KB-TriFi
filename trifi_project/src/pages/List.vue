@@ -21,11 +21,18 @@
         </div>
   
         <!-- 수입/지출 요약 -->
-        <div class="bg-white rounded p-3 shadow-sm mb-4">
-          <div class="d-flex justify-content-between">
-            <div><strong>전체 내역 {{ records.length }}건</strong></div>
-            <div class="text-danger">총 지출 {{ totalExpense.toLocaleString() }} 원</div>
-            <div class="text-primary">총 수입 {{ totalIncome.toLocaleString() }} 원</div>
+        <div class="bg-white rounded p-3 shadow-sm mb-4 d-flex justify-content-between align-items-center">
+          <div><strong>전체 내역 {{ filteredRecords.length }}건</strong></div>
+          <div class="d-flex gap-3 align-items-center">
+            <button class="btn btn-outline-danger btn-sm" @click="filterType = '지출'">
+              총 지출 {{ totalExpense.toLocaleString() }} 원
+            </button>
+            <button class="btn btn-outline-primary btn-sm" @click="filterType = '수입'">
+              총 수입 {{ totalIncome.toLocaleString() }} 원
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" @click="filterType = ''">
+              전체 보기
+            </button>
           </div>
         </div>
   
@@ -70,8 +77,9 @@
   
   const currentMonth = ref('2025-04')
   const records = ref([])
+  const filterType = ref('') // '', '수입', '지출'
   
-  // 내역 불러오기
+  // 데이터 불러오기
   const fetchRecords = async () => {
     const res = await axios.get('http://localhost:3000/records')
     records.value = res.data
@@ -80,10 +88,16 @@
     fetchRecords()
   })
   
+  // 필터링된 데이터
+  const filteredRecords = computed(() => {
+    if (filterType.value === '') return records.value
+    return records.value.filter(r => r.type === filterType.value)
+  })
+  
   // 날짜별로 그룹화
   const groupedRecords = computed(() => {
     const groups = {}
-    records.value.forEach(record => {
+    filteredRecords.value.forEach(record => {
       if (!groups[record.date]) {
         groups[record.date] = []
       }
@@ -96,7 +110,7 @@
     )
   })
   
-  // 카테고리에 따라 색상 뱃지 지정
+  // 카테고리 뱃지 스타일
   const getCategoryClass = (category) => {
     const categoryMap = {
       '식비': 'bg-primary',
@@ -109,20 +123,16 @@
     return categoryMap[category] || 'bg-dark'
   }
   
-  // 수입/지출 계산
+  // 총 수입/지출 계산
   const totalIncome = computed(() =>
-    records.value
-      .filter(record => record.type === '수입')
-      .reduce((sum, r) => sum + Number(r.amount), 0)
+    records.value.filter(r => r.type === '수입').reduce((sum, r) => sum + Number(r.amount), 0)
   )
   
   const totalExpense = computed(() =>
-    records.value
-      .filter(record => record.type === '지출')
-      .reduce((sum, r) => sum + Number(r.amount), 0)
+    records.value.filter(r => r.type === '지출').reduce((sum, r) => sum + Number(r.amount), 0)
   )
   
-  // 엑셀 다운로드
+  // 엑셀 저장
   const downloadExcel = () => {
     const excelData = records.value.map(record => ({
       날짜: record.date,
