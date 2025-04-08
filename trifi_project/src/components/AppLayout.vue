@@ -6,7 +6,7 @@
     <!-- 오른쪽 전체 -->
     <div class="flex-grow-1">
       <AppHeader :page-title="pageTitle" />
-      <main class="bg-light" style="padding-top: 64px; min-height: 100vh;">
+      <main class="bg-light" style="padding-top: 64px; min-height: 100vh; margin-left: 240px;">
         <div class="container py-4">
           <slot />
         </div>
