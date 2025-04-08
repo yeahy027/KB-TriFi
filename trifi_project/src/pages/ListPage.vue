@@ -30,7 +30,7 @@
             <button class="btn btn-outline-primary btn-sm" @click="filterType = '수입'">
               💰 수입 {{ totalIncome.toLocaleString() }}원
             </button>
-            <button class="btn btn-outline-success btn-sm" @click="filterType = '수입'">
+            <button class="btn btn-outline-success btn-sm" @click="filterType = '이체'">
               💰 이체 {{ totalTransfer.toLocaleString() }}원
             </button>
             <button class="btn btn-outline-secondary btn-sm" @click="filterType = ''">
