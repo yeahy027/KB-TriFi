@@ -40,7 +40,7 @@
         </div>
         <!-- 날짜별 내역 -->
         <div v-for="(dailyRecords, date) in groupedRecords" :key="date" class="mb-4">
-          <div class="fw-bold border-bottom pb-1 mb-2">{{ date }}</div>
+          <div class="fw-bold border-bottom pb-1 mb-2">{{ formatDateWithDay(date) }}</div>
   
           <div
             v-for="record in dailyRecords"
@@ -101,6 +101,14 @@
   const resetToThisMonth = () => {
     currentMonth.value = new Date()
   }
+
+  //요일 변환
+  const formatDateWithDay = (dateStr) => {
+    const date = new Date(dateStr)
+    const days = ['일','월','화','수','목','금','토']
+    const dayName = days[date.getDay()]
+    return `${dateStr} (${dayName})`
+  }
   
   // fetch
   let fetchInterval = null
@@ -112,7 +120,7 @@
   
   onMounted(() => {
     fetchRecords()
-    fetchInterval = setInterval(fetchRecords) // 5초마다 갱신
+    fetchInterval = setInterval(fetchRecords) 
   })
   
   onUnmounted(() => {
