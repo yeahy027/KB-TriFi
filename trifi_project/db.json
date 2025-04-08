@@ -41,6 +41,13 @@
       "nickname": "송송",
       "email": "test5@example.com",
       "password": "test5"
+    },
+    {
+      "id": "2dee",
+      "name": "dd",
+      "nickname": "dd",
+      "email": "dd@naver.com",
+      "password": "1111"
     }
   ],
   "transactions": [
@@ -89,5 +96,82 @@
       "userId": 1,
       "name": "삼성카드"
     }
-  ]
+  ],
+  "events": [
+    {
+      "id": 1,
+      "date": "2025-04-07",
+      "type": "income",
+      "amount": 3000000
+    },
+    {
+      "id": 2,
+      "date": "2025-04-07",
+      "type": "expense",
+      "amount": 80000
+    },
+    {
+      "id": 3,
+      "date": "2025-04-08",
+      "type": "transfer",
+      "amount": 500000
+    },
+    {
+      "id": 4,
+      "date": "2025-04-09",
+      "type": "expense",
+      "amount": 50000
+    },
+    {
+      "id": 4,
+      "date": "2025-04-09",
+      "type": "expense",
+      "amount": 50000
+    },
+    {
+      "id": "3d16",
+      "date": "2025-04-10",
+      "type": "income",
+      "amount": 999999
+    }
+  ],
+    "records": [
+      {
+        "id": 1,
+        "date": "2025-04-01",
+        "asset": "은행",
+        "category": "용돈",
+        "amount": 500000,
+        "type": "수입",
+        "memo": "알바비"
+      },
+      {
+        "id": 2,
+        "date": "2025-04-01",
+        "asset": "카드",
+        "category": "쇼핑",
+        "amount": 22909,
+        "type": "지출",
+        "memo": "무신사"
+      },
+      {
+        "id": 3,
+        "date": "2024-04-01",
+        "asset": "현금",
+        "category": "식비",
+        "amount": 112222,
+        "type": "지출",
+        "memo": "아웃백"
+      },{
+        "id": 4,
+        "date": "2024-03-04",
+        "asset": "현금",
+        "category": "식비",
+        "amount": 112222,
+        "type": "지출",
+        "memo": "아웃백"
+      }
+    ]
+
+  
 }

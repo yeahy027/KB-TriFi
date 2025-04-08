@@ -1,4 +1,5 @@
 <template>
+<AppLayout>
     <div>
       <h3 class="fw-bold mb-4">📊 지출 분석 통계</h3>
   
@@ -14,13 +15,15 @@
       <h5 class="mb-2">전월 vs 이번 달 지출</h5>
       <CompareChart :data="compareData"/>
     </div>
+  </AppLayout>
   </template>
   
   <script setup>
   import PieChart from '../components/charts/PieChart.vue'
   import BarChart from '../components/charts/BarChart.vue'
   import CompareChart from '../components/charts/CompareChart.vue'
-  
+  import AppLayout from '../components/AppLayout.vue'
+
   // 예시 더미 데이터
   const pieData = [
     { name: '식비', value: 450000 },

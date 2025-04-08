@@ -21,9 +21,24 @@ const router = createRouter({
     },
     {
       path: '/home',
-      name: 'home',
+      name: 'calender',
       component: () => import('../pages/CalendarPage.vue'),
     },
+    {
+      path: '/list',
+      name: 'list',
+      component: () => import('../pages/ListPage.vue'),
+    },
+    {
+      path: '/goal',
+      name: 'goal',
+      component: () => import('../pages/GoalPage.vue'),
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: () => import('../pages/MypagePage.vue'),
+    }
   ],
 
 })
