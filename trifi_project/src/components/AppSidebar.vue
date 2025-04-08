@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white border-end vh-100 p-4 position-fixed" style="width: 240px;">
+  <nav class="bg-white border-end vh-100 p-4 position-fixed " style="width: 240px;">
     <h5 class="text-danger fw-bold mb-4">Money Keeper</h5>
     <ul class="nav flex-column gap-2">
       <li v-for="item in menuItems" :key="item.to">
