@@ -13,7 +13,7 @@ import AppLayout from './components/AppLayout.vue'
 <!-- App.vue -->
 <template>
   <div>
-    <router-view />\
+    <router-view />
   </div>
 </template>
 

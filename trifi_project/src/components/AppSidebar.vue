@@ -3,9 +3,9 @@
     <h5 class="text-danger fw-bold mb-4">머니키퍼</h5>
     <ul class="nav flex-column gap-2">
       <li><router-link class="nav-link text-dark fw-semibold" to="/home">캘린더</router-link></li>
-      <li><router-link class="nav-link text-dark" to="/home/list">내역</router-link></li>
-      <li><router-link class="nav-link text-dark" to="/home/stats">통계</router-link></li>
-      <li><router-link class="nav-link text-dark" to="/home/goal">챌린지</router-link></li>
+      <li><router-link class="nav-link text-dark" to="/list">내역</router-link></li>
+      <li><router-link class="nav-link text-dark" to="/stat">통계</router-link></li>
+      <li><router-link class="nav-link text-dark" to="/goal">챌린지</router-link></li>
       <li><router-link class="nav-link text-dark" to="/homemypage">마이페이지</router-link></li>
     </ul>
   </nav>

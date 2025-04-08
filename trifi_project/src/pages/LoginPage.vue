@@ -46,20 +46,41 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
 
 const login = async () => {
-  const { data } = await axios.get('http://localhost:3000/users', {
-    params: { email: email.value, password: password.value }
-  })
-  if (data.length > 0) {
-    localStorage.setItem('user', JSON.stringify(data[0]))
-    router.push('/home')
-  } else {
-    alert('이메일 또는 비밀번호가 일치하지 않습니다.')
+  try {
+    const { data } = await axios.get('/api/users', {
+      params: { email: email.value, password: password.value }
+    })
+
+    if (data.length > 0) {
+      localStorage.setItem('user', JSON.stringify(data[0]))
+      router.push('/home')
+    } else {
+      Swal.fire({
+        title: '로그인 실패',
+        text: '이메일 또는 비밀번호가 일치하지 않습니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+        customClass: {
+          title: 'fw-bold',
+          confirmButton: 'btn btn-danger'
+        }
+      })
+    }
+  } catch (e) {
+    Swal.fire({
+      title: '오류 발생',
+      text: '서버와의 연결에 문제가 발생했습니다.',
+      icon: 'warning',
+      confirmButtonText: '확인'
+    })
+    console.error(e)
   }
 }
 </script>
