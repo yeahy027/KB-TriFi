@@ -117,61 +117,54 @@
       "amount": 500000
     },
     {
-      "id": 4,
-      "date": "2025-04-09",
-      "type": "expense",
-      "amount": 50000
-    },
-    {
-      "id": 4,
-      "date": "2025-04-09",
-      "type": "expense",
-      "amount": 50000
-    },
-    {
-      "id": "3d16",
-      "date": "2025-04-10",
-      "type": "income",
-      "amount": 999999
+      "id": "bbb0"
     }
   ],
-    "records": [
-      {
-        "id": 1,
-        "date": "2025-04-01",
-        "asset": "은행",
-        "category": "용돈",
-        "amount": 500000,
-        "type": "수입",
-        "memo": "알바비"
-      },
-      {
-        "id": 2,
-        "date": "2025-04-01",
-        "asset": "카드",
-        "category": "쇼핑",
-        "amount": 22909,
-        "type": "지출",
-        "memo": "무신사"
-      },
-      {
-        "id": 3,
-        "date": "2024-04-01",
+  "records": [
+    {
+      "id": 1,
+      "date": "2025-04-01",
+      "asset": "은행",
+      "category": "용돈",
+      "amount": 500000,
+      "type": "수입",
+      "memo": "알바비"
+    },
+    {
+      "id": 2,
+      "date": "2025-04-01",
+      "asset": "카드",
+      "category": "쇼핑",
+      "amount": 22909,
+      "type": "지출",
+      "memo": "무신사"
+    },
+    {
+      "id": 3,
+      "date": "2025-04-01",
+      "asset": "현금",
+      "category": "식비",
+      "amount": 112222,
+      "type": "지출",
+      "memo": "아웃백"
+    },
+    {
+      "id": 4,
+      "date": "2025-03-10",
+      "asset": "현금",
+      "category": "식비",
+      "amount": 112222,
+      "type": "지출",
+      "memo": "아웃백"
+    },
+    {
+        "id": 5,
+        "date": "2025-04-03",
         "asset": "현금",
         "category": "식비",
-        "amount": 112222,
-        "type": "지출",
+        "amount": 30000,
+        "type": "이체",
         "memo": "아웃백"
-      },{
-        "id": 4,
-        "date": "2024-03-04",
-        "asset": "현금",
-        "category": "식비",
-        "amount": 112222,
-        "type": "지출",
-        "memo": "아웃백"
-      }
-    ]
-
-  
+    }
+  ]
 }

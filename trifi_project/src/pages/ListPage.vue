@@ -25,17 +25,19 @@
           <div><strong>전체 내역 {{ filteredRecords.length }}건</strong></div>
           <div class="d-flex gap-3 align-items-center">
             <button class="btn btn-outline-danger btn-sm" @click="filterType = '지출'">
-              💸지출 {{ totalExpense.toLocaleString() }}원
+              💸 지출 {{ totalExpense.toLocaleString() }}원
             </button>
             <button class="btn btn-outline-primary btn-sm" @click="filterType = '수입'">
-              💰수입 {{ totalIncome.toLocaleString() }}원
+              💰 수입 {{ totalIncome.toLocaleString() }}원
+            </button>
+            <button class="btn btn-outline-success btn-sm" @click="filterType = '수입'">
+              💰 이체 {{ totalTransfer.toLocaleString() }}원
             </button>
             <button class="btn btn-outline-secondary btn-sm" @click="filterType = ''">
               📋전체 보기
             </button>
           </div>
         </div>
-  
         <!-- 날짜별 내역 -->
         <div v-for="(dailyRecords, date) in groupedRecords" :key="date" class="mb-4">
           <div class="fw-bold border-bottom pb-1 mb-2">{{ date }}</div>
@@ -110,7 +112,7 @@
   
   onMounted(() => {
     fetchRecords()
-    fetchInterval = setInterval(fetchRecords, 5000) // 5초마다 갱신
+    fetchInterval = setInterval(fetchRecords) // 5초마다 갱신
   })
   
   onUnmounted(() => {
@@ -186,6 +188,10 @@
   const totalExpense = computed(() =>
     filteredRecords.value.filter(r => r.type === '지출').reduce((sum, r) => sum + Number(r.amount), 0)
   )
+  const totalTransfer = computed(() =>
+    filteredRecords.value.filter(r => r.type === '이체').reduce((sum, r) => sum + Number(r.amount), 0)
+  )
+  
   
   // 엑셀 변환
   const downloadExcel = () => {

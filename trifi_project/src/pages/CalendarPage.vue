@@ -36,7 +36,7 @@
             :class="{ active: eventFilter === 'income' }"
             @click="setFilter('income')"
             >
-            수입 ({{ incomeCount }}건)<br />{{ formatCurrency(incomeSum) }}
+            💰 수입 ({{ incomeCount }}건)<br />{{ formatCurrency(incomeSum) }}
             </div>
             <!-- 지출 -->
             <div
@@ -44,7 +44,7 @@
             :class="{ active: eventFilter === 'expense' }"
             @click="setFilter('expense')"
             >
-            지출 ({{ expenseCount }}건)<br />{{ formatCurrency(expenseSum) }}
+            💸 지출 ({{ expenseCount }}건)<br />{{ formatCurrency(expenseSum) }}
             </div>
             <!-- 이체 -->
             <div
@@ -89,7 +89,7 @@
                 :key="eIndex"
                 :class="['event', event.type]"
                 >
-                <span :class="event.type">{{ formatCurrency(event.amount) }}</span>
+                <span :class="event.type">💰 {{ formatCurrency(event.amount) }}</span>
                 </div>
             </td>
             </tr>
@@ -325,9 +325,6 @@ function nextMonth() {
 async function addNewEvent() {
     // 실제로는 사용자 입력/모달 등을 통해 date, type, amount 등을 받아온 뒤 처리
     const newEvent = {
-    date: '2025-04-10',
-    type: 'income',
-    amount: 999999,
     };
 
     try {
