@@ -25,6 +25,13 @@
         </button>
       </div>
 
+      <!-- 엑셀 다운로드 -->
+      <div class="mb-3 text-end">
+        <button class="btn btn-success btn-sm" @click="downloadExcel">
+          <i class="bi bi-file-earmark-excel"></i> 엑셀 변환
+        </button>
+      </div>
+
       <!-- 수입/지출 요약 -->
       <div
         class="bg-white rounded p-3 shadow-sm mb-4 d-flex justify-content-between align-items-center"
@@ -37,13 +44,19 @@
             class="btn btn-outline-danger btn-sm"
             @click="filterType = '지출'"
           >
-            💸지출 {{ totalExpense.toLocaleString() }}원
+            💸 지출 {{ totalExpense.toLocaleString() }}원
           </button>
           <button
             class="btn btn-outline-primary btn-sm"
             @click="filterType = '수입'"
           >
-            💰수입 {{ totalIncome.toLocaleString() }}원
+            💰 수입 {{ totalIncome.toLocaleString() }}원
+          </button>
+          <button
+            class="btn btn-outline-success btn-sm"
+            @click="filterType = '이체'"
+          >
+            💰 이체 {{ totalTransfer.toLocaleString() }}원
           </button>
           <button
             class="btn btn-outline-secondary btn-sm"
@@ -93,6 +106,7 @@
           </div>
         </div>
       </div>
+
       <button class="add-button" @click="isModalOpen = true">+ 등록</button>
       <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
@@ -225,6 +239,11 @@ const totalExpense = computed(() =>
     .filter((r) => r.type === '지출')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
+const totalTransfer = computed(() =>
+  filteredRecords.value
+    .filter((r) => r.type === '이체')
+    .reduce((sum, r) => sum + Number(r.amount), 0)
+);
 
 // 엑셀 변환
 const downloadExcel = () => {
@@ -254,22 +273,5 @@ const downloadExcel = () => {
   min-width: 60px;
   font-size: 0.8rem;
   padding: 0.5em 0.75em;
-}
-/* + 버튼 (우측 하단 고정 등 원하는 스타일) */
-.add-button {
-  position: fixed;
-  right: 30px;
-  bottom: 30px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 30px;
-  background: #ff5252;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-.add-button:hover {
-  background-color: #fdb3b3;
 }
 </style>
