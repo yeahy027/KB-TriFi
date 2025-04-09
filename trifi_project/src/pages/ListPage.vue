@@ -6,13 +6,30 @@
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
-          <strong class="month-text mx-auto">{{ formattedMonth }}</strong>
+          <strong class="month-text mx-auto"
+          style="cursor:pointer"
+          @click="goToCalender">{{ formattedMonth }}</strong>
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
           <button class="btn btn-outline-primary btn-sm" @click="resetToThisMonth">📅이번 달</button>
         </div>
   
+<!-- 날짜 선택 -->
+<div class="mb-3 text-end">
+  <input
+    type="date"
+    v-model="selectedDate"
+    class="form-control form-control-sm d-inline-block"
+    style="width: auto;"
+  />
+  <button class="btn btn-outline-secondary btn-sm ms-2" @click="clearSelectedDate">
+    전체 보기
+  </button>
+</div>
+
+
+
         <!-- 엑셀 다운로드 -->
         <div class="mb-3 text-end">
           <button class="btn btn-success btn-sm" @click="downloadExcel">
@@ -40,7 +57,7 @@
         </div>
         <!-- 날짜별 내역 -->
         <div v-for="(dailyRecords, date) in groupedRecords" :key="date" class="mb-4">
-          <div class="fw-bold border-bottom pb-1 mb-2">{{ date }}</div>
+          <div class="fw-bold border-bottom pb-1 mb-2">{{ formatDateWithDay(date) }}</div>
   
           <div
             v-for="record in dailyRecords"
@@ -74,13 +91,28 @@
   import axios from 'axios'
   import * as XLSX from 'xlsx'
   import { saveAs } from 'file-saver'
-  
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
+
+  const goToCalender = () => {
+    const year = currentMonth.value.getFullYear()
+    const month = String(currentMonth.value.getMonth()+1).padStart(2,'0');
+    router.push(`/home`)
+  }
   const currentMonth = ref(new Date())
   const records = ref([])
   const filterType = ref('')
+
+  const selectedDate = ref('') // yyyy-mm-dd 형식
+
+const clearSelectedDate = () => {
+  selectedDate.value = ''
+}
+
   
   // 월 형식 변환
-  const formattedMonth = computed(() => {
+    const formattedMonth = computed(() => {
     const year = currentMonth.value.getFullYear()
     const month = String(currentMonth.value.getMonth() + 1).padStart(2, '0')
     return `${year}년 ${month}월`
@@ -101,6 +133,14 @@
   const resetToThisMonth = () => {
     currentMonth.value = new Date()
   }
+
+  //요일 변환
+  const formatDateWithDay = (dateStr) => {
+    const date = new Date(dateStr)
+    const days = ['일','월','화','수','목','금','토']
+    const dayName = days[date.getDay()]
+    return `${dateStr} (${dayName})`
+  }
   
   // fetch
   let fetchInterval = null
@@ -112,7 +152,7 @@
   
   onMounted(() => {
     fetchRecords()
-    fetchInterval = setInterval(fetchRecords) // 5초마다 갱신
+    fetchInterval = setInterval(fetchRecords) 
   })
   
   onUnmounted(() => {
@@ -133,8 +173,8 @@
   
       const typeMatches = !filterType.value || record.type === filterType.value
       const monthMatches = recordYear === selectedYear && recordMonth === selectedMonth
-  
-      return typeMatches && monthMatches
+      const dateMatches = !selectedDate.value || record.date === selectedDate.value
+      return typeMatches && monthMatches && dateMatches
     })
   })
   
@@ -183,14 +223,15 @@
   
   // 합계 (필터 기준)
   const totalIncome = computed(() =>
-    filteredRecords.value.filter(r => r.type === '수입').reduce((sum, r) => sum + Number(r.amount), 0)
-  )
-  const totalExpense = computed(() =>
-    filteredRecords.value.filter(r => r.type === '지출').reduce((sum, r) => sum + Number(r.amount), 0)
-  )
-  const totalTransfer = computed(() =>
-    filteredRecords.value.filter(r => r.type === '이체').reduce((sum, r) => sum + Number(r.amount), 0)
-  )
+  records.value.filter(r => r.type === '수입').reduce((sum, r) => sum + Number(r.amount), 0)
+)
+const totalExpense = computed(() =>
+  records.value.filter(r => r.type === '지출').reduce((sum, r) => sum + Number(r.amount), 0)
+)
+const totalTransfer = computed(() =>
+  records.value.filter(r => r.type === '이체').reduce((sum, r) => sum + Number(r.amount), 0)
+)
+
   
   
   // 엑셀 변환

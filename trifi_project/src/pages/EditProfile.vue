@@ -9,10 +9,25 @@
       <!-- 유저 정보 섹션 -->
       <div class="account-section">
         <div class="account-header">
-          <img class="basic-img" src="../basic-img.png" alt="User profile" />
+          <label for="profileUpload">
+            <img
+              class="basic-img"
+              :src="profilePreview"
+              alt="User profile"
+              style="cursor: pointer"
+            />
+          </label>
+          <input
+            type="file"
+            id="profileUpload"
+            accept="image/*"
+            @change="onProfileChange"
+            style="display: none"
+          />
+
           <div class="user-info">
-            <h2>{{ form.nickname }}</h2>
-            <p>{{ form.email }}</p>
+            <h2>{{ user.nickname }}</h2>
+            <p>{{ user.email }}</p>
           </div>
           <button class="yellow-btn edit-button" @click="updateProfile">
             회원정보 수정 >
@@ -44,15 +59,6 @@
             </select>
           </div>
 
-          <!-- <div v-else>
-            <input
-              type="text"
-              v-model="form[field.model]"
-              :placeholder="field.placeholder"
-              :disabled="!isEditing"
-              class="w-full p-2 border rounded-lg bg-gray-50"
-            />
-          </div> -->
           <div v-else>
             <input
               :type="field.type"
@@ -70,40 +76,48 @@
 
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useUserStore } from '@/stores/userStore';
-import axios from 'axios';
+import profileImage from '@/assets/basic-img.png';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const profilePreview = ref(profileImage);
+
+const onProfileChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    profilePreview.value = URL.createObjectURL(file);
+  }
+};
 
 const userStore = useUserStore(); // Pinia store 가져오기
-const form = computed(() => userStore.user); // 최신 user 데이터
-
-onMounted(() => {
-  userStore.checkLocalStorage();
-});
+userStore.checkLocalStorage();
+const user = userStore.user;
+const form = ref({ ...user }); // 최신 user 데이터
 
 const isEditing = ref(true);
 
 const fields = [
   {
-    label: 'Nick Name',
+    label: '닉네임',
     model: 'nickname',
     placeholder: 'Enter your nickname',
     type: 'text',
   },
   {
-    label: 'Country',
+    label: '나라',
     model: 'country',
     type: 'select',
     options: ['Korea', 'USA', 'Canada', 'UK', 'Japan'],
   },
   {
-    label: 'Language',
+    label: '언어',
     model: 'language',
     type: 'select',
     options: ['Korean', 'English', 'Japanese', 'Spanish', 'French'],
   },
   {
-    label: 'Email',
+    label: '이메일',
     model: 'email',
     placeholder: 'Enter your email',
     type: 'email',
@@ -111,19 +125,11 @@ const fields = [
 ];
 
 const updateProfile = async () => {
-  try {
-    const response = await axios.put(`/api/users/${form.id}`, form);
-    userStore.updateUser(form); // Pinia store에 업데이트된 데이터 저장
-    alert('프로필이 성공적으로 업데이트되었습니다!');
-  } catch (error) {
-    console.error('프로필 업데이트 실패:', error);
-    alert('프로필 업데이트 중 오류가 발생했습니다.');
-  }
+  userStore.updateUser(form.value, router);
 };
 </script>
 
 <style scoped>
-/* 스타일은 그대로 유지 */
 input[disabled],
 select[disabled] {
   cursor: not-allowed;
@@ -155,8 +161,8 @@ select[disabled] {
 }
 
 .basic-img {
-  width: 66px;
-  height: 66px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 
