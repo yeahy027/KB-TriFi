@@ -29,9 +29,20 @@
         <div class="form-box">
           <div class="form" v-if="activeTab !== '이체'">
             <input type="date" v-model="form.date" placeholder="날짜" />
-            <input type="number" v-model="form.amount" placeholder="금액" />
 
-            <select v-model="form.category" class="category-select">
+            <input
+              type="text"
+              :value="formattedAmount"
+              @input="formattedAmount = $event.target.value"
+              placeholder="금액"
+            />
+
+            <!-- ✅ 지출 탭일 때만 표시 -->
+            <select
+              v-if="activeTab === '지출'"
+              v-model="form.category"
+              class="category-select"
+            >
               <option disabled value="">카테고리를 선택하세요</option>
               <option value="식비">🍔 식비</option>
               <option value="교통">🚗 교통</option>
@@ -60,11 +71,39 @@
               <input type="checkbox" v-model="form.fixed" />
               고정 수입/지출입니다
             </label>
+
+            <div v-if="form.fixed">
+              <select v-model="form.period" class="category-select">
+                <option disabled value="">주기를 선택하세요</option>
+                <option value="매일">📆 매일</option>
+                <option value="매주">🗓 매주</option>
+                <option value="매월">📅 매월</option>
+              </select>
+              <div class="recurring-date-wrapper">
+                <label for="endDate">종료 날짜</label>
+                <input
+                  id="endDate"
+                  type="date"
+                  v-model="form.endDate"
+                  class="recurring-date"
+                />
+              </div>
+            </div>
           </div>
           <div class="form" v-else>
             <input type="date" v-model="form.date" placeholder="날짜" />
-            <input type="number" v-model="form.from" placeholder="출금 금액" />
-            <input type="number" v-model="form.to" placeholder="입금 금액" />
+            <input
+              type="text"
+              :value="formattedFrom"
+              @input="formattedFrom = $event.target.value"
+              placeholder="출금 금액"
+            />
+            <input
+              type="text"
+              :value="formattedTo"
+              @input="formattedTo = $event.target.value"
+              placeholder="입금 금액"
+            />
             <input type="text" v-model="form.memo" placeholder="메모" />
           </div>
 
@@ -76,17 +115,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
+import { useUserStore } from '@/stores/userStore';
 
 const emit = defineEmits(['close']);
 const store = useCounterStore();
-
+/* entry.userId = useUserStore.user.id; */
+const userStore = useUserStore();
 const activeTab = ref('수입');
 
+const today = new Date().toISOString().split('T')[0];
+
 const initialForm = () => ({
-  date: '',
+  date: today,
   amount: '',
   category: '',
   paymentMethod: '',
@@ -104,35 +147,99 @@ watch(activeTab, () => {
   Object.assign(form.value, initialForm());
 });
 
+const formattedAmount = computed({
+  get() {
+    if (!form.value.amount) return '';
+    return Number(form.value.amount).toLocaleString() + '원';
+  },
+  set(value) {
+    const numeric = value.replace(/[^\d]/g, '');
+    form.value.amount = numeric;
+  },
+});
+const formattedFrom = computed({
+  get() {
+    if (!form.value.from) return '';
+    return Number(form.value.from).toLocaleString() + '원';
+  },
+  set(value) {
+    const numeric = value.replace(/[^\d]/g, '');
+    form.value.from = numeric;
+  },
+});
+
+const formattedTo = computed({
+  get() {
+    if (!form.value.to) return '';
+    return Number(form.value.to).toLocaleString() + '원';
+  },
+  set(value) {
+    const numeric = value.replace(/[^\d]/g, '');
+    form.value.to = numeric;
+  },
+});
+
 // 한글 → 서버용 영문 매핑
 const typeMap = {
   수입: 'income',
   지출: 'expense',
+  이체: 'transfer',
 };
 
 const submitForm = async () => {
   const entry = {
-    type: activeTab.value,
+    type: typeMap[activeTab.value],
     date: form.value.date,
   };
 
-  if (activeTab.value === '이체') {
+  if (activeTab.value === 'transfer') {
     entry.from = Number(form.value.from);
     entry.to = Number(form.value.to);
     entry.memo = form.value.memo;
   } else {
-    entry.userId = 1;
+    /* 현재 로그인한 사람의 정보*/
+    entry.userId = userStore.user.id;
     entry.amount = Number(form.value.amount);
     entry.category = form.value.category;
     entry.payment = form.value.paymentMethod;
     entry.description = form.value.description;
     entry.fixed = form.value.fixed;
+
+    if (form.value.fixed) {
+      entry.period = form.value.period;
+      entry.endDate = form.value.endDate;
+
+      // ✅ fixedExpenses용 구조로 따로 구성
+      const fixedEntry = {
+        userId: entry.userId,
+        category: entry.category,
+        amount: entry.amount,
+        payment: entry.payment,
+        description: entry.description,
+        date: entry.date,
+        rotation: form.value.period, // ✅ 'period'를 'rotation'으로 보냄
+        endDate: form.value.endDate || null,
+      };
+
+      try {
+        const res = await axios.post(
+          'http://localhost:3000/fixedExpenses',
+          fixedEntry
+        );
+        console.log('✅ 고정 항목 등록 완료:', res.data);
+      } catch (err) {
+        console.error('❌ 고정 항목 전송 실패:', err);
+      }
+
+      emit('close');
+      return;
+    }
   }
 
   store.addTransaction(entry);
 
   try {
-    const res = await axios.post('/api/transactions', entry);
+    await axios.post('http://localhost:3000/transactions', entry);
     console.log('서버 응답:', res.data);
   } catch (err) {
     console.error('전송 실패:', err);
@@ -146,7 +253,7 @@ const submitForm = async () => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(240, 240, 240, 0.6);
+  background-color: rgba(240, 240, 240, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -264,6 +371,25 @@ const submitForm = async () => {
   padding: 10px 30px;
   border-radius: 20px;
   cursor: pointer;
+}
+/* 고정 지출 + 수입 -> 종료 날짜 */
+.recurring-date-wrapper {
+  width: 100%;
+  max-width: 250px; /* ✅ 박스 너비를 줄입니다 */
+  margin: 10px auto;
+}
+
+.recurring-date {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #000;
+  border-radius: 5px;
+
+  /* ✅ 텍스트 왼쪽 정렬 */
+  text-align: left;
+
+  /* ✅ 글꼴 크기 조정도 가능 */
+  font-size: 0.95rem;
 }
 </style>
 

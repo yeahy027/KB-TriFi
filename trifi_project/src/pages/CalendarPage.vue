@@ -5,7 +5,9 @@
       <div class="header">
         <!-- 월 이동 버튼/월 표시 영역 -->
         <!-- 월 선택 및 날짜 -->
-        <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+        <div
+          class="d-flex align-items-center justify-content-center gap-2 mb-3"
+        >
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
@@ -15,7 +17,12 @@
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
-          <button class="btn btn-outline-primary btn-sm" @click="resetToThisMonth">📅이번 달</button>
+          <button
+            class="btn btn-outline-primary btn-sm"
+            @click="resetToThisMonth"
+          >
+            📅이번 달
+          </button>
         </div>
 
         <!-- 전체/수입/지출/이체 버튼 (필터) -->
@@ -50,7 +57,9 @@
             :class="{ active: eventFilter === 'transfer' }"
             @click="setFilter('transfer')"
           >
-            🏦 이체 ({{ transferCount }}건)<br />{{ formatCurrency(transferSum) }}
+            🏦 이체 ({{ transferCount }}건)<br />{{
+              formatCurrency(transferSum)
+            }}
           </div>
         </div>
       </div>
@@ -72,7 +81,9 @@
                 sunday: day.dateObj.getDay() === 0,
                 saturday: day.dateObj.getDay() === 6,
               }"
-              @mouseenter="dayEvents(day.dateStr).length > 0 && openPreview(day.dateStr)"
+              @mouseenter="
+                dayEvents(day.dateStr).length > 0 && openPreview(day.dateStr)
+              "
               @mouseleave="closePreview"
             >
               <!-- 날짜 표시 (오늘이면 today-badge 클래스 추가) -->
@@ -84,16 +95,13 @@
               </div>
 
               <!-- 말풍선 팝업(hover) - 해당 날짜에 마우스 올라갔을 때만 표시 -->
-              <div
-                v-if="previewDateStr === day.dateStr"
-                class="popup-bubble"
-              >
-                <div 
-                  v-for="(evt, index) in dayEvents(day.dateStr)" 
+              <div v-if="previewDateStr === day.dateStr" class="popup-bubble">
+                <div
+                  v-for="(evt, index) in dayEvents(day.dateStr)"
                   :key="index"
                   class="popup-item"
                 >
-                  {{ evt.description }}<br/>
+                  {{ evt.description }}<br />
                   {{ formattedAmount(evt) }}
                 </div>
               </div>
@@ -103,15 +111,32 @@
                 v-for="(event, eIndex) in dayEvents(day.dateStr)"
                 :key="eIndex"
                 :class="['event', event.type]"
-                style="display: block;"
+                style="display: block"
                 @click.stop="onEventClick(event)"
               >
                 <span :class="event.type">
                   {{ formattedAmount(event) }}원
                 </span>
-                <div v-if="selectedEventId === event.id" class="edit-delete-buttons" style="background-color: #f2f2f2;">
-                <button type="button" class="btn btn-outline-danger btn-sm" @click.stop="deleteEvent(event.id)" style="margin-right: 10px;">삭제</button>
-                <button type="button" class="btn btn-outline-warning btn-sm" @click.stop="editEvent(event)">수정</button>
+                <div
+                  v-if="selectedEventId === event.id"
+                  class="edit-delete-buttons"
+                  style="background-color: #f2f2f2"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm"
+                    @click.stop="deleteEvent(event.id)"
+                    style="margin-right: 10px"
+                  >
+                    삭제
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-warning btn-sm"
+                    @click.stop="editEvent(event)"
+                  >
+                    수정
+                  </button>
                 </div>
               </div>
             </td>
@@ -201,7 +226,11 @@ const dayNames = computed(() => ['일', '월', '화', '수', '목', '금', '토'
 
 // 달력 주차 계산
 const weeks = computed(() => {
-  const firstDayOfMonth = new Date(currentYear.value, currentMonth.value - 1, 1);
+  const firstDayOfMonth = new Date(
+    currentYear.value,
+    currentMonth.value - 1,
+    1
+  );
   const lastDayOfMonth = new Date(currentYear.value, currentMonth.value, 0);
   const lastDate = lastDayOfMonth.getDate();
   const startDay = firstDayOfMonth.getDay();
@@ -339,7 +368,8 @@ function formattedAmount(evt) {
   } else if (evt.type === 'expense' || evt.type === 'transfer') {
     return `- ${evt.amount.toLocaleString()}`;
   }
-  return evt.amount.toLocaleString();
+
+  return evt.amount;
 }
 
 // 통화 포맷 (통계 부분에 사용)
@@ -380,7 +410,10 @@ async function addNewEvent() {
     amount: 50000,
   };
   try {
-    const res = await axios.post('http://localhost:3000/transactions', newEvent);
+    const res = await axios.post(
+      'http://localhost:3000/transactions',
+      newEvent
+    );
     events.value.push(res.data);
     alert('새 이벤트가 등록되었습니다!');
   } catch (error) {
@@ -395,7 +428,7 @@ function resetToThisMonth() {
 }
 function onEventClick(event) {
   // 같은 이벤트를 두 번 클릭하면 닫히도록 토글 형태(원하시는 방식으로 변경 가능)
-  selectedEventId.value = (selectedEventId.value === event.id) ? null : event.id;
+  selectedEventId.value = selectedEventId.value === event.id ? null : event.id;
 }
 async function deleteEvent(eventId) {
   if (confirm('정말 삭제하시겠습니까?')) {
@@ -415,7 +448,6 @@ function editEvent(event) {
   // 원하는 로직: 예를 들어 수정 모달 열기
   alert(`"${event.description}" 수정하기 버튼 클릭됨!`);
 }
-
 </script>
 
 <style scoped>
@@ -431,7 +463,6 @@ function editEvent(event) {
   flex-direction: column;
 }
 
-
 /* 통계/요약 (필터) */
 .summary {
   text-align: center;
@@ -446,7 +477,7 @@ function editEvent(event) {
   padding-bottom: 4px;
 }
 .summary-item.total {
-  color: #c62828; 
+  color: #c62828;
 }
 .summary-item.income {
   color: blue;
@@ -508,7 +539,7 @@ function editEvent(event) {
   border-radius: 50%;
   background-color: black;
   color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* 이벤트 표시 */
@@ -544,11 +575,11 @@ function editEvent(event) {
   padding: 4px;
   z-index: 999;
   font-size: 0.9rem;
-  border-radius: 10px; 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 .popup-bubble::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 10px;
   left: -10px;
@@ -557,7 +588,7 @@ function editEvent(event) {
   border-color: transparent #fff transparent transparent;
 }
 .popup-bubble::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 10px;
   left: -12px;
@@ -582,7 +613,7 @@ function editEvent(event) {
   color: black;
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .add-button:hover {
   background-color: #fdb3b3;
