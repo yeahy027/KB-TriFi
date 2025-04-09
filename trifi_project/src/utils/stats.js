@@ -1,6 +1,8 @@
 // utils/stats.js
-
+// 주차별로 데이터를 그룹핑해서 비교 꺾은선 그래프용 데이터 가공
 import dayjs from 'dayjs'
+import isoWeek from 'dayjs/plugin/isoWeek'
+dayjs.extend(isoWeek)
 
 export function getExpenses(transactions) {
   return transactions.filter(tx => tx.type === 'expense' || tx.fixed)
@@ -64,3 +66,54 @@ export function getIncomeVsExpense(transactions) {
     { name: '지출', value: expense }
   ]
 }
+
+export function getCompareChartData(transactions) {
+    const now = dayjs()
+    const thisMonth = now.format('YYYY-MM')
+    const lastMonth = now.subtract(1, 'month').format('YYYY-MM')
+  
+    const weeks = ['1주차', '2주차', '3주차', '4주차', '5주차']
+  
+    function getWeeklySums(month) {
+      const weekSums = [0, 0, 0, 0, 0]
+  
+      getExpenses(transactions)
+        .filter(tx => tx.date.startsWith(month))
+        .forEach(tx => {
+          const week = dayjs(tx.date).date()
+          const weekIndex = Math.floor((week - 1) / 7)
+          weekSums[weekIndex] += tx.amount
+        })
+  
+      return weekSums
+    }
+  
+    const thisMonthSums = getWeeklySums(thisMonth)
+    const lastMonthSums = getWeeklySums(lastMonth)
+  
+    return {
+      labels: weeks,
+      datasets: [
+        {
+          label: '전달',
+          data: lastMonthSums,
+          borderColor: '#8AB4F8',
+          backgroundColor: 'rgba(138, 180, 248, 0.3)',
+          tension: 0.4,
+          fill: false,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        },
+        {
+          label: '이번 달',
+          data: thisMonthSums,
+          borderColor: '#F9D85E',
+          backgroundColor: 'rgba(249, 216, 94, 0.3)',
+          tension: 0.4,
+          fill: false,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }
+      ]
+    }
+  }
