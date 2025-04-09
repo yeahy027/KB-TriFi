@@ -53,6 +53,7 @@
       "password": "1111"
     }
   ],
+
   "transactions": [
     {
       "id": "1",
@@ -77,6 +78,7 @@
       "fixed": false
     }
   ],
+
   "fixedExpenses": [
     {
       "id": "1",
@@ -88,6 +90,7 @@
       "date": "2025-04-05"
     }
   ],
+
   "cards": [
     {
       "id": "1",
@@ -99,36 +102,38 @@
     },
     {
       "id": "2",
-      "userId": 1,
+      "userId": 2,
       "name": "삼성카드",
-      "number": "5789 •••• •••• 2847",
+      "number": "1234 •••• •••• 2847",
       "cardholder_name": "Mike Smith",
       "expiry_date": "06/21"
     }
   ],
+
   "events": [
     {
-      "id": 1,
+      "id": "1",
       "date": "2025-04-07",
       "type": "income",
       "amount": 3000000
     },
     {
-      "id": 2,
+      "id": "2",
       "date": "2025-04-07",
       "type": "expense",
       "amount": 80000
     },
     {
-      "id": 3,
+      "id": "3",
       "date": "2025-04-08",
       "type": "transfer",
       "amount": 500000
     }
   ],
+
   "records": [
     {
-      "id": 1,
+      "id": "1",
       "date": "2025-04-01",
       "asset": "은행",
       "category": "용돈",
@@ -137,7 +142,7 @@
       "memo": "알바비"
     },
     {
-      "id": 2,
+      "id": "2",
       "date": "2025-04-01",
       "asset": "카드",
       "category": "쇼핑",
@@ -146,7 +151,7 @@
       "memo": "무신사"
     },
     {
-      "id": 3,
+      "id": "3",
       "date": "2025-04-01",
       "asset": "현금",
       "category": "식비",
@@ -155,7 +160,7 @@
       "memo": "아웃백"
     },
     {
-      "id": 4,
+      "id": "4",
       "date": "2025-03-10",
       "asset": "현금",
       "category": "식비",
@@ -164,7 +169,7 @@
       "memo": "아웃백"
     },
     {
-      "id": 5,
+      "id": "5",
       "date": "2025-04-03",
       "asset": "현금",
       "category": "식비",

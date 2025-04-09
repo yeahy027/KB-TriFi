@@ -24,7 +24,7 @@ export const useUserStore = defineStore('user', () => {
   // 액션 - 사용자 정보 가져오기
   const fetchUser = async () => {
     try {
-      const response = await axios.get(BASEURI);
+      const response = await axios.get(`/api/users/${states.user.id}`);
       if (response.status === 200) {
         states.user = response.data;
       } else {

@@ -1,4 +1,3 @@
-<!-- MyPage.vue -->
 <template>
   <AppLayout>
     <div class="my-page">
@@ -13,8 +12,6 @@
           <div class="user-info">
             <h2>{{ user.nickname }}</h2>
             <p>{{ user.email }}</p>
-            <!-- <h2>TriFi</h2>
-          <p>TriFi</p> -->
           </div>
         </div>
         <div class="account-buttons">
@@ -38,14 +35,17 @@
           </div>
           <div class="card-box">
             <button class="slide-btn left" @click="prevCard"><</button>
-            <div class="card">
-              <p class="brand">cloudcash</p>
-              <p class="number">5789 •••• •••• 2847</p>
+
+            <!-- 카드 반복 출력 -->
+            <div v-for="(card, index) in cards" :key="card.id" class="card">
+              <p class="brand">{{ card.name }}</p>
+              <p class="number">{{ card.number }}</p>
               <div class="card-footer">
-                <span>Mike Smith</span>
-                <span>06/21</span>
+                <span>{{ card.cardholder_name }}</span>
+                <span>{{ card.expiry_date }}</span>
               </div>
             </div>
+
             <button class="slide-btn right" @click="nextCard">></button>
           </div>
         </div>
@@ -71,16 +71,30 @@
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
 import { useUserStore } from '@/stores/userStore';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const userStore = useUserStore(); // Pinia store 가져오기
 const user = computed(() => userStore.user); // 최신 user 데이터
 const router = useRouter();
+const cards = ref([]); // 카드 데이터를 저장할 변수
 
 onMounted(() => {
   userStore.checkLocalStorage();
+  fetchCards(); // 카드 정보 불러오기
 });
+
+// 카드 정보 가져오기
+const fetchCards = async () => {
+  try {
+    const response = await axios.get('/api/cards'); // API 요청 (db.json에서 카드 데이터 불러오기)
+    cards.value = response.data.cards; // 카드 데이터를 상태에 저장
+  } catch (error) {
+    console.error('카드 정보 불러오기 실패:', error);
+    alert('카드 정보를 불러오는 데 실패했습니다.');
+  }
+};
 
 const handleLogout = () => {
   userStore.logoutUser();
@@ -95,6 +109,25 @@ const handleDeleteAccount = () => {
       router.push('/'); // 홈이나 로그인 페이지 등으로 이동
     });
   }
+};
+
+// 카드를 추가하는 함수 (나중에 추가 기능을 위해 만들 수 있음)
+const addCard = () => {
+  console.log('카드 추가');
+};
+
+// 카드 슬라이드 기능
+const prevCard = () => {
+  console.log('이전 카드');
+};
+
+const nextCard = () => {
+  console.log('다음 카드');
+};
+
+// 고정지출 목록 추가
+const addFixList = () => {
+  console.log('고정지출 목록 추가');
 };
 </script>
 
@@ -193,8 +226,6 @@ const handleDeleteAccount = () => {
 .plus-fixlist {
   border: none;
   border-radius: 30%;
-  /* padding: 12px; */
-
   font-size: 24px;
   cursor: pointer;
   color: #f4c542;
@@ -209,10 +240,6 @@ const handleDeleteAccount = () => {
   gap: 16px;
   position: relative;
   padding-top: 20px;
-
-  /* background: #e0f0ff;
-  padding: 24px;
-  border-radius: 16px; */
 }
 
 .card {
@@ -231,21 +258,20 @@ const handleDeleteAccount = () => {
   border: none;
   border-radius: 30%;
   background: rgba(255, 255, 255, 0.6);
-  /* padding: 12px; */
   cursor: pointer;
   font-size: 24px;
   z-index: 1;
-  width: 40px; /* 버튼 크기 조정 */
-  height: 40px; /* 버튼 높이 조정 */
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
-  align-items: center; /* 버튼 안의 아이콘을 중앙 정렬 */
+  align-items: center;
   top: 50%;
 }
 
 .left {
   position: absolute;
-  left: 20px; /* 좌측 버튼 위치 */
+  left: 20px;
 }
 
 .right {
