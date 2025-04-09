@@ -147,7 +147,16 @@
       <!-- 모달로 등록 폼 열기 -->
     </div>
     <button class="add-button" @click="isModalOpen = true">+</button>
+    <button class="calc-button" @click="showCalculator = true">
+      <i class="bi bi-calculator"></i>
+    </button>
+
+    <!-- 계산기 컴포넌트 -->
+    <Calculator 
+      :visible="showCalculator"
+      @close="showCalculator = false"></Calculator>
     <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+    
   </AppLayout>
 </template>
 
@@ -156,6 +165,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
 import axios from 'axios';
+import Calculator from './Calculator.vue';
 
 defineOptions({ name: 'CalendarExample' });
 
@@ -182,6 +192,7 @@ const previewDateStr = ref(null);
 
 // 필터 상태 ('all', '수입', '지출', '이체')
 const eventFilter = ref('all');
+const showCalculator = ref(false);
 
 // 모달 열림 여부
 const isModalOpen = ref(false);
@@ -605,6 +616,23 @@ function editEvent(event) {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .add-button:hover {
+  background-color: #fdb3b3;
+}
+.calc-button {
+  position: fixed;
+  right: 30px;
+  bottom: 100px; /* +버튼 위쪽으로 배치해봤습니다. 원하는 대로 조절 */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px; /* 아이콘 크기 */
+  color: black;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+.calc-button:hover {
   background-color: #fdb3b3;
 }
 </style>
