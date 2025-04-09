@@ -13,7 +13,7 @@
           </button>
           <strong
             class="month-text mx-auto"
-            style="cursor: pointer"
+            style="cursor: pointer; font-size: large"
             @click="goToCalender"
             >{{ formattedYearMonth }}</strong
           >
@@ -148,9 +148,9 @@
       </table>
 
       <!-- 모달로 등록 폼 열기 -->
-      <button class="add-button" @click="isModalOpen = true">+</button>
-      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
+    <button class="add-button" @click="isModalOpen = true">+</button>
+    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
   </AppLayout>
 </template>
 
@@ -464,15 +464,6 @@ function editEvent(event) {
 .header {
   display: flex;
   flex-direction: column;
-}
-
-/* 월 이동 버튼/월 표시 */
-.month-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
 }
 
 /* 통계/요약 (필터) */

@@ -1,4 +1,3 @@
-<!-- MyPage.vue -->
 <template>
   <AppLayout>
     <div class="my-page">
@@ -9,22 +8,27 @@
       <!-- 유저 정보 섹션 -->
       <div class="account-section">
         <div class="account-left">
-          <img class="basic-img" src="../basic-img.png" alt="User profile" />
+          <img
+            class="basic-img"
+            src="../assets/basic-img.png"
+            alt="User profile"
+          />
+
           <div class="user-info">
             <h2>{{ user.nickname }}</h2>
             <p>{{ user.email }}</p>
-            <!-- <h2>TriFi</h2>
-          <p>TriFi</p> -->
+            <div class="account-buttons">
+              <router-link to="/editprofile">
+                <button class="yellow-btn">회원정보 수정 ></button>
+              </router-link>
+              <button class="yellow-btn" @click="handleLogout">
+                로그아웃 >
+              </button>
+              <button class="yellow-btn" @click="handleDeleteAccount">
+                회원탈퇴 >
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="account-buttons">
-          <router-link to="/editprofile">
-            <button class="yellow-btn">회원정보 수정 ></button>
-          </router-link>
-          <button class="yellow-btn" @click="handleLogout">로그아웃 ></button>
-          <button class="yellow-btn" @click="handleDeleteAccount">
-            회원탈퇴 >
-          </button>
         </div>
       </div>
 
@@ -34,33 +38,37 @@
         <div class="cards">
           <div class="section-title">
             <h3>Cards</h3>
-            <button class="plus-card" @click="addCard">+</button>
+            <!-- <button class="plus-card" @click="addCard">+</button> -->
           </div>
           <div class="card-box">
             <button class="slide-btn left" @click="prevCard"><</button>
-            <div class="card">
-              <p class="brand">cloudcash</p>
-              <p class="number">5789 •••• •••• 2847</p>
-              <div class="card-footer">
-                <span>Mike Smith</span>
-                <span>06/21</span>
+
+            <div class="create-card">
+              <div class="create-text">
+                <div style="color: #e3fc87; font-size: 18px">
+                  카드를 추가하세요
+                </div>
+                <button class="plus-card" @click="waitPlease">+</button>
               </div>
             </div>
+
             <button class="slide-btn right" @click="nextCard">></button>
           </div>
         </div>
 
-        <!-- 고정지출 섹션 -->
         <div class="expenses">
           <div class="section-title">
             <h3>고정지출 내역</h3>
-            <button class="plus-fixlist" @click="addFixList">+</button>
           </div>
           <ul class="expense-list">
-            <li>교통비</li>
-            <li>핸드폰 요금</li>
-            <li>애플뮤직</li>
-            <li>월세</li>
+
+            <!-- 고정지출 미리 체크되어있도록 -->
+            <RouterLink to="/registeredit">
+              <input
+                class="plus-fixlist"
+                placeholder="고정지출 추가하기"
+              ></input>
+            </RouterLink>
           </ul>
         </div>
       </div>
@@ -71,8 +79,10 @@
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
 import { useUserStore } from '@/stores/userStore';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const userStore = useUserStore(); // Pinia store 가져오기
 const user = computed(() => userStore.user); // 최신 user 데이터
@@ -84,17 +94,53 @@ onMounted(() => {
 
 const handleLogout = () => {
   userStore.logoutUser();
-  // 예: 로그인 페이지로 이동
   router.push('/');
 };
 
-const handleDeleteAccount = () => {
-  if (confirm('정말로 탈퇴하시겠습니까?')) {
+const waitPlease = () => {
+  Swal.fire({
+    titld: '점검 중',
+    text: '점검 중입니다.',
+    icon: 'info',
+  });
+};
+
+const handleDeleteAccount = async () => {
+  const result = await Swal.fire({
+    title: '회원 탈퇴 여부 확인',
+    text: '정말로 탈퇴하시겠습니까?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: '예',
+    cancelButtonText: '아니오',
+  });
+
+  if (result.isConfirmed) {
     userStore.deleteUser(() => {
-      alert('회원 탈퇴가 완료되었습니다.');
-      router.push('/'); // 홈이나 로그인 페이지 등으로 이동
+      Swal.fire({
+        title: '회원 탈퇴',
+        text: '회원 탈퇴가 완료되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+        customClass: {
+          title: 'fw-bold',
+          confirmButton: 'btn btn-success',
+        },
+      });
+      router.push('/');
     });
   }
+};
+
+// 카드 슬라이드 기능
+const prevCard = () => {
+  console.log('이전 카드');
+};
+
+const nextCard = () => {
+  console.log('다음 카드');
 };
 </script>
 
@@ -109,11 +155,11 @@ const handleDeleteAccount = () => {
   font-size: 32px;
   margin-bottom: 4px;
 }
-.subtitle {
+/* .subtitle {
   color: gray;
   font-size: 14px;
   margin-bottom: 32px;
-}
+} */
 
 .account-section {
   flex-direction: column;
@@ -132,8 +178,8 @@ const handleDeleteAccount = () => {
 }
 
 .basic-img {
-  width: 66px;
-  height: 66px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 
@@ -151,7 +197,6 @@ const handleDeleteAccount = () => {
   display: flex;
   gap: 12px;
   margin-top: 15px;
-  margin-left: 80px;
 }
 
 .yellow-btn {
@@ -189,17 +234,29 @@ const handleDeleteAccount = () => {
   margin: 0;
 }
 
-.plus-card,
-.plus-fixlist {
+.plus-card {
   border: none;
   border-radius: 30%;
-  /* padding: 12px; */
-
   font-size: 24px;
   cursor: pointer;
   color: #f4c542;
   font-weight: bold;
-  margin-right: 50px;
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plus-fixlist {
+  border: none;
+  border-radius: 10%;
+  cursor: pointer;
+  font-weight: 500;
+  width: 300px;
+  height: 50px;
+  padding-left: 20px;
 }
 
 .card-box {
@@ -209,21 +266,6 @@ const handleDeleteAccount = () => {
   gap: 16px;
   position: relative;
   padding-top: 20px;
-
-  /* background: #e0f0ff;
-  padding: 24px;
-  border-radius: 16px; */
-}
-
-.card {
-  background: linear-gradient(to right, #3b82f6, #60a5fa);
-  color: white;
-  border-radius: 16px;
-  padding: 20px;
-  min-width: 300px;
-  min-height: 200px;
-  margin-right: 30px;
-  margin-top: 5px;
 }
 
 .slide-btn {
@@ -231,43 +273,25 @@ const handleDeleteAccount = () => {
   border: none;
   border-radius: 30%;
   background: rgba(255, 255, 255, 0.6);
-  /* padding: 12px; */
   cursor: pointer;
   font-size: 24px;
   z-index: 1;
-  width: 40px; /* 버튼 크기 조정 */
-  height: 40px; /* 버튼 높이 조정 */
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
-  align-items: center; /* 버튼 안의 아이콘을 중앙 정렬 */
+  align-items: center;
   top: 50%;
 }
 
 .left {
   position: absolute;
-  left: 20px; /* 좌측 버튼 위치 */
+  left: 20px;
 }
 
 .right {
   position: absolute;
-  right: 50px;
-}
-
-.card .brand {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.card .number {
-  font-size: 18px;
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
+  right: 20px;
 }
 
 .expense-list {
@@ -279,5 +303,28 @@ const handleDeleteAccount = () => {
 .expense-list li {
   padding-top: 10px;
   margin-bottom: 8px;
+}
+
+.create-card {
+  background-color: #253a82;
+  width: 330px;
+  height: 200px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center; /* 세로축 중앙 */
+  justify-content: center; /* 가로축 중앙 */
+}
+
+.create-text {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  width: 200px;
+  height: 100px;
 }
 </style>

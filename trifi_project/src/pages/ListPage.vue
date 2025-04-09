@@ -8,8 +8,7 @@
         </button>
         <strong
           class="month-text mx-auto"
-          style="cursor: pointer"
-          @click="goToCalender"
+          style="cursor: pointer; font-size: large"
         >
           {{ formattedMonth }}
         </strong>
@@ -134,9 +133,9 @@
           </div>
         </div>
       </div>
+      <button class="add-button" @click="isModalOpen = true">+</button>
+      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
-    <button class="add-button" @click="isModalOpen = true">+</button>
-    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
   </AppLayout>
 </template>
 
@@ -420,10 +419,10 @@ const deleteRecord = async (id) => {
   height: 50px;
   border-radius: 50%;
   font-size: 30px;
-  background: #ff5252;
-  color: #fff;
+  color: black;
   border: none;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .add-button:hover {
   background-color: #fdb3b3;

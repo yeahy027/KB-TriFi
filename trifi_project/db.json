@@ -46,14 +46,36 @@
       "language": "Korean"
     },
     {
-      "id": "d6a3",
-      "name": "서현",
-      "nickname": "강",
-      "email": "seohyun0916@naver.com",
+      "id": "7a3b",
+      "name": "머머",
+      "nickname": "머니요hi",
+      "email": "money@example.com",
       "password": "1234"
     }
   ],
   "transactions": [
+    {
+      "id": "1",
+      "userId": 1,
+      "type": "income",
+      "date": "2025-04-01",
+      "amount": 3000000,
+      "category": "월급",
+      "payment": "계좌이체(은행)",
+      "description": "4월 월급",
+      "fixed": true
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "type": "expense",
+      "date": "2025-04-03",
+      "amount": 15000,
+      "category": "식비",
+      "payment": "카드",
+      "description": "점심",
+      "fixed": false
+    },
     {
       "id": "3",
       "userId": 1,
@@ -66,7 +88,18 @@
       "fixed": false
     },
     {
-      "id": "7",
+      "id": "4",
+      "userId": 1,
+      "type": "expense",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "payment": "카드",
+      "description": "문구점",
+      "fixed": false
+    },
+    {
+      "id": "5",
       "userId": 1,
       "type": "income",
       "date": "2025-04-11",
@@ -297,6 +330,17 @@
       "date": "2025-04-09",
       "rotation": "매주",
       "endDate": "2025-04-30"
+    },
+    {
+      "id": "28f1",
+      "userId": "d6a3",
+      "category": "",
+      "amount": 1222,
+      "payment": "현금",
+      "description": "알바",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-06-09"
     }
   ]
 }
