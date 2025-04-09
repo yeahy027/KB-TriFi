@@ -6,9 +6,11 @@
         <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
           <i class="bi bi-chevron-left"></i>
         </button>
-        <strong class="month-text mx-auto" style="cursor:pointer; font-size: large;">
+        <strong class="month-text mx-auto" style="cursor:pointer; font-size: xx-large;"
+        @click="showDatePicker">
           {{ formattedMonth }}
         </strong>
+       
         <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
           <i class="bi bi-chevron-right"></i>
         </button>
@@ -17,14 +19,17 @@
 
       <!-- 날짜 선택 + 엑셀 다운로드 -->
       <div class="mb-3 d-flex justify-content-end align-items-center gap-2">
-        <input
+        <button class="btn btn-outline-secondary btn-sm" @click="focusDateInput">
+  🔍
+</button><input
           type="date"
           v-model="selectedDate"
+          ref="dateInput"
           class="form-control form-control-sm"
           style="width: auto;"
         />
         <button class="btn btn-success btn-sm" @click="downloadExcel">
-          <i class="bi bi-file-earmark-excel"></i> 엑셀 변환
+          📂 엑셀 변환
         </button>
       </div>
 
@@ -69,7 +74,7 @@
         <div
           v-for="record in dailyRecords"
           :key="record.id"
-          class="d-flex align-items-center justify-content-between py-2 px-3 border-bottom"
+          class="d-flex align-items-center justify-content-between py-2 px-3 border-bottom position-relative"
         >
           <span class="badge me-3 d-flex align-items-center gap-1" :class="getCategoryClass(record.category)">
             {{ categoryIcons[record.category] || '❓' }} {{ record.category }}
@@ -118,6 +123,11 @@ const records = ref([])
 const filterType = ref('')
 const selectedDate = ref('')
 const isModalOpen = ref(false);
+const dateInput = ref(null);
+
+const focusDateInput = () => {
+  dateInput.value?.focus()
+}
 
 const clearSelectedDate = () => {
   selectedDate.value = ''
@@ -143,8 +153,10 @@ const nextMonth = () => {
 
 const resetToThisMonth = () => {
   currentMonth.value = new Date()
+  selectedDate.value = ''
 }
 
+// 요일 변환환
 const formatDateWithDay = (dateStr) => {
   const date = new Date(dateStr)
   const days = ['일','월','화','수','목','금','토']
@@ -152,6 +164,8 @@ const formatDateWithDay = (dateStr) => {
   return `${dateStr} (${dayName})`
 }
 
+
+// fetch
 let fetchInterval = null
 
 const fetchRecords = async () => {
@@ -288,6 +302,9 @@ const formattedYearMonth = computed(() => {
   const m = String(currentMonth.value).padStart(2, '0');
   return `${currentYear.value}년 ${m}월`;
 });
+
+
+
 </script>
 
 <style scoped>
