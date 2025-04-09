@@ -55,20 +55,9 @@
   ],
   "transactions": [
     {
-      "id": "1",
-      "userId": 1,
-      "type": "income",
-      "date": "2025-04-01",
-      "amount": 3000000,
-      "category": "월급",
-      "payment": "계좌이체(은행)",
-      "description": "4월 월급",
-      "fixed": true
-    },
-    {
       "id": "2",
       "userId": 1,
-      "type": "expense",
+      "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
       "category": "식비",
@@ -77,20 +66,9 @@
       "fixed": false
     },
     {
-      "id": "3",
-      "userId": 1,
-      "type": "expense",
-      "date": "2025-04-07",
-      "amount": 18000,
-      "category": "교통",
-      "payment": "카드",
-      "description": "지하철 정기권",
-      "fixed": false
-    },
-    {
       "id": "4",
       "userId": 1,
-      "type": "expense",
+      "type": "지출",
       "date": "2025-04-10",
       "amount": 15000,
       "category": "쇼핑",
@@ -101,7 +79,7 @@
     {
       "id": "5",
       "userId": 1,
-      "type": "income",
+      "type": "지출",
       "date": "2025-04-11",
       "amount": 1000,
       "category": "교통",
@@ -112,145 +90,13 @@
     {
       "id": "6",
       "userId": 1,
-      "type": "income",
+      "type": "지출",
       "date": "2025-04-12",
       "amount": 10077770,
       "category": "쇼핑",
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
-    },
-    {
-      "id": "2157",
-      "type": "수입",
-      "date": "2025-04-09",
-      "userId": 1,
-      "amount": 120000,
-      "category": "식비",
-      "payment": "현금",
-      "description": "21",
-      "fixed": true,
-      "period": "매일"
-    },
-    {
-      "id": "2c27",
-      "type": "수입",
-      "date": "2025-04-09",
-      "userId": 1,
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": false
-    },
-    {
-      "id": "0466",
-      "type": "수입",
-      "date": "2025-04-09",
-      "userId": 1,
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": true,
-      "period": "매일",
-      "endDate": "2025-04-30"
-    },
-    {
-      "id": "7876",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "8419",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "5e9c",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "82a9",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "94d8",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "dac3",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "f623",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "069a",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "8625",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "4c01",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "dff7",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "b8b6",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
     }
   ],
   "fixedExpenses": [
