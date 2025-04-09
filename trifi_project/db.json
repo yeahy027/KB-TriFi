@@ -46,11 +46,11 @@
       "language": "Korean"
     },
     {
-      "id": "2dee",
-      "name": "dd",
-      "nickname": "dd",
-      "email": "dd@naver.com",
-      "password": "1111"
+      "id": "7a3b",
+      "name": "머머",
+      "nickname": "머니요hi",
+      "email": "money@example.com",
+      "password": "1234"
     }
   ],
   "transactions": [
@@ -60,13 +60,13 @@
       "type": "income",
       "date": "2025-04-01",
       "amount": 3000000,
-      "category": "월급",
+      "category": "급여",
       "payment": "계좌이체(은행)",
       "description": "4월 월급",
       "fixed": true
     },
     {
-      "id": 2,
+      "id": "2",
       "userId": 1,
       "type": "expense",
       "date": "2025-04-03",
@@ -77,7 +77,7 @@
       "fixed": false
     },
     {
-      "id": 3,
+      "id": "3",
       "userId": 1,
       "type": "expense",
       "date": "2025-04-07",
@@ -88,7 +88,7 @@
       "fixed": false
     },
     {
-      "id": 4,
+      "id": "4",
       "userId": 1,
       "type": "expense",
       "date": "2025-04-10",
@@ -99,102 +99,40 @@
       "fixed": false
     },
     {
-      "id": 5,
-      "userId": 1,
-      "type": "income",
-      "date": "2025-04-11",
-      "amount": 1000,
-      "category": "교통",
-      "payment": "현금",
-      "description": "ㅁㅇㅁㅇ",
-      "fixed": false
-    },
-    {
-      "id": 6,
+      "id": "6",
       "userId": 1,
       "type": "income",
       "date": "2025-04-12",
-      "amount": 1000,
-      "category": "교통",
-      "payment": "현금",
-      "description": "ㅁㅇㅁㅇ",
+      "amount": 10077770,
+      "category": "쇼핑",
+      "payment": "카드",
+      "description": "에이블리",
       "fixed": false
     },
     {
-      "id": "f2b9",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "3656",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "5e47",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "bdfe",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "9b25",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "0b45",
+      "id": "7",
       "type": "수입",
-      "date": "",
+      "date": "2025-04-09",
       "userId": 1,
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": true
-    },
-    {
-      "id": "f198",
-      "type": "이체",
-      "date": "",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "41fc",
-      "type": "지출",
-      "date": "2025-03-03",
-      "userId": 1,
-      "amount": 111,
+      "amount": 120000,
       "category": "식비",
       "payment": "현금",
-      "description": "1111111",
-      "fixed": false
+      "description": "맥도날드",
+      "fixed": true,
+      "period": "매일"
+    }, {
+      "id": "8",
+      "type": "수입",
+      "date": "2025-03-09",
+      "userId": 1,
+      "amount": 120000,
+      "category": "식비",
+      "payment": "현금",
+      "description": "맥도날드",
+      "fixed": true,
+      "period": "매일"
     }
+   
   ],
   "fixedExpenses": [
     {
@@ -204,92 +142,86 @@
       "amount": 50000,
       "payment": "계좌이체(은행)",
       "description": "인터넷 요금",
-      "date": "2025-04-05"
-    }
-  ],
-  "cards": [
-    {
-      "id": "1",
-      "userId": 1,
-      "name": "신한카드",
-      "number": "5789 •••• •••• 2847",
-      "cardholder_name": "Mike Smith",
-      "expiry_date": "06/21"
+      "date": "2025-04-05",
+      "rotatiton": "day/week/month/year",
+      "endDate": "date/무기한(1년)"
     },
     {
-      "id": "2",
-      "userId": 1,
-      "name": "삼성카드",
-      "number": "5789 •••• •••• 2847",
-      "cardholder_name": "Mike Smith",
-      "expiry_date": "06/21"
-    }
-  ],
-  "events": [
-    {
-      "id": 1,
-      "date": "2025-04-07",
-      "type": "income",
-      "amount": 3000000
+      "id": "a229",
+      "userId": "",
+      "category": "",
+      "amount": 122222,
+      "payment": "카드",
+      "description": "캐시백",
+      "date": "2025-04-09",
+      "rotation": "매일",
+      "endDate": "2025-04-16"
     },
     {
-      "id": 2,
-      "date": "2025-04-07",
-      "type": "expense",
-      "amount": 80000
+      "id": "2484",
+      "userId": "",
+      "category": "",
+      "amount": 100000,
+      "payment": "카드",
+      "description": "캐시백",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-04-09"
     },
     {
-      "id": 3,
-      "date": "2025-04-08",
-      "type": "transfer",
-      "amount": 500000
-    }
-  ],
-  "records": [
-    {
-      "id": 1,
-      "date": "2025-04-01",
-      "asset": "은행",
-      "category": "용돈",
-      "amount": 500000,
-      "type": "수입",
-      "memo": "알바비"
+      "id": "6053",
+      "userId": "",
+      "category": "",
+      "amount": 1200,
+      "payment": "현금",
+      "description": "캐시백",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-10"
     },
     {
-      "id": 2,
-      "date": "2025-04-01",
-      "asset": "카드",
-      "category": "쇼핑",
-      "amount": 22909,
-      "type": "지출",
-      "memo": "무신사"
+      "id": "e4ef",
+      "userId": "",
+      "category": "",
+      "amount": 0,
+      "payment": "현금",
+      "description": "12212",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-05-10"
     },
     {
-      "id": 3,
-      "date": "2025-04-01",
-      "asset": "현금",
-      "category": "식비",
-      "amount": 112222,
-      "type": "지출",
-      "memo": "아웃백"
+      "id": "6453",
+      "userId": "",
+      "category": "",
+      "amount": 12200,
+      "payment": "카드",
+      "description": "캐시백",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
     },
     {
-      "id": 4,
-      "date": "2025-03-10",
-      "asset": "현금",
-      "category": "식비",
-      "amount": 112222,
-      "type": "지출",
-      "memo": "아웃백"
+      "id": "bf13",
+      "userId": "",
+      "category": "",
+      "amount": 12000,
+      "payment": "카드",
+      "description": "알바",
+      "date": "2025-04-09",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
     },
     {
-      "id": 5,
-      "date": "2025-04-03",
-      "asset": "현금",
-      "category": "식비",
-      "amount": 30000,
-      "type": "이체",
-      "memo": "아웃백"
+      "id": "28f1",
+      "userId": "d6a3",
+      "category": "",
+      "amount": 1222,
+      "payment": "현금",
+      "description": "알바",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-06-09"
     }
   ]
 }

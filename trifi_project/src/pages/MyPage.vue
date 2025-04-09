@@ -1,4 +1,3 @@
-<!-- MyPage.vue -->
 <template>
   <AppLayout>
     <div class="my-page">
@@ -9,22 +8,26 @@
       <!-- 유저 정보 섹션 -->
       <div class="account-section">
         <div class="account-left">
-          <img class="basic-img" src="../basic-img.png" alt="User profile" />
+          <img
+            class="basic-img"
+            src="../assets/basic-img.png"
+            alt="User profile"
+          />
           <div class="user-info">
             <h2>{{ user.nickname }}</h2>
             <p>{{ user.email }}</p>
-            <!-- <h2>TriFi</h2>
-          <p>TriFi</p> -->
+            <div class="account-buttons">
+              <router-link to="/editprofile">
+                <button class="yellow-btn">회원정보 수정 ></button>
+              </router-link>
+              <button class="yellow-btn" @click="handleLogout">
+                로그아웃 >
+              </button>
+              <button class="yellow-btn" @click="handleDeleteAccount">
+                회원탈퇴 >
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="account-buttons">
-          <router-link to="/editprofile">
-            <button class="yellow-btn">회원정보 수정 ></button>
-          </router-link>
-          <button class="yellow-btn" @click="handleLogout">로그아웃 ></button>
-          <button class="yellow-btn" @click="handleDeleteAccount">
-            회원탈퇴 >
-          </button>
         </div>
       </div>
 
@@ -34,35 +37,52 @@
         <div class="cards">
           <div class="section-title">
             <h3>Cards</h3>
-            <button class="plus-card" @click="addCard">+</button>
           </div>
           <div class="card-box">
             <button class="slide-btn left" @click="prevCard"><</button>
-            <div class="card">
-              <p class="brand">cloudcash</p>
-              <p class="number">5789 •••• •••• 2847</p>
-              <div class="card-footer">
-                <span>Mike Smith</span>
-                <span>06/21</span>
+
+            <!-- 여기부터 카드 추가 UI -->
+            <div class="create-card">
+              <!-- 캡처처럼 가운데 + 원형 영역과 안내문구 -->
+              <div class="card-add-circle">
+                <div class="plus-sign" @click="isModalOpen = true">+</div>
+                <RegisterCard v-if="isModalOpen" @close="isModalOpen = false" />
               </div>
+              <p class="instruction">위의 + 버튼을 눌러 카드를 등록해 주세요</p>
             </div>
+            <!-- 여기까지 카드 추가 UI -->
+
             <button class="slide-btn right" @click="nextCard">></button>
           </div>
         </div>
 
-        <!-- 고정지출 섹션 -->
         <div class="expenses">
           <div class="section-title">
             <h3>고정지출 내역</h3>
-            <button class="plus-fixlist" @click="addFixList">+</button>
           </div>
           <ul class="expense-list">
-            <li>교통비</li>
-            <li>핸드폰 요금</li>
-            <li>애플뮤직</li>
-            <li>월세</li>
+            <RouterLink to="/registeredit">
+              <input
+                class="plus-fixlist"
+                placeholder="고정지출 추가하기"
+              />
+            </RouterLink>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <!-- 실제 카드 상세정보를 입력할 폼/모달(간단 예시) -->
+    <div v-if="isCardFormOpen" class="card-detail-modal">
+      <div class="card-detail-content">
+        <h2>카드 정보 입력</h2>
+        <!-- 여기에 세부내용 폼(카드 이름, 번호 등) 넣으시면 됩니다. -->
+        <form @submit.prevent="submitCardInfo">
+          <!-- 예: <input type="text" placeholder="카드명" v-model="newCardName" /> -->
+          <!-- 필요한 내용은 직접 채우시면 됩니다 -->
+          <button type="submit">저장</button>
+        </form>
+        <button class="close-btn" @click="closeCardForm">닫기</button>
       </div>
     </div>
   </AppLayout>
@@ -71,12 +91,22 @@
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
 import { useUserStore } from '@/stores/userStore';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import RegisterCard from './RegisterCard.vue';
 
 const userStore = useUserStore(); // Pinia store 가져오기
 const user = computed(() => userStore.user); // 최신 user 데이터
 const router = useRouter();
+const isModalOpen = ref(false);
+
+// 모달 열림/닫힘 상태
+const isCardFormOpen = ref(false);
+
+// 카드 상세정보 입력 예시 데이터
+const newCardName = ref(''); // 필요하다면 v-model로 사용
 
 onMounted(() => {
   userStore.checkLocalStorage();
@@ -84,17 +114,66 @@ onMounted(() => {
 
 const handleLogout = () => {
   userStore.logoutUser();
-  // 예: 로그인 페이지로 이동
   router.push('/');
 };
 
-const handleDeleteAccount = () => {
-  if (confirm('정말로 탈퇴하시겠습니까?')) {
+const handleDeleteAccount = async () => {
+  const result = await Swal.fire({
+    title: '회원 탈퇴 여부 확인',
+    text: '정말로 탈퇴하시겠습니까?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: '예',
+    cancelButtonText: '아니오',
+  });
+
+  if (result.isConfirmed) {
     userStore.deleteUser(() => {
-      alert('회원 탈퇴가 완료되었습니다.');
-      router.push('/'); // 홈이나 로그인 페이지 등으로 이동
+      Swal.fire({
+        title: '회원 탈퇴',
+        text: '회원 탈퇴가 완료되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+        customClass: {
+          title: 'fw-bold',
+          confirmButton: 'btn btn-success',
+        },
+      });
+      router.push('/');
     });
   }
+};
+
+// 카드 추가 모달 열기
+const openCardForm = () => {
+  isCardFormOpen.value = true;
+};
+
+// 카드 추가 모달 닫기
+const closeCardForm = () => {
+  isCardFormOpen.value = false;
+};
+
+// 카드 정보 제출
+const submitCardInfo = () => {
+  // TODO: 폼 데이터( newCardName 등 )를 활용하여 서버 통신 or store 업데이트
+  console.log('카드 정보:', newCardName.value);
+
+  // 저장 후 모달 닫기
+  isCardFormOpen.value = false;
+};
+
+// 카드 슬라이드 기능
+const prevCard = () => {
+  console.log('이전 카드');
+};
+const nextCard = () => {
+  console.log('다음 카드');
+};
+const goToRegisterCard = () => {
+  router.push('/registercard'); // RegisterCard.vue 경로로 이동
 };
 </script>
 
@@ -108,11 +187,6 @@ const handleDeleteAccount = () => {
 .header h1 {
   font-size: 32px;
   margin-bottom: 4px;
-}
-.subtitle {
-  color: gray;
-  font-size: 14px;
-  margin-bottom: 32px;
 }
 
 .account-section {
@@ -132,8 +206,8 @@ const handleDeleteAccount = () => {
 }
 
 .basic-img {
-  width: 66px;
-  height: 66px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 
@@ -151,7 +225,6 @@ const handleDeleteAccount = () => {
   display: flex;
   gap: 12px;
   margin-top: 15px;
-  margin-left: 80px;
 }
 
 .yellow-btn {
@@ -189,17 +262,14 @@ const handleDeleteAccount = () => {
   margin: 0;
 }
 
-.plus-card,
 .plus-fixlist {
   border: none;
-  border-radius: 30%;
-  /* padding: 12px; */
-
-  font-size: 24px;
+  border-radius: 10%;
   cursor: pointer;
-  color: #f4c542;
-  font-weight: bold;
-  margin-right: 50px;
+  font-weight: 500;
+  width: 300px;
+  height: 50px;
+  padding-left: 20px;
 }
 
 .card-box {
@@ -209,21 +279,6 @@ const handleDeleteAccount = () => {
   gap: 16px;
   position: relative;
   padding-top: 20px;
-
-  /* background: #e0f0ff;
-  padding: 24px;
-  border-radius: 16px; */
-}
-
-.card {
-  background: linear-gradient(to right, #3b82f6, #60a5fa);
-  color: white;
-  border-radius: 16px;
-  padding: 20px;
-  min-width: 300px;
-  min-height: 200px;
-  margin-right: 30px;
-  margin-top: 5px;
 }
 
 .slide-btn {
@@ -231,53 +286,100 @@ const handleDeleteAccount = () => {
   border: none;
   border-radius: 30%;
   background: rgba(255, 255, 255, 0.6);
-  /* padding: 12px; */
   cursor: pointer;
   font-size: 24px;
   z-index: 1;
-  width: 40px; /* 버튼 크기 조정 */
-  height: 40px; /* 버튼 높이 조정 */
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
-  align-items: center; /* 버튼 안의 아이콘을 중앙 정렬 */
+  align-items: center;
   top: 50%;
 }
 
 .left {
   position: absolute;
-  left: 20px; /* 좌측 버튼 위치 */
+  left: 20px;
 }
 
 .right {
   position: absolute;
-  right: 50px;
+  right: 20px;
 }
 
-.card .brand {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.card .number {
-  font-size: 18px;
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-}
-
-.card-footer {
+/* 카드 추가 버튼 스타일 */
+.create-card {
+  background-color: #f9f9ec;
+  width: 330px;
+  height: 200px;
+  border-radius: 16px;
   display: flex;
-  justify-content: space-between;
-  font-size: 14px;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-.expense-list {
-  list-style: none;
-  padding: 0;
-  font-weight: bold;
-  padding-top: 10px;
+.card-add-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
-.expense-list li {
-  padding-top: 10px;
-  margin-bottom: 8px;
+
+.plus-sign {
+  display: flex;
+  align-content: center;
+  justify-items: center;
+  font-size: 50px;
+  color: #999;
+  margin-right: 4px;
+}
+
+.add-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.instruction {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+/* 카드 입력 폼 모달 예시 */
+.card-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.card-detail-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 300px;
+}
+
+.close-btn {
+  margin-top: 10px;
+  background-color: #f4c542;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 </style>

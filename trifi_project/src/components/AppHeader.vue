@@ -1,11 +1,17 @@
 <template>
-  <header class="d-flex justify-content-between align-items-center px-4 border-bottom bg-white position-fixed"
-          style="left: 240px; right: 0; height: 64px; top: 0; z-index: 1000;">
+  <header
+    class="d-flex justify-content-between align-items-center px-4 border-bottom bg-white position-fixed"
+    style="left: 240px; right: 0; height: 64px; top: 0; z-index: 1000;"
+  >
     <h6 class="fw-semibold m-0">{{ pageTitle }}</h6>
     <div class="d-flex align-items-center gap-3">
       <small class="text-muted">{{ timeLeft }} 후 만료</small>
-      <button class="btn btn-light btn-sm"><i class="bi bi-arrow-clockwise"></i></button>
-      <button class="btn btn-light btn-sm rounded-circle"><i class="bi bi-person-circle"></i></button>
+      <button class="btn btn-light btn-sm" @click="resetTimer">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+      <button class="btn btn-light btn-sm rounded-circle" @click="Mypage">
+        <i class="bi bi-person-circle"></i>
+      </button>
     </div>
   </header>
 </template>
@@ -32,18 +38,40 @@ const pageTitle = ref(pageTitleMap[route.path] || '페이지')
 const timeLeft = ref('60분')
 let timer = null
 
-// 로그인 시간 가져오기 또는 저장
+/**
+ * 1. 로그인 시간(getOrSetLoginTime):
+ *    - 로컬 스토리지에서 loginTime이 있으면 파싱하여 반환
+ *    - 없으면 현재 시간을 저장하고 반환
+ */
 const getOrSetLoginTime = () => {
   const saved = localStorage.getItem('loginTime')
-  if (saved) return new Date(saved)
-
-  const now = new Date()
-  localStorage.setItem('loginTime', now.toISOString())
-  return now
+  if (saved) {
+    return new Date(saved)
+  } else {
+    const now = new Date()
+    localStorage.setItem('loginTime', now.toISOString())
+    return now
+  }
 }
 
-// 남은 시간 계산 및 로그아웃 처리 함수
-const updateRemainingTime = (loginTime) => {
+/**
+ * 2. 남은 시간 계산(updateRemainingTime):
+ *    - 매번 localStorage에 있는 loginTime을 가져와서 계산
+ *    - 세션 만료 시 로그아웃 처리
+ */
+const updateRemainingTime = () => {
+  // 매번 최신 loginTime 가져오기
+  const saved = localStorage.getItem('loginTime')
+  let loginTime
+  if (saved) {
+    loginTime = new Date(saved)
+  } else {
+    // 저장된 값이 없으면(비정상적 상황) 지금 시각으로 세팅
+    loginTime = new Date()
+    localStorage.setItem('loginTime', loginTime.toISOString())
+  }
+
+  // 경과 시간
   const now = new Date()
   const elapsed = Math.floor((now - loginTime) / 1000)
   const remaining = 3600 - elapsed
@@ -52,7 +80,6 @@ const updateRemainingTime = (loginTime) => {
     timeLeft.value = '세션 만료됨'
     clearInterval(timer)
 
-    // 로그아웃 처리
     localStorage.removeItem('user')
     localStorage.removeItem('loginTime')
 
@@ -73,21 +100,42 @@ const updateRemainingTime = (loginTime) => {
   timeLeft.value = `${minutes}분 ${seconds < 10 ? '0' : ''}${seconds}초`
 }
 
-// 컴포넌트 마운트 시 실행
+/**
+ * 3. 타이머 리셋(resetTimer):
+ *    - 현재 시각을 localStorage에 다시 저장하여 60분 카운트다운을 재시작
+ */
+const resetTimer = () => {
+  const now = new Date()
+  localStorage.setItem('loginTime', now.toISOString())
+  updateRemainingTime() // 즉시 갱신
+}
+
+/**
+ * 4. 컴포넌트 마운트 시(onMounted):
+ *    - 최초 로그인 시간을 가져오거나 세팅
+ *    - 남은 시간 즉시 업데이트
+ *    - 이후 1초 간격으로 updateRemainingTime 실행
+ */
 onMounted(() => {
-  const loginTime = getOrSetLoginTime()
+  // 최초 loginTime이 없으면 새로 세팅
+  getOrSetLoginTime()
 
-  // 👉 최초 1회 즉시 실행
-  updateRemainingTime(loginTime)
+  // 즉시 1회 업데이트
+  updateRemainingTime()
 
-  // 이후 1초마다 남은 시간 업데이트
+  // 1초마다 갱신
   timer = setInterval(() => {
-    updateRemainingTime(loginTime)
+    updateRemainingTime()
   }, 1000)
 })
 
-// 컴포넌트 언마운트 시 타이머 정리
+/**
+ * 5. 언마운트 시(onUnmounted):
+ *    - timer 정리
+ */
 onUnmounted(() => {
   clearInterval(timer)
 })
+const Mypage = () => {
+  router.push(`/mypage`);}
 </script>
