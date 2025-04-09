@@ -51,6 +51,13 @@
       "nickname": "머니요hi",
       "email": "money@example.com",
       "password": "1234"
+    },
+    {
+      "id": "4174",
+      "name": "강",
+      "nickname": "서현",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
@@ -98,7 +105,6 @@
       "description": "에이블리",
       "fixed": false
     }
-   
   ],
   "fixedExpenses": [
     {
@@ -188,6 +194,17 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-06-09"
+    },
+    {
+      "id": "cfae",
+      "userId": "",
+      "category": "",
+      "amount": 12222,
+      "payment": "현금",
+      "description": "알바+용돈",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-05-09"
     }
   ]
 }

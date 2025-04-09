@@ -61,7 +61,7 @@
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
               <option value="카드">💳 카드</option>
-              <option value="계좌이체(은행)">🏦 계좌이체(은행)</option>
+              <option value="페이">💰페이(카카오,네이버 등)</option>
             </select>
 
             <input type="text" v-model="form.description" placeholder="내용" />
@@ -98,13 +98,28 @@
               @input="formattedFrom = $event.target.value"
               placeholder="출금 금액"
             />
-            <input
+            <!-- <input
               type="text"
               :value="formattedTo"
               @input="formattedTo = $event.target.value"
               placeholder="입금 금액"
-            />
-            <input type="text" v-model="form.memo" placeholder="메모" />
+            /> -->
+            <select v-model="form.category" class="category-select">
+              <option disabled value="">카테고리를 선택하세요</option>
+              <option value="식비">🍔 식비</option>
+              <option value="교통">🚗 교통</option>
+              <option value="쇼핑">🛍 쇼핑</option>
+              <option value="주거">🏠 주거</option>
+              <option value="기타">💅 미용</option>
+              <option value="기타">🎬 문화</option>
+              <option value="기타">🏦 저축</option>
+              <option value="기타">💰 급여</option>
+              <option value="기타">💰 용돈</option>
+              <option value="기타">🎁 선물</option>
+              <option value="기타">💊 의료</option>
+              <option value="기타">💡 공과금</option>
+            </select>
+            <input type="text" v-model="form.description" placeholder="메모" />
           </div>
 
           <button class="submit-btn" @click="submitForm">등록</button>
@@ -136,8 +151,8 @@ const initialForm = () => ({
   description: '',
   fixed: false,
   from: '',
-  to: '',
-  memo: '',
+  /*   to: '', */
+  /* memo: '', */
 });
 
 const form = ref(initialForm());
@@ -157,7 +172,7 @@ const formattedAmount = computed({
     form.value.amount = numeric;
   },
 });
-const formattedFrom = computed({
+/* const formattedFrom = computed({
   get() {
     if (!form.value.from) return '';
     return Number(form.value.from).toLocaleString() + '원';
@@ -166,7 +181,7 @@ const formattedFrom = computed({
     const numeric = value.replace(/[^\d]/g, '');
     form.value.from = numeric;
   },
-});
+}); */
 
 const formattedTo = computed({
   get() {
@@ -194,8 +209,9 @@ const submitForm = async () => {
 
   if (activeTab.value === 'transfer') {
     entry.from = Number(form.value.from);
-    entry.to = Number(form.value.to);
-    entry.memo = form.value.memo;
+    /* entry.to = Number(form.value.to); */
+    /*  entry.memo = form.value.memo; */
+    entry.description = form.value.description;
   } else {
     /* 현재 로그인한 사람의 정보*/
     entry.userId = userStore.user.id;
@@ -239,7 +255,7 @@ const submitForm = async () => {
   store.addTransaction(entry);
 
   try {
-    await axios.post('http://localhost:3000/transactions', entry);
+    const res = await axios.post('http://localhost:3000/transactions', entry);
     console.log('서버 응답:', res.data);
   } catch (err) {
     console.error('전송 실패:', err);
