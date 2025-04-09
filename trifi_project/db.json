@@ -44,9 +44,38 @@
       "password": "test5",
       "country": "Korea",
       "language": "Korean"
+    },
+    {
+      "id": "7a3b",
+      "name": "머머",
+      "nickname": "머니요hi",
+      "email": "money@example.com",
+      "password": "1234"
     }
   ],
   "transactions": [
+    {
+      "id": "1",
+      "userId": 1,
+      "type": "income",
+      "date": "2025-04-01",
+      "amount": 3000000,
+      "category": "월급",
+      "payment": "계좌이체(은행)",
+      "description": "4월 월급",
+      "fixed": true
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "type": "expense",
+      "date": "2025-04-03",
+      "amount": 15000,
+      "category": "식비",
+      "payment": "카드",
+      "description": "점심",
+      "fixed": false
+    },
     {
       "id": "3",
       "userId": 1,
@@ -59,7 +88,18 @@
       "fixed": false
     },
     {
-      "id": "7",
+      "id": "4",
+      "userId": 1,
+      "type": "expense",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "payment": "카드",
+      "description": "문구점",
+      "fixed": false
+    },
+    {
+      "id": "5",
       "userId": 1,
       "type": "income",
       "date": "2025-04-11",
