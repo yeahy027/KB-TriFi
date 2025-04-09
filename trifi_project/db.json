@@ -251,6 +251,17 @@
       "from": 0,
       "to": 0,
       "memo": ""
+    },
+    {
+      "id": "6a8a",
+      "type": "income",
+      "date": "2025-04-09",
+      "userId": "",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
