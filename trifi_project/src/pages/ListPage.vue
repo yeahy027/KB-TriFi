@@ -6,7 +6,7 @@
         <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
           <i class="bi bi-chevron-left"></i>
         </button>
-        <strong class="month-text mx-auto" style="cursor:pointer" @click="goToCalender">
+        <strong class="month-text mx-auto" style="cursor:pointer; font-size: large;">
           {{ formattedMonth }}
         </strong>
         <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
@@ -92,9 +92,9 @@
           
         </div>
       </div>
+      <button class="add-button" @click="isModalOpen = true">+</button>
+      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
-    <button class="add-button" @click="isModalOpen = true">+</button>
-    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
   </AppLayout>
 </template>
 
@@ -117,6 +117,7 @@ const currentMonth = ref(new Date())
 const records = ref([])
 const filterType = ref('')
 const selectedDate = ref('')
+const isModalOpen = ref(false);
 
 const clearSelectedDate = () => {
   selectedDate.value = ''
@@ -283,6 +284,10 @@ const deleteRecord = async (id) => {
     fetchRecords()
   }
 }
+const formattedYearMonth = computed(() => {
+  const m = String(currentMonth.value).padStart(2, '0');
+  return `${currentYear.value}년 ${m}월`;
+});
 </script>
 
 <style scoped>
@@ -344,10 +349,10 @@ const deleteRecord = async (id) => {
   height: 50px;
   border-radius: 50%;
   font-size: 30px;
-  background: #ff5252;
-  color: #fff;
+  color: black;
   border: none;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 .add-button:hover {
   background-color: #fdb3b3;
