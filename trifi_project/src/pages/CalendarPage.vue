@@ -11,12 +11,9 @@
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
-          <strong
-            class="month-text mx-auto"
-            style="cursor: pointer; font-size: large"
-            @click="goToCalender"
-            >{{ formattedYearMonth }}</strong
-          >
+          <strong class="month-text mx-auto"
+          style="cursor:pointer; font-size: xx-large;"
+          @click="goToCalender">{{ formattedYearMonth }}</strong>
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
