@@ -28,27 +28,42 @@
         </button>
       </div>
 
-      <!-- 수입/지출 요약 (총합은 전체 월 기준) -->
+      <!-- 수입/지출 요약 -->
       <div class="bg-white rounded p-3 shadow-sm mb-4 d-flex justify-content-between align-items-center">
         <div><strong>전체 내역 {{ monthlyRecords.length }}건</strong></div>
         <div class="d-flex gap-3 align-items-center">
-          <button class="btn btn-outline-danger btn-sm" @click="filterType = 'expense'">
+          <button
+            class="btn btn-sm"
+            :class="['btn-outline-danger', filterType === 'expense' ? 'active-btn' : '']"
+            @click="filterType = 'expense'"
+          >
             💸 지출 {{ totalExpense.toLocaleString() }}원
           </button>
-          <button class="btn btn-outline-primary btn-sm" @click="filterType = 'income'">
+          <button
+            class="btn btn-sm"
+            :class="['btn-outline-primary', filterType === 'income' ? 'active-btn' : '']"
+            @click="filterType = 'income'"
+          >
             💰 수입 {{ totalIncome.toLocaleString() }}원
           </button>
-          <button class="btn btn-outline-success btn-sm" @click="filterType = 'transfer'">
+          <button
+            class="btn btn-sm"
+            :class="['btn-outline-success', filterType === 'transfer' ? 'active-btn' : '']"
+            @click="filterType = 'transfer'"
+          >
             💰 이체 {{ totalTransfer.toLocaleString() }}원
           </button>
-          <button class="btn btn-outline-secondary btn-sm" @click="filterType = ''">
-            📋전체 보기
+          <button
+            class="btn btn-sm"
+            :class="['btn-outline-secondary', filterType === '' ? 'active-btn' : '']"
+            @click="filterType = ''"
+          >
+            📋 전체 보기
           </button>
         </div>
       </div>
 
-      
-      <!-- 날짜별 내역 (화면에 보일 필터링은 filterType 적용) -->
+      <!-- 날짜별 내역 -->
       <div v-for="(dailyRecords, date) in groupedRecords" :key="date" class="mb-4">
         <div class="fw-bold border-bottom pb-1 mb-2">{{ formatDateWithDay(date) }}</div>
         <div
@@ -56,16 +71,13 @@
           :key="record.id"
           class="d-flex align-items-center justify-content-between py-2 px-3 border-bottom"
         >
-          <!-- 카테고리 아이콘 + 뱃지 -->
           <span class="badge me-3 d-flex align-items-center gap-1" :class="getCategoryClass(record.category)">
             {{ categoryIcons[record.category] || '❓' }} {{ record.category }}
           </span>
-          <!-- 내용 + 자산 -->
           <div class="flex-grow-1">
             <div>{{ record.description }}</div>
             <small class="text-muted">{{ record.payment }}</small>
           </div>
-          <!-- 금액 -->
           <div :class="record.type === 'income' ? 'text-primary fw-bold' : 'text-danger fw-bold'">
             {{ Number(record.amount).toLocaleString() }} 원
           </div>
@@ -85,9 +97,9 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// const goToCalender = () => {
-//   router.push(`/home`)
-// }
+const goToCalender = () => {
+  router.push(`/home`)
+}
 
 const currentMonth = ref(new Date())
 const records = ref([])
@@ -136,7 +148,7 @@ const fetchRecords = async () => {
 
 onMounted(() => {
   fetchRecords()
-  fetchInterval = setInterval(fetchRecords, 5000) // 주기를 지정하는 것이 좋습니다.
+  fetchInterval = setInterval(fetchRecords, 5000)
 })
 
 onUnmounted(() => {
@@ -146,10 +158,6 @@ onUnmounted(() => {
   }
 })
 
-/*  
-  monthlyRecords: 현재 선택한 월 및 선택된 날짜 기준의 전체 내역 (filterType은 미적용)
-  이 값을 총합 계산에 사용
-*/
 const monthlyRecords = computed(() => {
   return records.value.filter(record => {
     const recordDate = new Date(record.date)
@@ -163,17 +171,12 @@ const monthlyRecords = computed(() => {
   })
 })
 
-/*  
-  filteredRecords: monthlyRecords에서 filterType에 따라 추가 필터링.
-  화면에 보이는 내역을 위해 사용
-*/
 const filteredRecords = computed(() => {
   return monthlyRecords.value.filter(record => {
     return !filterType.value || record.type === filterType.value
   })
 })
 
-// monthlyFilteredRecords 를 날짜별로 그룹핑한 버전
 const groupedRecords = computed(() => {
   const groups = {}
   filteredRecords.value.forEach(record => {
@@ -232,7 +235,7 @@ const totalTransfer = computed(() =>
 const downloadExcel = () => {
   const excelData = monthlyRecords.value.map(record => ({
     날짜: record.date,
-    자산: record.payment,
+    결제수단: record.payment,
     분류: record.category,
     금액: record.amount,
     내용: record.description,
@@ -270,5 +273,36 @@ const downloadExcel = () => {
   font-size: 0.85rem;
   padding: 0.6em 0.9em;
   border-radius: 1rem;
+}
+
+/* 선택된 버튼 강조 스타일 */
+.active-btn {
+  font-weight: bold;
+  opacity: 1 !important;
+  border-width: 2px;
+}
+
+.btn-outline-danger.active-btn {
+  background-color: #fa5252;
+  color: white;
+  border-color: #fa5252;
+}
+
+.btn-outline-primary.active-btn {
+  background-color: #228be6;
+  color: white;
+  border-color: #228be6;
+}
+
+.btn-outline-success.active-btn {
+  background-color: #40c057;
+  color: white;
+  border-color: #40c057;
+}
+
+.btn-outline-secondary.active-btn {
+  background-color: #495057;
+  color: white;
+  border-color: #495057;
 }
 </style>
