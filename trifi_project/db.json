@@ -51,6 +51,13 @@
       "nickname": "머니요hi",
       "email": "money@example.com",
       "password": "1234"
+    },
+    {
+      "id": "4174",
+      "name": "강",
+      "nickname": "서현",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
@@ -157,94 +164,6 @@
       "endDate": "2025-04-30"
     },
     {
-      "id": "7876",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "8419",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "5e9c",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "82a9",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "94d8",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "dac3",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "f623",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "069a",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "8625",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "4c01",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
-      "id": "dff7",
-      "type": "이체",
-      "date": "2025-04-09",
-      "from": 0,
-      "to": 0,
-      "memo": ""
-    },
-    {
       "id": "b8b6",
       "type": "이체",
       "date": "2025-04-09",
@@ -261,6 +180,94 @@
       "category": "",
       "payment": "",
       "description": "",
+      "fixed": false
+    },
+    {
+      "id": "cd4c",
+      "type": "transfer",
+      "date": "2025-04-09",
+      "userId": "",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
+    },
+    {
+      "id": "c487",
+      "type": "income",
+      "date": "2025-04-09",
+      "userId": "",
+      "amount": 12000,
+      "category": "",
+      "payment": "현금",
+      "description": "용돈",
+      "fixed": false
+    },
+    {
+      "id": "86e2",
+      "type": "transfer",
+      "date": "2025-04-09",
+      "userId": "",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
+    },
+    {
+      "id": "404b",
+      "type": "transfer",
+      "date": "2025-04-09",
+      "userId": "4174",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
+    },
+    {
+      "id": "5ff8",
+      "type": "transfer",
+      "date": "2025-04-09",
+      "userId": "4174",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
+    },
+    {
+      "id": "86a3",
+      "type": "transfer",
+      "date": "2025-04-09",
+      "userId": "4174",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
+    },
+    {
+      "id": "de27",
+      "type": "transfer",
+      "date": "2025-04-09",
+      "userId": "",
+      "amount": 0,
+      "category": "쇼핑",
+      "payment": "",
+      "description": "안녕",
+      "fixed": false
+    },
+    {
+      "id": "2f5f",
+      "type": "income",
+      "date": "2025-04-09",
+      "userId": "4174",
+      "amount": 12000,
+      "category": "",
+      "payment": "카드",
+      "description": "ㅎㅎㅇ",
       "fixed": false
     }
   ],
@@ -352,6 +359,17 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-06-09"
+    },
+    {
+      "id": "cfae",
+      "userId": "",
+      "category": "",
+      "amount": 12222,
+      "payment": "현금",
+      "description": "알바+용돈",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-05-09"
     }
   ]
 }
