@@ -34,10 +34,21 @@ const router = createRouter({
       name: "goal",
       component: () => import("../pages/GoalPage.vue"),
     },
+
     {
       path: "/mypage",
       name: "mypage",
-      component: () => import("../pages/Mypage.vue"),
+      component: () => import("../pages/MyPage.vue"),
+    },
+    {
+      path: "/registeredit",
+      name: "RegisterEdit",
+      component: () => import("../pages/Register_edit.vue"),
+    },
+    {
+      path: "/editprofile",
+      name: "editprofile",
+      component: () => import("../pages/EditProfile.vue"),
     },
   ],
 });
