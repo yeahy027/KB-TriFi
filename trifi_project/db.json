@@ -48,28 +48,6 @@
   ],
   "transactions": [
     {
-      "id": "1",
-      "userId": 1,
-      "type": "income",
-      "date": "2025-04-01",
-      "amount": 3000000,
-      "category": "급여",
-      "payment": "계좌이체(은행)",
-      "description": "4월 월급",
-      "fixed": true
-    },
-    {
-      "id": "2",
-      "userId": 1,
-      "type": "expense",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "점심",
-      "fixed": false
-    },
-    {
       "id": "3",
       "userId": 1,
       "type": "expense",
@@ -81,31 +59,20 @@
       "fixed": false
     },
     {
-      "id": "4",
-      "userId": 1,
-      "type": "expense",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "문구점",
-      "fixed": false
-    },
-    {
-      "id": "5",
-      "userId": 1,
-      "type": "expense",
-      "date": "2025-03-10",
-      "amount": 500000,
-      "category": "저축",
-      "payment": "은행",
-      "description": "정기적금",
-      "fixed": false
-    },
-    {
       "id": "7",
       "userId": 1,
-      "type": "transfer",
+      "type": "income",
+      "date": "2025-04-11",
+      "amount": 1000,
+      "category": "교통",
+      "payment": "현금",
+      "description": "ㅁㅇㅁㅇ",
+      "fixed": false
+    },
+    {
+      "id": "6",
+      "userId": 1,
+      "type": "income",
       "date": "2025-04-12",
       "amount": 10077770,
       "category": "쇼핑",
