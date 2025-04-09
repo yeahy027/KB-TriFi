@@ -392,6 +392,28 @@
       "date": "2025-04-09",
       "rotation": "매주",
       "endDate": "2025-04-29"
+    },
+    {
+      "id": "dc83",
+      "userId": "a886",
+      "category": "",
+      "amount": 878,
+      "payment": "계좌이체(은행)",
+      "description": "xx",
+      "date": "2025-04-09",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
+    },
+    {
+      "id": "8601",
+      "userId": "5da5",
+      "category": "",
+      "amount": 4445,
+      "payment": "계좌이체(은행)",
+      "description": "테스트입니다",
+      "date": "2025-04-09",
+      "rotation": "매주",
+      "endDate": "2025-04-29"
     }
   ]
 }

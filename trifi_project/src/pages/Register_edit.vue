@@ -115,10 +115,11 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
+import { useRoute } from 'vue-router';
 
 const emit = defineEmits(['close']);
 const store = useCounterStore();
@@ -143,9 +144,6 @@ const initialForm = () => ({
 const form = ref(initialForm());
 
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
-import { useRoute } from 'vue-router';
-import { onMounted } from 'vue';
-
 const route = useRoute();
 
 // 탭 변경 시 form 초기화

@@ -56,33 +56,26 @@
           </div>
         </div>
 
+        <!-- 고정지출 내역 -->
         <div class="expenses">
           <div class="section-title">
             <h3>고정지출 내역</h3>
           </div>
-
-          <!-- 고정지출 미리 체크되어있도록 + 마이페이지에서 추가한 내역 출력하도록 -->
-          <ul class="expense-list">
-            <li v-for="item in fixedExpenses" :key="item.id">
-              {{ item.description }} - {{ item.date }}
-            </li>
-
-            <!-- 고정지출 추가하기 버튼은 항상 아래에 위치 -->
-            <!-- <RouterLink :to="{ path: '/registeredit', query: { fixed: true } }">
-              <input
-                class="plus-fixlist"
-                placeholder="고정지출 추가하기"
-                readonly
-              /> -->
-
-            <!-- input 말고 모달로 수정 -->
-            <button class="plus-fixlist" @click="isModalOpen = true">
-              고정지출 추가하기
+          <div class="expense-buttons">
+            <button
+              class="expense-btn"
+              v-for="item in fixedExpenses"
+              :key="item.id"
+            >
+              {{ item.description }} &nbsp; - &nbsp; {{ item.date }}
             </button>
-            <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
-            <!-- 여기까지 -->
-            <!-- </RouterLink> -->
-          </ul>
+          </div>
+
+          <!-- 모달로 고정지출 추가 -->
+          <button class="plus-fixlist" @click="isModalOpen = true">
+            고정지출 추가하기
+          </button>
+          <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
         </div>
       </div>
     </div>
@@ -96,9 +89,11 @@ import { useUserStore } from '@/stores/userStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
-
-// 고정내역 추가 시 마이페이지에서 출력될 수 있도록 수정
 import axios from 'axios';
+
+const userStore = useUserStore(); // Pinia store 가져오기
+const user = computed(() => userStore.user); // 최신 user 데이터
+const router = useRouter();
 const fixedExpenses = ref([]);
 
 onMounted(async () => {
@@ -111,11 +106,6 @@ onMounted(async () => {
     console.error('고정지출 불러오기 실패:', err);
   }
 });
-// 여기까지
-
-const userStore = useUserStore(); // Pinia store 가져오기
-const user = computed(() => userStore.user); // 최신 user 데이터
-const router = useRouter();
 
 onMounted(() => {
   userStore.checkLocalStorage();
@@ -128,7 +118,7 @@ const handleLogout = () => {
 
 const waitPlease = () => {
   Swal.fire({
-    titld: '점검 중',
+    title: '점검 중',
     text: '점검 중입니다.',
     icon: 'info',
   });
@@ -172,7 +162,6 @@ const nextCard = () => {
   console.log('다음 카드');
 };
 
-// 모달 추가
 // 모달 열림 여부
 const isModalOpen = ref(false);
 </script>
@@ -279,10 +268,10 @@ const isModalOpen = ref(false);
 
 .plus-fixlist {
   border: none;
-  border-radius: 10%;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
-  width: 300px;
+  width: 500px;
   height: 50px;
   padding-left: 20px;
 }
@@ -354,5 +343,32 @@ const isModalOpen = ref(false);
   border-radius: 16px;
   width: 200px;
   height: 100px;
+}
+
+/* 수정 */
+.expense-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+}
+
+.expense-btn {
+  background-color: rgba(244, 197, 66, 0.5);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  padding-left: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  width: 500px;
+}
+
+.expense-btn:hover {
+  background-color: #e5b832;
 }
 </style>
