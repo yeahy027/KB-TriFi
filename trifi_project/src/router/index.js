@@ -38,12 +38,12 @@ const router = createRouter({
       name: "goal",
       component: () => import("../pages/GoalPage.vue"),
     },
+
     {
       path: "/mypage",
       name: "mypage",
-      component: () => import("../pages/Mypage.vue"),
+      component: () => import("../pages/MyPage.vue"),
     },
-
     {
       path: "/registeredit",
       name: "RegisterEdit",
