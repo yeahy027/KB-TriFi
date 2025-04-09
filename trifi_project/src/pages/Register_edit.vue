@@ -118,10 +118,12 @@
 import { ref, watch, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
+import { useUserStore } from '@/stores/userStore';
 
 const emit = defineEmits(['close']);
 const store = useCounterStore();
 /* entry.userId = useUserStore.user.id; */
+const userStore = useUserStore();
 const activeTab = ref('수입');
 
 const today = new Date().toISOString().split('T')[0];
@@ -181,21 +183,22 @@ const formattedTo = computed({
 const typeMap = {
   수입: 'income',
   지출: 'expense',
+  이체: 'transfer',
 };
 
 const submitForm = async () => {
   const entry = {
-    type: activeTab.value,
+    type: typeMap[activeTab.value],
     date: form.value.date,
   };
 
-  if (activeTab.value === '이체') {
+  if (activeTab.value === 'transfer') {
     entry.from = Number(form.value.from);
     entry.to = Number(form.value.to);
     entry.memo = form.value.memo;
   } else {
     /* 현재 로그인한 사람의 정보*/
-    entry.userId = useUserStore.user.id;
+    entry.userId = userStore.user.id;
     entry.amount = Number(form.value.amount);
     entry.category = form.value.category;
     entry.payment = form.value.paymentMethod;
@@ -219,7 +222,10 @@ const submitForm = async () => {
       };
 
       try {
-        await axios.post('http://localhost:3000/fixedExpenses', fixedEntry);
+        const res = await axios.post(
+          'http://localhost:3000/fixedExpenses',
+          fixedEntry
+        );
         console.log('✅ 고정 항목 등록 완료:', res.data);
       } catch (err) {
         console.error('❌ 고정 항목 전송 실패:', err);

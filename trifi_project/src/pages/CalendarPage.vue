@@ -371,7 +371,8 @@ function formattedAmount(evt) {
   } else if (evt.type === 'expense' || evt.type === 'transfer') {
     return `- ${evt.amount.toLocaleString()}`;
   }
-  return evt.amount.toLocaleString();
+
+  return evt.amount;
 }
 
 // 통화 포맷 (통계 부분에 사용)
