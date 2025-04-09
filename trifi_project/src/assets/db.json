@@ -123,8 +123,8 @@
       "payment": "계좌이체(은행)",
       "description": "인터넷 요금",
       "date": "2025-04-05",
-      "rotatiton" : "month",
-      "endDate" : "2025-06-05"
+      "rotatiton" : "day/week/month/year",
+      "endDate" : "date/무기한(1년)"
     }
   ]
 }

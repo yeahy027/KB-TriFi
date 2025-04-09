@@ -5,7 +5,7 @@
   </template>  
   
   <script setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue'
+  import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
   import { Chart, registerables } from 'chart.js'
   import { registerChart, unregisterChart } from '@/utils/chartManager'
   
@@ -21,7 +21,11 @@
   const chartRef = ref(null)
   let chartInstance = null
   
-  onMounted(() => {
+  const renderChart = () => {
+    if (chartInstance) {
+      chartInstance.destroy()
+    }
+  
     const ctx = chartRef.value.getContext('2d')
     chartInstance = new Chart(ctx, {
       type: 'pie',
@@ -44,11 +48,24 @@
     })
   
     registerChart(chartInstance)
+  }
+  
+  onMounted(() => {
+    if (props.data && props.data.length > 0) {
+      renderChart()
+    }
   })
+  
+  // ✅ data가 변경되면 차트 다시 렌더링
+  watch(() => props.data, (newVal) => {
+    if (newVal && newVal.length > 0) {
+      renderChart()
+    }
+  }, { deep: true })
   
   onBeforeUnmount(() => {
     unregisterChart(chartInstance)
-    chartInstance.destroy()
+    chartInstance?.destroy()
   })
   </script>
   
