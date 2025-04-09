@@ -50,6 +50,11 @@ const router = createRouter({
       name: "editprofile",
       component: () => import("../pages/EditProfile.vue"),
     },
+    {
+      path: "/registercard",
+      name: "registercard",
+      component: () => import("../pages/RegisterCard.vue"),
+    },
   ],
 });
 export default router;

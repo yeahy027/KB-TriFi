@@ -9,7 +9,7 @@
       <button class="btn btn-light btn-sm" @click="resetTimer">
         <i class="bi bi-arrow-clockwise"></i>
       </button>
-      <button class="btn btn-light btn-sm rounded-circle">
+      <button class="btn btn-light btn-sm rounded-circle" @click="Mypage">
         <i class="bi bi-person-circle"></i>
       </button>
     </div>
@@ -136,4 +136,6 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(timer)
 })
+const Mypage = () => {
+  router.push(`/mypage`);}
 </script>
