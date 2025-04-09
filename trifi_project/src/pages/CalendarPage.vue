@@ -112,6 +112,7 @@ import axios from 'axios';
 
 defineOptions({ name: 'CalendarExample' });
 
+const isModalOpen = ref(false);
 /** YYYY-MM-DD 문자열 생성 */
 function formatDateStr(dateObj) {
   const yyyy = dateObj.getFullYear();

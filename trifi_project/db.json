@@ -46,18 +46,11 @@
       "language": "Korean"
     },
     {
-      "id": "2dee",
-      "name": "dd",
-      "nickname": "dd",
-      "email": "dd@naver.com",
-      "password": "1111"
-    },
-    {
-      "id": "13bd",
+      "id": "d6a3",
       "name": "서현",
-      "nickname": "123123",
-      "email": "123123@naver.com",
-      "password": "12341234123"
+      "nickname": "강",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
@@ -128,112 +121,136 @@
       "fixed": false
     },
     {
-      "id": "f2b9",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "3656",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "5e47",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "bdfe",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "9b25",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "paymentMethod": "카드",
-      "description": "문구점"
-    },
-    {
-      "id": "0b45",
+      "id": "2157",
       "type": "수입",
-      "date": "",
+      "date": "2025-04-09",
+      "userId": 1,
+      "amount": 120000,
+      "category": "식비",
+      "payment": "현금",
+      "description": "21",
+      "fixed": true,
+      "period": "매일"
+    },
+    {
+      "id": "2c27",
+      "type": "수입",
+      "date": "2025-04-09",
       "userId": 1,
       "amount": 0,
       "category": "",
       "payment": "",
       "description": "",
-      "fixed": true
+      "fixed": false
     },
     {
-      "id": "f198",
+      "id": "0466",
+      "type": "수입",
+      "date": "2025-04-09",
+      "userId": 1,
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": true,
+      "period": "매일",
+      "endDate": "2025-04-30"
+    },
+    {
+      "id": "7876",
       "type": "이체",
-      "date": "",
+      "date": "2025-04-09",
       "from": 0,
       "to": 0,
       "memo": ""
     },
     {
-      "id": "8fa7",
-      "type": "수입",
-      "date": "",
-      "userId": 1,
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": false
+      "id": "8419",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
     },
     {
-      "id": "5b16",
-      "type": "수입",
-      "date": "2025-04-08",
-      "userId": 1,
-      "amount": 100000,
-      "category": "교통",
-      "payment": "현금",
-      "description": "123123",
-      "fixed": true
+      "id": "5e9c",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
     },
     {
-      "id": "9c1f",
-      "type": "수입",
-      "date": "2025-04-03",
-      "userId": 1,
-      "amount": 32131,
-      "category": "주거",
-      "payment": "카드",
-      "description": "23131",
-      "fixed": false
+      "id": "82a9",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
     },
     {
-      "id": "6955",
-      "type": "수입",
-      "date": "",
-      "userId": 1,
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": false
+      "id": "94d8",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "dac3",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "f623",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "069a",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "8625",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "4c01",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "dff7",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
+    },
+    {
+      "id": "b8b6",
+      "type": "이체",
+      "date": "2025-04-09",
+      "from": 0,
+      "to": 0,
+      "memo": ""
     }
   ],
   "fixedExpenses": [
@@ -244,92 +261,9 @@
       "amount": 50000,
       "payment": "계좌이체(은행)",
       "description": "인터넷 요금",
-      "date": "2025-04-05"
-    }
-  ],
-  "cards": [
-    {
-      "id": "1",
-      "userId": 1,
-      "name": "신한카드",
-      "number": "5789 •••• •••• 2847",
-      "cardholder_name": "Mike Smith",
-      "expiry_date": "06/21"
-    },
-    {
-      "id": "2",
-      "userId": 1,
-      "name": "삼성카드",
-      "number": "5789 •••• •••• 2847",
-      "cardholder_name": "Mike Smith",
-      "expiry_date": "06/21"
-    }
-  ],
-  "events": [
-    {
-      "id": "1",
-      "date": "2025-04-07",
-      "type": "income",
-      "amount": 3000000
-    },
-    {
-      "id": "2",
-      "date": "2025-04-07",
-      "type": "expense",
-      "amount": 80000
-    },
-    {
-      "id": "3",
-      "date": "2025-04-08",
-      "type": "transfer",
-      "amount": 500000
-    }
-  ],
-  "records": [
-    {
-      "id": "1",
-      "date": "2025-04-01",
-      "asset": "은행",
-      "category": "용돈",
-      "amount": 500000,
-      "type": "수입",
-      "memo": "알바비"
-    },
-    {
-      "id": "2",
-      "date": "2025-04-01",
-      "asset": "카드",
-      "category": "쇼핑",
-      "amount": 22909,
-      "type": "지출",
-      "memo": "무신사"
-    },
-    {
-      "id": "3",
-      "date": "2025-04-01",
-      "asset": "현금",
-      "category": "식비",
-      "amount": 112222,
-      "type": "지출",
-      "memo": "아웃백"
-    },
-    {
-      "id": "4",
-      "date": "2025-03-10",
-      "asset": "현금",
-      "category": "식비",
-      "amount": 112222,
-      "type": "지출",
-      "memo": "아웃백"
-    },
-    {
-      "id": "5",
-      "date": "2025-04-03",
-      "asset": "현금",
-      "category": "식비",
-      "amount": 30000,
-      "type": "이체",
-      "memo": "아웃백"
+      "date": "2025-04-05",
+      "rotation": "day/week/month/year",
+      "endDate": "date/무기한(1년)"
     }
   ]
 }

@@ -15,6 +15,10 @@ app.use(router);
 
 app.mount('#app');
 
+router.beforeEach((to, from, next) => {
+  document.title = 'Money Keeper';
+  next();
+});
 // 🔥 윈도우 리사이즈 시 전체 차트 리사이즈
 window.addEventListener('resize', () => {
   resizeAllCharts();
