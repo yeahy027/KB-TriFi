@@ -61,17 +61,6 @@
             <h3>고정지출 내역</h3>
           </div>
 
-          <!-- 고정지출 미리 체크되어있도록 -->
-          <!-- <ul class="expense-list">
-            <RouterLink :to="{ path: '/registeredit', query: { fixed: true } }">
-              <input
-                class="plus-fixlist"
-                placeholder="고정지출 추가하기"
-                readonly
-              />
-            </RouterLink>
-          </ul> -->
-
           <!-- 고정지출 미리 체크되어있도록 + 마이페이지에서 추가한 내역 출력하도록 -->
           <ul class="expense-list">
             <li v-for="item in fixedExpenses" :key="item.id">
@@ -79,13 +68,20 @@
             </li>
 
             <!-- 고정지출 추가하기 버튼은 항상 아래에 위치 -->
-            <RouterLink :to="{ path: '/registeredit', query: { fixed: true } }">
+            <!-- <RouterLink :to="{ path: '/registeredit', query: { fixed: true } }">
               <input
                 class="plus-fixlist"
                 placeholder="고정지출 추가하기"
                 readonly
-              />
-            </RouterLink>
+              /> -->
+
+            <!-- input 말고 모달로 수정 -->
+            <button class="plus-fixlist" @click="isModalOpen = true">
+              고정지출 추가하기
+            </button>
+            <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+            <!-- 여기까지 -->
+            <!-- </RouterLink> -->
           </ul>
         </div>
       </div>
@@ -95,6 +91,7 @@
 
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
+import RegisterEdit from '@/pages/Register_edit.vue';
 import { useUserStore } from '@/stores/userStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -174,6 +171,10 @@ const prevCard = () => {
 const nextCard = () => {
   console.log('다음 카드');
 };
+
+// 모달 추가
+// 모달 열림 여부
+const isModalOpen = ref(false);
 </script>
 
 <style scoped>

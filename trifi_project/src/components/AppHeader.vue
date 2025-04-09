@@ -6,7 +6,7 @@
     <h6 class="fw-semibold m-0">{{ pageTitle }}</h6>
     <div class="d-flex align-items-center gap-3">
       <small class="text-muted">{{ timeLeft }} 후 만료</small>
-      <button class="btn btn-light btn-sm">
+      <button class="btn btn-light btn-sm" @click="resetTimer">
         <i class="bi bi-arrow-clockwise"></i>
       </button>
       <router-link to="/mypage">
@@ -82,7 +82,6 @@ const updateRemainingTime = () => {
     timeLeft.value = '세션 만료됨';
     clearInterval(timer);
 
-    // 로그아웃 처리
     localStorage.removeItem('user');
     localStorage.removeItem('loginTime');
 
@@ -139,8 +138,4 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(timer);
 });
-
-const Mypage = () => {
-  router.push(`/mypage`);
-};
 </script>
