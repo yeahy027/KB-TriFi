@@ -99,10 +99,29 @@ const initialForm = () => ({
 
 const form = ref(initialForm());
 
+// 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
+import { useRoute } from 'vue-router';
+import { onMounted } from 'vue';
+
+const route = useRoute();
+
 // 탭 변경 시 form 초기화
 watch(activeTab, () => {
   Object.assign(form.value, initialForm());
+
+  // 고정 여부 쿼리 반영
+  if (route.query.fixed === 'true') {
+    form.value.fixed = true;
+  }
 });
+
+onMounted(() => {
+  // 탭도 URL 쿼리로 제어하고 싶다면
+  if (route.query.fixed === 'true') {
+    activeTab.value = '지출'; // watch가 작동하면서 체크됨
+  }
+});
+// 여기까지
 
 // 한글 → 서버용 영문 매핑
 const typeMap = {

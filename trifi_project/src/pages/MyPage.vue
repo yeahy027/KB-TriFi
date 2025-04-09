@@ -60,14 +60,31 @@
           <div class="section-title">
             <h3>고정지출 내역</h3>
           </div>
-          <ul class="expense-list">
 
-            <!-- 고정지출 미리 체크되어있도록 -->
-            <RouterLink to="/registeredit">
+          <!-- 고정지출 미리 체크되어있도록 -->
+          <!-- <ul class="expense-list">
+            <RouterLink :to="{ path: '/registeredit', query: { fixed: true } }">
               <input
                 class="plus-fixlist"
                 placeholder="고정지출 추가하기"
-              ></input>
+                readonly
+              />
+            </RouterLink>
+          </ul> -->
+
+          <!-- 고정지출 미리 체크되어있도록 + 마이페이지에서 추가한 내역 출력하도록 -->
+          <ul class="expense-list">
+            <li v-for="item in fixedExpenses" :key="item.id">
+              {{ item.description }} - {{ item.date }}
+            </li>
+
+            <!-- 고정지출 추가하기 버튼은 항상 아래에 위치 -->
+            <RouterLink :to="{ path: '/registeredit', query: { fixed: true } }">
+              <input
+                class="plus-fixlist"
+                placeholder="고정지출 추가하기"
+                readonly
+              />
             </RouterLink>
           </ul>
         </div>
@@ -81,8 +98,23 @@ import AppLayout from '@/components/AppLayout.vue';
 import { useUserStore } from '@/stores/userStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import Swal from 'sweetalert2';
+
+// 고정내역 추가 시 마이페이지에서 출력될 수 있도록 수정
+import axios from 'axios';
+const fixedExpenses = ref([]);
+
+onMounted(async () => {
+  try {
+    const res = await axios.get('/api/fixedExpenses'); // db.json에서 고정지출 가져오기
+    fixedExpenses.value = res.data.filter(
+      (item) => item.userId === user.value.id
+    );
+  } catch (err) {
+    console.error('고정지출 불러오기 실패:', err);
+  }
+});
+// 여기까지
 
 const userStore = useUserStore(); // Pinia store 가져오기
 const user = computed(() => userStore.user); // 최신 user 데이터
@@ -155,11 +187,6 @@ const nextCard = () => {
   font-size: 32px;
   margin-bottom: 4px;
 }
-/* .subtitle {
-  color: gray;
-  font-size: 14px;
-  margin-bottom: 32px;
-} */
 
 .account-section {
   flex-direction: column;

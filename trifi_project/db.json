@@ -46,11 +46,11 @@
       "language": "Korean"
     },
     {
-      "id": "7a3b",
-      "name": "머머",
-      "nickname": "머니요hi",
-      "email": "money@example.com",
-      "password": "1234"
+      "id": "88e3",
+      "name": "머니요",
+      "nickname": "머머키퍼",
+      "email": "ex@example.com",
+      "password": "123"
     }
   ],
   "transactions": [
@@ -119,6 +119,17 @@
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
+    },
+    {
+      "id": "cf7f",
+      "type": "지출",
+      "date": "2025-04-09",
+      "userId": 1,
+      "amount": 30000,
+      "category": "교통",
+      "payment": "계좌이체(은행)",
+      "description": "교통비",
+      "fixed": true
     }
   ],
   "fixedExpenses": [
