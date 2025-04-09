@@ -1,8 +1,8 @@
 <template>
-    <div>
-      <canvas ref="chartRef"></canvas>
+    <div style="max-width: 400px; margin: auto">
+      <canvas ref="chartRef" width="300" height="300"></canvas>
     </div>
-  </template>
+  </template>  
   
   <script setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue'
