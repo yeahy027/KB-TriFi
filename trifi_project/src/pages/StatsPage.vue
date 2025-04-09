@@ -89,7 +89,8 @@ onMounted(async () => {
     pieData.value = getPieChartData(transactions.value, fixedExpenses.value)
     console.log("Pie 차트 데이터:", pieData.value)
 
-    // topSpendingData.value = getTopSpendingData(transactions.value)
+    topSpendingData.value = getTopSpendingData(transactions.value)
+    console.log("3 차트 데이터:", topSpendingData.value)
     // compareData.value = getCompareChartData(transactions.value)
 
   } catch (error) {
