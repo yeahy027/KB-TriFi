@@ -37,9 +37,15 @@
               <option value="교통">🚗 교통</option>
               <option value="쇼핑">🛍 쇼핑</option>
               <option value="주거">🏠 주거</option>
-              <option value="기타">🔖 기타</option>
+              <option value="기타">💅 미용</option>
+              <option value="기타">🎬 문화</option>
+              <option value="기타">🏦 저축</option>
+              <option value="기타">💰 급여</option>
+              <option value="기타">💰 용돈</option>
+              <option value="기타">🎁 선물</option>
+              <option value="기타">💊 의료</option>
+              <option value="기타">💡 공과금</option>
             </select>
-
             <select v-model="form.paymentMethod" class="payment-select">
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
