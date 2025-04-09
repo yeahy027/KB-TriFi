@@ -102,18 +102,7 @@
       "description": "정기적금",
       "fixed": false
     },
-   
     {
-      "id": "6",
-      "userId": 1,
-      "type": "income",
-      "date": "2025-04-12",
-      "amount": 1000,
-      "category": "교통",
-      "payment": "현금",
-      "description": "교통카드",
-      "fixed": false
-    },{
       "id": "7",
       "userId": 1,
       "type": "transfer",
@@ -122,16 +111,6 @@
       "category": "쇼핑",
       "payment": "카드",
       "description": "에이블리",
-      "fixed": false
-    },{
-      "id": "8",
-      "userId": 1,
-      "type": "expense",
-      "date": "2025-04-13",
-      "amount": 10077770,
-      "category": "문화",
-      "payment": "카드",
-      "description": "영화 관람",
       "fixed": false
     }
   ],
@@ -144,8 +123,8 @@
       "payment": "계좌이체(은행)",
       "description": "인터넷 요금",
       "date": "2025-04-05",
-      "rotatiton" : "day/week/month/year",
-      "endDate" : "date/무기한(1년)"
+      "rotatiton": "day/week/month/year",
+      "endDate": "date/무기한(1년)"
     }
   ]
 }

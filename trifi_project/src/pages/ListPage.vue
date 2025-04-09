@@ -80,10 +80,21 @@
           </div>
           <div :class="record.type === 'income' ? 'text-primary fw-bold' : 'text-danger fw-bold'">
             {{ Number(record.amount).toLocaleString() }} 원
+            <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
           </div>
+
+          <!-- 수정,삭제 드롭다운 메뉴 -->
+           <div v-if="openMenuId === record.id" class="dropdown-menu-custom">
+            <button class="dropdown-item" @click="editRecord(record)">수정</button>
+            <button class="dropdown-item" @click="deleteRecord(record.id)">삭제</button>
+           </div>
+
+          
         </div>
       </div>
     </div>
+    <button class="add-button" @click="isModalOpen = true">+</button>
+    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
   </AppLayout>
 </template>
 
@@ -94,6 +105,7 @@ import axios from 'axios'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'vue-router'
+import RegisterEdit from '@/pages/Register_edit.vue'
 
 const router = useRouter()
 
@@ -222,6 +234,7 @@ const categoryIcons = {
   '공과금': '💡',
 }
 
+// 총 수입, 지출, 이체 내역 계산산
 const totalIncome = computed(() =>
   monthlyRecords.value.filter(r => r.type === 'income').reduce((sum, r) => sum + Number(r.amount), 0)
 )
@@ -232,6 +245,7 @@ const totalTransfer = computed(() =>
   monthlyRecords.value.filter(r => r.type === 'transfer').reduce((sum, r) => sum + Number(r.amount), 0)
 )
 
+// 엑셀 데이터 변환환
 const downloadExcel = () => {
   const excelData = monthlyRecords.value.map(record => ({
     날짜: record.date,
@@ -251,6 +265,23 @@ const downloadExcel = () => {
   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
   const blob = new Blob([excelBuffer], { type: 'application/octet-stream' })
   saveAs(blob, `가계부_내역_${year}년_${month}월.xlsx`)
+}
+
+
+// 내역 수정, 삭제
+const openMenuId = ref(null)
+
+const toggleMenu = (id) => {openMenuId.value = openMenuId.value === id ? null : id}
+
+const editRecord = (record) => {
+  alert(`수정 기능 - ${record.description}`)
+}
+
+const deleteRecord = async (id) => {
+  if (confirm('정말 삭제하시겠습니까?')) {
+    await axios.delete(`http://localhost:3000/transactions/${id}`)
+    fetchRecords()
+  }
 }
 </script>
 
@@ -305,4 +336,56 @@ const downloadExcel = () => {
   color: white;
   border-color: #495057;
 }
+.add-button {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 30px;
+  background: #ff5252;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.add-button:hover {
+  background-color: #fdb3b3;
+}
+
+.menu-toggle {
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: 1.2rem;
+  color: #000;
+}
+
+.dropdown-menu-custom {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 0.3rem 0;
+  z-index: 10;
+  min-width: 100px;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f3f5;
+}
+
 </style>
