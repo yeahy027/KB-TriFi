@@ -215,6 +215,7 @@ const goToCalender = () => {
 
 const currentMonth = ref(new Date())
 const records = ref([])
+const fixedExpenses = ref([])
 const filterType = ref('')
 const selectedDate = ref('')
 const dateInput = ref(null);
@@ -265,7 +266,6 @@ let fetchInterval = null
 
 
 // 유저정보 가져오기
-const user = JSON.parse(localStorage.getItem("user"));
 
 const fetchRecords = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -279,13 +279,30 @@ const fetchRecords = async () => {
 };
 
 
+const fetchFixedExpenses = async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+  if (!userId) return;
+
+  const res = await axios.get('http://localhost:3000/fixedExpenses', {
+    params: { userId }
+  });
+  fixedExpenses.value = res.data; // fixedExpenses는 ref로 선언해줘야 함
+};
+
+
+
 
 
 onMounted(() => {
   fetchRecords();
-  fetchInterval = setInterval(fetchRecords, 5000);
+  fetchFixedExpenses();
+  fetchInterval = setInterval(() => {
+    fetchRecords();
+    fetchFixedExpenses();
+  }, 5000);
 
-  document.addEventListener('click',handleClickOutside)
+  document.addEventListener('click', handleClickOutside);
 });
 
 onUnmounted(() => {
