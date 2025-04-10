@@ -9,7 +9,7 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
 function getExpenses(transactions) {
-  return transactions.filter(tx => tx.type === 'expense')
+  return transactions.filter(tx => tx.type === '지출')
 }
 
 function calculateMonthlyFixedAmount(expense, targetMonth) {
@@ -137,7 +137,7 @@ export function getCompareChartData(transactions, fixedExpenses = [], userId) {
 
 export function getIncomeVsExpense(transactions) {
   const income = transactions
-    .filter(tx => tx.type === 'income')
+    .filter(tx => tx.type === '수입')
     .reduce((sum, tx) => sum + tx.amount, 0)
 
   const expense = getExpenses(transactions)
