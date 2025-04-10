@@ -36,8 +36,9 @@
             <input
               type="text"
               :value="formattedAmount"
-              @input="formattedAmount = $event.target.value"
+              @input="handleAmountInput($event.target.value)"
               placeholder="금액"
+              :class="{ 'input-error': isTouched && form.amount === '' }"
             />
             <p class="error-message" v-if="isTouched && !form.amount">
               금액을 입력하세요
@@ -144,8 +145,9 @@
             <input
               type="text"
               :value="formattedFrom"
-              @input="formattedFrom = $event.target.value"
+              @input="handleFromInput($event.target.value)"
               placeholder="출금 금액"
+              :class="{ 'input-error': isTouched && !form.from }"
             />
             <p class="error-message" v-if="isTouched && !form.from">
               출금 금액을 입력하세요
@@ -235,28 +237,28 @@ const form = ref(initialForm());
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
 
-// const props = defineProps({
-//   onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
-// });
+/* const props = defineProps({
+  onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
+}); */
 
 // 등록 가능 여부를 판단하는 computed
 const isFormValid = computed(() => {
   if (activeTab.value === '이체') {
     return (
-      form.value.date &&
-      form.value.from &&
-      form.value.category &&
-      form.value.description
+      form.value.date !== '' &&
+      form.value.from !== '' &&
+      form.value.category !== '' &&
+      form.value.description !== ''
     );
   }
 
   const baseValid =
-    form.value.date &&
-    form.value.amount &&
-    form.value.paymentMethod &&
-    form.value.description;
+    form.value.date !== '' &&
+    form.value.amount !== '' &&
+    form.value.paymentMethod !== '' &&
+    form.value.description !== '';
 
-  if (activeTab.value === '지출') {
+  if (activeTab.value === '지출' || activeTab.value === '수입') {
     if (!form.value.category) return false;
   }
 
@@ -268,14 +270,15 @@ const isFormValid = computed(() => {
 });
 
 // 탭 변경 시 form 초기화
-// watch(activeTab, () => {
-//   Object.assign(form.value, initialForm());
+watch(activeTab, () => {
+  Object.assign(form.value, initialForm());
+  isTouched.value = false;
 
-//   // 고정 여부 쿼리 반영
-//   if (route.query.fixed === 'true') {
-//     form.value.fixed = true;
-//   }
-// });
+  //   // 고정 여부 쿼리 반영
+  //   if (route.query.fixed === 'true') {
+  //     form.value.fixed = true;
+  //   }
+});
 
 onMounted(() => {
   form.value.fixed = props.checked;
@@ -285,6 +288,16 @@ onMounted(() => {
     activeTab.value = '지출'; // watch가 작동하면서 체크됨
   }
 });
+/* 숫자 칸 처리하는 방법 */
+const handleAmountInput = (value) => {
+  const numeric = value.replace(/[^\d]/g, '');
+  form.value.amount = numeric;
+};
+
+const handleFromInput = (value) => {
+  const numeric = value.replace(/[^\d]/g, '');
+  form.value.from = numeric;
+};
 
 const formattedFrom = computed({
   get() {
