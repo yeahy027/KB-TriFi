@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": "2",
+      "id": "aff5",
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
@@ -10,7 +10,7 @@
       "language": "Korean"
     },
     {
-      "id": "5da5",
+      "id": "aff4",
       "name": "김네비",
       "nickname": "네비게이션",
       "email": "test3@example.com",
@@ -22,7 +22,7 @@
   "transactions": [
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "수입",
       "date": "2025-04-03",
       "amount": 15000,
@@ -33,7 +33,7 @@
     },
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
@@ -44,7 +44,7 @@
     },
     {
       "id": "4",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-10",
       "amount": 15000,
@@ -55,7 +55,7 @@
     },
     {
       "id": "5",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-11",
       "amount": 1000,
@@ -66,7 +66,7 @@
     },
     {
       "id": "6",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-12",
       "amount": 100070,
@@ -79,7 +79,7 @@
       "id": "cf7f",
       "type": "지출",
       "date": "2025-04-09",
-      "userId": 1,
+      "userId": "aff4",
       "amount": 30000,
       "category": "교통",
       "payment": "계좌이체(은행)",
@@ -89,26 +89,59 @@
   ],
   "fixedExpenses": [
     {
-      "id": "0dd3",
-      "userId": "2",
-      "category": "주거",
-      "amount": 888,
+      "id": "2484",
+      "userId": "aff4",
+      "category": "",
+      "amount": 100000,
       "payment": "카드",
-      "description": "반영테스트",
-      "date": "2025-04-10",
+      "description": "캐시백",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-05-09"
+    },
+    {
+      "id": "d302",
+      "userId": null,
+      "category": "",
+      "amount": 13,
+      "payment": "페이",
+      "description": "13",
+      "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-04-30"
     },
     {
-      "id": "5611",
-      "userId": "2",
+      "id": "25c0",
+      "userId": "aff4",
       "category": "",
       "amount": 444,
       "payment": "카드",
+      "description": "대중교통",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-05-08"
+    },
+    {
+      "id": "6651",
+      "userId": "aff4",
+      "category": "교통",
+      "amount": 123,
+      "payment": "페이",
       "description": "테스트",
       "date": "2025-04-10",
       "rotation": "매일",
       "endDate": "2025-04-23"
+    },
+    {
+      "id": "a177",
+      "userId": "aff5",
+      "category": "",
+      "amount": 9999,
+      "payment": "카드",
+      "description": "test",
+      "date": "2025-04-25",
+      "rotation": "매월",
+      "endDate": "2025-04-30"
     }
   ]
 }
