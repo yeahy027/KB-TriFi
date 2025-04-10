@@ -108,12 +108,6 @@
                   삭제
                 </div>
               </div>
-              <!-- <RegisterReEdit
-                v-if="editModalOpen"
-                :existingData="itemToEdit"
-                @close="editModalOpen = false"
-                :checked="true"
-              /> -->
             </div>
           </div>
 
