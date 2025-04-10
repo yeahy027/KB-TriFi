@@ -43,7 +43,6 @@
 
             <!-- 여기부터 카드 추가 UI -->
             <div class="create-card">
-              <!-- 캡처처럼 가운데 + 원형 영역과 안내문구 -->
               <div class="card-add-circle">
                 <div class="plus-sign" @click="isCardFormOpen = true">+</div>
                 <RegisterCard
@@ -76,10 +75,18 @@
           </div>
 
           <!-- 모달로 고정지출 추가 -->
-          <button class="plus-fixlist" @click="isModalOpen = true">
+          <button class="plus-fixlist" @click="openExpenseModal">
             고정지출 추가하기
           </button>
-          <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+          <!-- 
+            @close : RegisterEdit에서 닫기 버튼 누르면 모달 닫음
+            @fixedExpenseSaved : RegisterEdit에서 등록/수정이 끝나면 새 데이터(또는 수정된 데이터)를 부모로 emit
+          -->
+          <RegisterEdit
+            v-if="isModalOpen"
+            @close="isModalOpen = false"
+            @fixedExpenseSaved="handleFixedExpenseSaved"
+          />
         </div>
       </div>
     </div>
@@ -91,37 +98,41 @@ import AppLayout from '@/components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
 import RegisterCard from './RegisterCard.vue';
 import { useUserStore } from '@/stores/userStore';
-import { computed, onMounted, ref, onUnmounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-const userStore = useUserStore(); // Pinia store 가져오기
-const user = computed(() => userStore.user); // 최신 user 데이터
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 const router = useRouter();
+
+// 모달 열고 닫기 상태
 const isModalOpen = ref(false);
 const isCardFormOpen = ref(false);
 
-// 카드 상세정보 입력 예시 데이터
-const newCardName = ref(''); // 필요하다면 v-model로 사용
+// 고정지출 목록
 const fixedExpenses = ref([]);
 
-onMounted(async () => {
+onMounted(() => {
+  userStore.checkLocalStorage();
+  fetchFixedExpenses();
+});
+
+// 고정지출 목록 불러오기 함수
+const fetchFixedExpenses = async () => {
   try {
-    const res = await axios.get('/api/fixedExpenses'); // db.json에서 고정지출 가져오기
+    const res = await axios.get('/api/fixedExpenses');
+    // 현재 유저 id에 맞는 고정지출만 필터링
     fixedExpenses.value = res.data.filter(
       (item) => item.userId === user.value.id
     );
   } catch (err) {
     console.error('고정지출 불러오기 실패:', err);
   }
-});
+};
 
-
-onMounted(() => {
-  userStore.checkLocalStorage();
-});
-
+// 회원 관련 함수
 const handleLogout = () => {
   userStore.logoutUser();
   router.push('/');
@@ -156,36 +167,37 @@ const handleDeleteAccount = async () => {
   }
 };
 
-// 카드 추가 모달 열기
-const openCardForm = () => {
-  isCardFormOpen.value = true;
+// 고정지출 추가 모달 열기
+const openExpenseModal = () => {
+  isModalOpen.value = true;
 };
 
-// 카드 추가 모달 닫기
-const closeCardForm = () => {
-  isCardFormOpen.value = false;
+// RegisterEdit에서 emit('fixedExpenseSaved')하면 실행될 메서드
+const handleFixedExpenseSaved = (newOrUpdatedExpense) => {
+  // 만약 id가 있으면 편집 기능이고, 없으면 새로 생성된 것이라고 가정
+  const idx = fixedExpenses.value.findIndex(
+    (item) => item.id === newOrUpdatedExpense.id
+  );
+
+  if (idx !== -1) {
+    // 이미 존재하는 항목 -> 업데이트
+    fixedExpenses.value.splice(idx, 1, newOrUpdatedExpense);
+  } else {
+    // 새로운 항목 -> 추가
+    fixedExpenses.value.push(newOrUpdatedExpense);
+  }
+
+  // 모달 닫기
+  isModalOpen.value = false;
 };
 
-// 카드 정보 제출
-const submitCardInfo = () => {
-  // TODO: 폼 데이터( newCardName 등 )를 활용하여 서버 통신 or store 업데이트
-  console.log('카드 정보:', newCardName.value);
-
-  // 저장 후 모달 닫기
-  isCardFormOpen.value = false;
-};
-
-// 카드 슬라이드 기능
+// 카드 슬라이드
 const prevCard = () => {
   console.log('이전 카드');
 };
+
 const nextCard = () => {
   console.log('다음 카드');
-};
-
-// gotoRegisterCard는 어디에서 필요한건가요?
-const goToRegisterCard = () => {
-  router.push('/registercard'); // RegisterCard.vue 경로로 이동
 };
 </script>
 

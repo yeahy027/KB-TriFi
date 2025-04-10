@@ -2,8 +2,7 @@
   <AppLayout>
     <div class="calendar-container">
       <!-- 상단 헤더(월/년도, 통계 표시) -->
-      <div class="header">
-        <!-- 월 이동 버튼/월 표시 영역 -->
+      <div class="header" :class="seasonClass">
         <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
@@ -11,9 +10,9 @@
           <strong
             class="month-text mx-auto"
             style="cursor: pointer; font-size: xx-large;"
-            @click="goToCalender"
+            @click="showDatePicker"
           >
-            {{ formattedYearMonth }}
+            {{ formattedMonth }}
           </strong>
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
@@ -81,29 +80,30 @@
               @mouseleave="closePreview"
             >
               <!-- 날짜 숫자 -->
-              <div
-  class="day-number"
-  :class="{ 'today-badge': isToday(day.dateObj) }"
->
-  {{ day.dateObj.getDate() }}
+              <div class="day-number">
+                <!-- 오늘이면 .today-badge 클래스 추가 -->
+                <span class="day-badge" :class="{ 'today-badge': isToday(day.dateObj) }">
+                  {{ day.dateObj.getDate() }}
+                </span>
 
-  <!-- (중요) 해당 날짜에 매칭되는 고정 항목 표시 -->
-  <template
-    v-for="(fexp, idx) in fixedExpensesForDay(day.dateStr)"
-    :key="idx"
-  >
-    <span style="margin-left: 4px;">
-      📌
-      <!-- 수입이면 +, 지출이면 - 표시 -->
-      <template v-if="fexp.type === '지출'">
-        - {{ fexp.amount.toLocaleString() }}원
-      </template>
-      <template v-else-if="fexp.type === '수입'">
-        + {{ fexp.amount.toLocaleString() }}원
-      </template>
-    </span>
-  </template>
-</div>
+                <!-- 고정지출/고정수입이 있으면 표시 -->
+                <template v-if="fixedExpensesForDay(day.dateStr).length">
+                  <span class="pin-line">
+                    📌
+                    <template
+                      v-for="(fexp, i) in fixedExpensesForDay(day.dateStr)"
+                      :key="i"
+                    >
+                      {{ fexp.type === '지출' ? '-' : '+' }}
+                      {{ fexp.amount.toLocaleString() }}원
+                      <span
+                        v-if="i < fixedExpensesForDay(day.dateStr).length - 1"
+                        > / </span
+                      >
+                    </template>
+                  </span>
+                </template>
+              </div>
 
               <!-- 말풍선 팝업(hover) - 해당 날짜에 마우스 올라갔을 때만 표시 -->
               <div v-if="previewDateStr === day.dateStr" class="popup-bubble">
@@ -133,18 +133,20 @@
                   class="edit-delete-buttons"
                   style="background-color: #f2f2f2"
                 >
+                  <!-- 삭제 버튼 -->
                   <button
                     type="button"
                     class="btn btn-outline-danger btn-sm"
-                    @click.stop="deleteEvent(event.id)"
                     style="margin-right: 10px"
+                    @click.stop="deleteEvent(event.id)"
                   >
                     삭제
                   </button>
+                  <!-- 수정 버튼: 모달 열기 -->
                   <button
                     type="button"
                     class="btn btn-outline-warning btn-sm"
-                    @click.stop="editEvent(event)"
+                    @click.stop="editItem(event)"
                   >
                     수정
                   </button>
@@ -154,20 +156,27 @@
           </tr>
         </tbody>
       </table>
-
-      <!-- 등록 폼 모달 (예시) -->
     </div>
+
+    <!-- + 버튼 (등록 모달 열기) -->
     <button class="add-button" @click="isModalOpen = true">+</button>
+    <!-- 계산기 버튼 -->
     <button class="calc-button" @click="showCalculator = true">
       <i class="bi bi-calculator"></i>
     </button>
 
     <!-- 계산기 컴포넌트 -->
-    <Calculator
-      :visible="showCalculator"
-      @close="showCalculator = false"
-    ></Calculator>
+    <Calculator :visible="showCalculator" @close="showCalculator = false" />
+
+    <!-- 등록 모달 (기존 RegisterEdit) -->
     <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+
+    <!-- 수정 모달 (RegisterReedit) -->
+    <RegisterReEdit
+      v-if="editModalOpen"
+      :existingData="itemToEdit"
+      @close="editModalOpen = false"
+    />
   </AppLayout>
 </template>
 
@@ -175,26 +184,25 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
-import axios from 'axios';
+import RegisterReEdit from './RegisterReedit.vue';
 import Calculator from './Calculator.vue';
+
+import axios from 'axios';
 
 defineOptions({ name: 'CalendarExample' });
 
-/** YYYY-MM-DD 문자열 생성 */
+/** --- 날짜 헬퍼 함수들 --- **/
 function formatDateStr(dateObj) {
   const yyyy = dateObj.getFullYear();
   const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
   const dd = String(dateObj.getDate()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd}`;
 }
-
-// 날짜 더하기 유틸(일)
 function addDays(dateObj, days) {
   const newDate = new Date(dateObj);
   newDate.setDate(newDate.getDate() + days);
   return newDate;
 }
-// 날짜 더하기 유틸(월)
 function addMonths(dateObj, months) {
   const newDate = new Date(dateObj);
   newDate.setMonth(newDate.getMonth() + months);
@@ -202,8 +210,7 @@ function addMonths(dateObj, months) {
 }
 
 /**
- * startDate ~ endDate 사이 rotation(매일/매주/매월)에 따라
- * 모든 날짜 문자열(YYYY-MM-DD) 배열을 만들어 반환
+ * 주기(roation)에 따라 startDate ~ endDate 사이의 모든 날짜(YYYY-MM-DD) 배열 생성
  */
 function generateDatesBetween(startDateStr, endDateStr, rotation) {
   const result = [];
@@ -213,10 +220,8 @@ function generateDatesBetween(startDateStr, endDateStr, rotation) {
   if (isNaN(start) || isNaN(end)) return result;
 
   let current = new Date(start);
-
   while (current <= end) {
     result.push(formatDateStr(current));
-
     if (rotation === '매일') {
       current = addDays(current, 1);
     } else if (rotation === '매주') {
@@ -224,67 +229,39 @@ function generateDatesBetween(startDateStr, endDateStr, rotation) {
     } else if (rotation === '매월') {
       current = addMonths(current, 1);
     } else {
-      // 다른 값이면 중단
       break;
     }
   }
   return result;
 }
 
-// 달력에서 클릭된 이벤트 id
-const selectedEventId = ref(null);
+/** --- 전역 상태들 --- **/
+const selectedEventId = ref(null);   // 클릭된 이벤트 ID
+const editModalOpen = ref(false);    // RegisterReedit 모달 열림 여부
+const itemToEdit = ref(null);        // 수정할 항목 데이터
 
-// 기본 연/월
 const currentYear = ref(2025);
 const currentMonth = ref(4);
 
-// 일반 이벤트 목록
-const events = ref([]);
+const events = ref([]);         // 일반 이벤트
+const fixedExpenses = ref([]);  // 고정 이벤트
 
-// fixedExpenses(실제로는 고정 지출/수입 겸용)
-const fixedExpenses = ref([]);
+const previewDateStr = ref(null);    // hover 미리보기
+const eventFilter = ref('all');      // 'all', '수입', '지출', '이체'
 
-// 마우스 hover 중인 날짜
-const previewDateStr = ref(null);
+const showCalculator = ref(false);   // 계산기
+const isModalOpen = ref(false);      // RegisterEdit(등록용) 모달
 
-// 필터('all', '수입', '지출', '이체')
-const eventFilter = ref('all');
+let fetchInterval = null;            // 폴링 interval
 
-// 모달 / 계산기
-const showCalculator = ref(false);
-const isModalOpen = ref(false);
-// 주기적 폴링 타이머
-let fetchInterval = null;
-
-/** 서버에서 일반 트랜잭션 가져오기 */
-async function fetchEvents() {
-  try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user?.id;
-    if(!userId) return; 
-    const res = await axios.get('http://localhost:3000/transactions',{
-      params: {userId}
-    });
-    events.value = res.data;
-  } catch (error) {
-    console.error('이벤트 목록 오류:', error);
-  }
-}
-
-/** 서버에서 고정 지출/수입(fixedExpenses) 가져오기 */
-async function fetchFixedExpenses() {
-  try {
-    const res = await axios.get('http://localhost:3000/fixedExpenses');
-    fixedExpenses.value = res.data;
-  } catch (error) {
-    console.error('고정 항목 목록 오류:', error);
-  }
-}
-
-/** onMounted 시점에 한번 실행 + 폴링 */
+/** --- onMounted에서 데이터 fetch + interval 설정 --- **/
 onMounted(() => {
   fetchAll();
   fetchInterval = setInterval(fetchAll, 5000);
+});
+
+onUnmounted(() => {
+  if (fetchInterval) clearInterval(fetchInterval);
 });
 
 function fetchAll() {
@@ -292,28 +269,57 @@ function fetchAll() {
   fetchFixedExpenses();
 }
 
-onUnmounted(() => {
-  if (fetchInterval) clearInterval(fetchInterval);
+/** 일반 트랜잭션 불러오기 */
+async function fetchEvents() {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
+    if (!userId) return;
+    const res = await axios.get('http://localhost:3000/transactions', {
+      params: { userId },
+    });
+    events.value = res.data;
+  } catch (error) {
+    console.error('이벤트 목록 오류:', error);
+  }
+}
+
+/** 고정 항목 불러오기 */
+async function fetchFixedExpenses() {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
+    const res = await axios.get('http://localhost:3000/fixedExpenses', {
+      params: { userId },
+    });
+    fixedExpenses.value = res.data;
+  } catch (error) {
+    console.error('고정 항목 목록 오류:', error);
+  }
+}
+
+/** --- 계절 배경을 위한 computed --- */
+const seasonClass = computed(() => {
+  const month = currentMonth.value;
+  if ([12, 1, 2].includes(month)) return 'winter-bg';
+  if ([3, 4, 5].includes(month)) return 'spring-bg';
+  if ([6, 7, 8].includes(month)) return 'summer-bg';
+  if ([9, 10, 11].includes(month)) return 'autumn-bg';
+  return '';
 });
 
-/**
- * rotation에 따라 날짜별 이벤트로 펼쳐주는 computed
- *  fixedExpenses 배열에 있는 각 항목(fe)이
- *    - type: "수입" or "지출"
- *    - date, endDate, rotation: 주기
- *    - amount, description ...
- */
+/** --- 고정 항목들을 실제 날짜별로 펼쳐서 리턴 --- */
 const expandedFixedExpenses = computed(() => {
   const result = [];
   for (const fe of fixedExpenses.value) {
     const dates = generateDatesBetween(fe.date, fe.endDate, fe.rotation);
     for (const d of dates) {
       result.push({
-        id: `fixed-${fe.id}-${d}`,     // 중복 방지용
+        id: `fixed-${fe.id}-${d}`, // 고정 이벤트 id 구분
         date: d,
         amount: fe.amount,
         description: fe.description || '고정항목',
-        type: fe.type,                // "지출" or "수입"
+        type: fe.type,  // "지출" or "수입"
         isFixed: true,
       });
     }
@@ -321,25 +327,19 @@ const expandedFixedExpenses = computed(() => {
   return result;
 });
 
-/**
- * 최종적으로 달력에 표시할 모든 이벤트:
- *   1) 기존 transactions
- *   2) expandedFixedExpenses (고정항목)
- */
+/** 모든 이벤트(일반 + 고정) */
 const allEvents = computed(() => {
   return [...events.value, ...expandedFixedExpenses.value];
 });
 
 /** --- 달력 계산 --- **/
-// YYYY-MM 표시
-const formattedYearMonth = computed(() => {
+const formattedMonth = computed(() => {
   const m = String(currentMonth.value).padStart(2, '0');
   return `${currentYear.value}년 ${m}월`;
 });
-// 요일 헤더
+
 const dayNames = computed(() => ['일', '월', '화', '수', '목', '금', '토']);
 
-// weeks: 달력용 2차원 배열
 const weeks = computed(() => {
   const firstDayOfMonth = new Date(currentYear.value, currentMonth.value - 1, 1);
   const lastDayOfMonth = new Date(currentYear.value, currentMonth.value, 0);
@@ -347,7 +347,7 @@ const weeks = computed(() => {
   const startDay = firstDayOfMonth.getDay();
 
   const cells = [];
-  // 이전 달
+  // 이전 달 부분
   for (let i = 0; i < startDay; i++) {
     const prevDate = new Date(
       currentYear.value,
@@ -382,7 +382,6 @@ const weeks = computed(() => {
     }
   }
 
-  // 7칸씩 잘라서 주차 구성
   const result = [];
   for (let i = 0; i < cells.length; i += 7) {
     result.push(cells.slice(i, i + 7));
@@ -390,7 +389,7 @@ const weeks = computed(() => {
   return result;
 });
 
-/** --- 현재 달에 속한 이벤트들 --- **/
+/** 현재 달에 속한 이벤트만 모아서 통계 */
 const monthlyEvents = computed(() => {
   return allEvents.value.filter((ev) => {
     const [y, m] = ev.date.split('-');
@@ -399,48 +398,40 @@ const monthlyEvents = computed(() => {
 });
 
 /** --- 통계 --- **/
-// 전체 건수
 const totalCount = computed(() => monthlyEvents.value.length);
-// 총액(수입=+, 지출/이체=-)
 const totalAmount = computed(() => {
   return monthlyEvents.value.reduce((acc, ev) => {
-    if (ev.type === '수입') {
-      return acc + ev.amount;
-    } else {
-      return acc - ev.amount;
-    }
+    if (ev.type === '수입') return acc + ev.amount;
+    else return acc - ev.amount;
   }, 0);
 });
-// 수입
-const incomeSum = computed(() => {
-  return monthlyEvents.value
+const incomeSum = computed(() => 
+  monthlyEvents.value
     .filter((ev) => ev.type === '수입')
-    .reduce((acc, ev) => acc + ev.amount, 0);
-});
-const incomeCount = computed(
-  () => monthlyEvents.value.filter((ev) => ev.type === '수입').length
+    .reduce((acc, ev) => acc + ev.amount, 0)
 );
-// 지출
-const expenseSum = computed(() => {
-  return monthlyEvents.value
+const incomeCount = computed(() => 
+  monthlyEvents.value.filter((ev) => ev.type === '수입').length
+);
+const expenseSum = computed(() =>
+  monthlyEvents.value
     .filter((ev) => ev.type === '지출')
-    .reduce((acc, ev) => acc + ev.amount, 0);
-});
-const expenseCount = computed(
-  () => monthlyEvents.value.filter((ev) => ev.type === '지출').length
+    .reduce((acc, ev) => acc + ev.amount, 0)
 );
-// 이체
-const transferSum = computed(() => {
-  return monthlyEvents.value
+const expenseCount = computed(() =>
+  monthlyEvents.value.filter((ev) => ev.type === '지출').length
+);
+const transferSum = computed(() =>
+  monthlyEvents.value
     .filter((ev) => ev.type === '이체')
-    .reduce((acc, ev) => acc + ev.amount, 0);
-});
-const transferCount = computed(
-  () => monthlyEvents.value.filter((ev) => ev.type === '이체').length
+    .reduce((acc, ev) => acc + ev.amount, 0)
+);
+const transferCount = computed(() =>
+  monthlyEvents.value.filter((ev) => ev.type === '이체').length
 );
 
 /** --- methods --- **/
-// hover 팝업
+// hover 말풍선
 function openPreview(dateStr) {
   previewDateStr.value = dateStr;
 }
@@ -453,16 +444,16 @@ function setFilter(type) {
   eventFilter.value = type;
 }
 
-// 특정 날짜의 이벤트 (필터 반영)
+// 특정 날짜의 이벤트(필터 적용)
 function dayEvents(dateStr) {
   return allEvents.value.filter(
     (e) =>
-      e.date === dateStr &&
+      e.date === dateStr && 
       (eventFilter.value === 'all' || e.type === eventFilter.value)
   );
 }
 
-// 오늘 판별
+// 오늘인지 판별
 function isToday(dateObj) {
   const today = new Date();
   return (
@@ -472,34 +463,25 @@ function isToday(dateObj) {
   );
 }
 
-/**
- * 달력 표시용 금액 포맷
- *  - 수입: + 붙여주기
- *  - 지출/이체: - 붙여주기
- */
+// 달력 표시 금액
 function formattedAmount(evt) {
-  if (evt.type === '수입') {
-    return `+ ${evt.amount.toLocaleString()}`;
-  } else if (evt.type === '지출' || evt.type === '이체') {
-    return `- ${evt.amount.toLocaleString()}`;
-  }
+  if (evt.type === '수입') return `+ ${evt.amount.toLocaleString()}`;
+  if (evt.type === '지출' || evt.type === '이체') return `- ${evt.amount.toLocaleString()}`;
   return evt.amount.toLocaleString();
 }
 
 // 통화 포맷
 function formatCurrency(value) {
-  if (typeof value === 'number') {
-    return value.toLocaleString() + '원';
-  }
+  if (typeof value === 'number') return value.toLocaleString() + '원';
   return String(value);
 }
 
-// 특정 날짜의 (고정) 항목만 뽑기
+// 특정 날짜 고정항목
 function fixedExpensesForDay(dateStr) {
   return expandedFixedExpenses.value.filter((fe) => fe.date === dateStr);
 }
 
-// 이전 달
+// 달 이동
 function prevMonth() {
   if (currentMonth.value === 1) {
     currentMonth.value = 12;
@@ -508,7 +490,6 @@ function prevMonth() {
     currentMonth.value--;
   }
 }
-// 다음 달
 function nextMonth() {
   if (currentMonth.value === 12) {
     currentMonth.value = 1;
@@ -523,16 +504,17 @@ function resetToThisMonth() {
   currentMonth.value = today.getMonth() + 1;
 }
 
-// 이벤트 클릭 -> 열기/닫기
+// 이벤트 클릭 -> 펼침/닫힘
 function onEventClick(event) {
   selectedEventId.value = selectedEventId.value === event.id ? null : event.id;
 }
 
-// 이벤트 삭제 (transactions에만 해당)
+/** 삭제 (일반 transaction만 대상으로 예시) */
 async function deleteEvent(id) {
   if (confirm('정말 삭제하시겠습니까?')) {
     try {
       await axios.delete(`http://localhost:3000/transactions/${id}`);
+      // events에서 제거
       events.value = events.value.filter((ev) => ev.id !== id);
       alert('삭제되었습니다.');
     } catch (error) {
@@ -542,9 +524,10 @@ async function deleteEvent(id) {
   }
 }
 
-// 이벤트 수정
-function editEvent(event) {
-  alert(`"${event.description}" 수정하기 버튼 클릭됨!`);
+/** 수정 버튼 -> 모달 오픈 */
+function editItem(event) {
+  itemToEdit.value = event;
+  editModalOpen.value = true;
 }
 </script>
 
@@ -552,7 +535,6 @@ function editEvent(event) {
 .calendar-container {
   width: 100%;
   margin: 0 auto;
-  font-family: sans-serif;
 }
 
 /* 상단 헤더 */
@@ -607,7 +589,7 @@ function editEvent(event) {
   border: 1px solid #ddd;
   height: 120px;
   padding: 4px;
-  position: relative; /* 말풍선 절대배치용 */
+  position: relative; /* 말풍선 위치 */
 }
 
 /* 이전/다음 달 날짜 회색 처리 */
@@ -615,7 +597,7 @@ function editEvent(event) {
   color: #ccc;
 }
 
-/* 일요일(0), 토요일(6) */
+/* 일/토요일 색상 */
 .sunday {
   color: red;
 }
@@ -623,18 +605,22 @@ function editEvent(event) {
   color: blue;
 }
 
-/* '오늘' 날짜 원형 표시 */
+/* 날짜 숫자 */
 .day-number {
-  font-weight: bold;
+  display: flex;
   margin-bottom: 4px;
-}
-.day-number.today-badge {
-  display: inline-flex;
   align-items: center;
+}
+.day-badge {
+  display: inline-flex;
   justify-content: center;
+  align-items: center;
   width: 28px;
   height: 28px;
+  font-weight: bold;
   border-radius: 50%;
+}
+.day-badge.today-badge {
   background-color: black;
   color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
@@ -661,11 +647,16 @@ function editEvent(event) {
   color: green;
 }
 
-/* 말풍선 팝업 (arrow left) */
+/* 수정/삭제 버튼 박스 */
+.edit-delete-buttons {
+  margin-top: 4px;
+}
+
+/* 말풍선 팝업 */
 .popup-bubble {
   color: black;
   position: absolute;
-  top: 20px; /* 날짜 숫자 아래로 조금 띄움 */
+  top: 20px;
   left: 170px;
   width: 90%;
   background-color: ivory;
@@ -699,7 +690,7 @@ function editEvent(event) {
   margin-bottom: 6px;
 }
 
-/* + 버튼 (우측 하단 고정) */
+/* + 버튼 (등록) */
 .add-button {
   position: fixed;
   right: 30px;
@@ -716,6 +707,7 @@ function editEvent(event) {
 .add-button:hover {
   background-color: #fdb3b3;
 }
+
 /* 계산기 버튼 */
 .calc-button {
   position: fixed;
@@ -733,5 +725,26 @@ function editEvent(event) {
 }
 .calc-button:hover {
   background-color: #fdb3b3;
+}
+
+/* 압정 표시 */
+.pin-line {
+  margin-left: 4px;
+  font-size: 12px;
+  color: #444;
+}
+
+/* 계절별 배경 */
+.header.winter-bg {
+  background: url('/src/assets/winter.jpg') center/cover no-repeat;
+}
+.header.spring-bg {
+  background: url('src/assets/spring.png') center/cover no-repeat;
+}
+.header.summer-bg {
+  background: url('src/assets/summer.jpeg') center/cover no-repeat;
+}
+.header.autumn-bg {
+  background: url('src/assets/fall.jpeg') center/cover no-repeat;
 }
 </style>

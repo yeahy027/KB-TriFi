@@ -26,30 +26,7 @@
       "password": "yeahy*027"
     }
   ],
-  "transactions": [
-    {
-      "id": "2",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "4",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "문구점",
-      "fixed": false
-    }
-  ],
+  "transactions": [],
   "fixedExpenses": [
     {
       "id": "2484",
@@ -97,6 +74,54 @@
       "date": "2025-04-10",
       "rotation": "매일",
       "endDate": "2025-04-17"
+    },
+    {
+      "id": "b811",
+      "userId": "675e",
+      "type": "수입",
+      "category": "",
+      "amount": 333,
+      "payment": "현금",
+      "description": "1111",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-24"
+    },
+    {
+      "id": "8bec",
+      "userId": "675e",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "현금",
+      "description": "11",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
+    },
+    {
+      "id": "42ef",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "카드",
+      "description": "1",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-05-09"
+    },
+    {
+      "id": "9d3a",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "현금",
+      "description": "11",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-16"
     }
   ]
 }
