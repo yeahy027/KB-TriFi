@@ -11,9 +11,12 @@
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
-          <strong class="month-text mx-auto"
-          style="cursor:pointer; font-size: xx-large;"
-          @click="goToCalender">{{ formattedYearMonth }}</strong>
+          <strong
+            class="month-text mx-auto"
+            style="cursor: pointer; font-size: xx-large"
+            @click="goToCalender"
+            >{{ formattedYearMonth }}</strong
+          >
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
@@ -152,11 +155,15 @@
     </button>
 
     <!-- 계산기 컴포넌트 -->
-    <Calculator 
+    <Calculator
       :visible="showCalculator"
-      @close="showCalculator = false"></Calculator>
-    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
-    
+      @close="showCalculator = false"
+    ></Calculator>
+    <RegisterEdit
+      v-if="isModalOpen"
+      @close="isModalOpen = false"
+      :onSubmitted="fetchEvents"
+    />
   </AppLayout>
 </template>
 
@@ -448,7 +455,6 @@ function editEvent(event) {
   alert(`"${event.description}" 수정하기 버튼 클릭됨!`);
 }
 </script>
-
 
 <style scoped>
 .calendar-container {

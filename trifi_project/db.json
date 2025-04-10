@@ -24,9 +24,72 @@
       "nickname": "예영",
       "email": "yeahy027@naver.com",
       "password": "yeahy*027"
+    },
+    {
+      "id": "bd8d",
+      "name": "강",
+      "nickname": "서현",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
-  "transactions": [],
+  "transactions": [
+    {
+      "id": "9b0b",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "4174",
+      "amount": 1200000,
+      "category": "",
+      "payment": "카드",
+      "description": "용돈",
+      "fixed": false
+    },
+    {
+      "id": "8010",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "bd8d",
+      "amount": 120000,
+      "category": "기타",
+      "payment": "카드",
+      "description": "펌펌",
+      "fixed": false
+    },
+    {
+      "id": "9d00",
+      "type": "수입",
+      "date": "2025-04-25",
+      "userId": "bd8d",
+      "amount": 120000,
+      "category": "",
+      "payment": "카드",
+      "description": "용돈이지롱",
+      "fixed": false
+    },
+    {
+      "id": "0ba1",
+      "type": "수입",
+      "date": "2025-04-17",
+      "userId": "bd8d",
+      "amount": 150000,
+      "category": "",
+      "payment": "카드",
+      "description": "길가다가 주움",
+      "fixed": false
+    },
+    {
+      "id": "dd64",
+      "type": "지출",
+      "date": "2025-04-20",
+      "userId": "bd8d",
+      "amount": 130000,
+      "category": "식비",
+      "payment": "카드",
+      "description": "빵먹음",
+      "fixed": false
+    }
+  ],
   "fixedExpenses": [
     {
       "id": "53c2",
@@ -38,6 +101,18 @@
       "date": "2025-04-16",
       "rotation": "매주",
       "endDate": null
+    },
+    {
+      "id": "6a6b",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "용돈이지롱",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-05-08"
     }
   ]
 }
