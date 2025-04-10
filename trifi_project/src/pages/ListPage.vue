@@ -21,22 +21,65 @@
           📅이번 달
         </button>
       </div>
+<!-- 상단 필터 바 -->
+<div class="mb-3 d-flex justify-content-end align-items-center gap-2 flex-wrap">
+  <!-- 검색 버튼 -->
+  <button
+  class="btn btn-sm p-1"
+  style="border: none; background: transparent; box-shadow: none;"
+  @click="focusDateInput"
+>
+  🔍검색하기
+</button>
 
-      <!-- 날짜 선택 + 엑셀 다운로드 -->
-      <div class="mb-3 d-flex justify-content-end align-items-center gap-2">
-        <button class="btn btn-outline-secondary btn-sm" @click="focusDateInput">
-  🔍
-</button><input
-          type="date"
-          v-model="selectedDate"
-          ref="dateInput"
-          class="form-control form-control-sm"
-          style="width: auto"
-        />
-        <button class="btn btn-success btn-sm" @click="downloadExcel">
-          📂 엑셀 변환
-        </button>
-      </div>
+
+ <!-- 카테고리별 내역 드롭다운 -->
+<div class="dropdown position-relative" ref="categoryDropdownRef">
+  <button
+    class="btn btn-outline-dark btn-sm"
+    @click="toggleCategoryDropdown"
+  >
+    📊 카테고리별 내역
+  </button>
+  <div
+    v-if="isCategoryDropdownOpen"
+    class="category-dropdown"
+  >
+    <!-- 전체보기 항목 추가 -->
+    <div
+      class="dropdown-item"
+      @click="filterByCategory('전체')"
+    >
+      전체보기
+    </div>
+    <!-- 기존 카테고리들 -->
+    <div
+      class="dropdown-item"
+      v-for="(icon, category) in categoryIcons"
+      :key="category"
+      @click="filterByCategory(category)"
+    >
+      {{ icon }} {{ category }}
+    </div>
+  </div>
+</div>
+
+
+  <!-- 날짜 선택 -->
+  <input
+    type="date"
+    v-model="selectedDate"
+    ref="dateInput"
+    class="form-control form-control-sm"
+    style="width: auto"
+  />
+
+  <!-- 엑셀 다운로드 -->
+  <button class="btn btn-success btn-sm" @click="downloadExcel">
+    📂 엑셀 변환
+  </button>
+</div>
+
 
       <!-- 수입/지출 요약 -->
       <div
@@ -89,6 +132,9 @@
         </div>
       </div>
 
+     
+      
+
       <!-- 날짜별 내역 -->
       <div
         v-for="(dailyRecords, date) in groupedRecords"
@@ -124,6 +170,8 @@
             <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
           </div>
 
+
+          
           <!-- 수정,삭제 드롭다운 메뉴 -->
           <div v-if="openMenuId === record.id" class="dropdown-menu-custom">
             <button class="dropdown-item" @click="editRecord(record)">
@@ -136,7 +184,15 @@
         </div>
       </div>
       <button class="add-button" @click="isModalOpen = true">+</button>
-      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+    <button class="calc-button" @click="showCalculator = true">
+      <i class="bi bi-calculator"></i>
+    </button>
+
+    <!-- 계산기 컴포넌트 -->
+    <Calculator 
+      :visible="showCalculator"
+      @close="showCalculator = false"></Calculator>
+    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
   </AppLayout>
 </template>
@@ -149,6 +205,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useRouter } from 'vue-router';
 import RegisterEdit from '@/pages/Register_edit.vue';
+import Calculator from './Calculator.vue';
 
 const router = useRouter();
 const isModalOpen = ref(false);
@@ -161,6 +218,7 @@ const records = ref([])
 const filterType = ref('')
 const selectedDate = ref('')
 const dateInput = ref(null);
+const showCalculator = ref(false);
 
 const focusDateInput = () => {
   dateInput.value?.focus()
@@ -213,6 +271,8 @@ const fetchRecords = async () => {
 onMounted(() => {
   fetchRecords();
   fetchInterval = setInterval(fetchRecords, 5000);
+
+  document.addEventListener('click',handleClickOutside)
 });
 
 onUnmounted(() => {
@@ -220,6 +280,7 @@ onUnmounted(() => {
     clearInterval(fetchInterval);
     fetchInterval = null;
   }
+  document.removeEventListener('click', handleClickOutside)
 });
 
 const monthlyRecords = computed(() => {
@@ -240,9 +301,19 @@ const monthlyRecords = computed(() => {
   });
 });
 
+
+
+const categoryDropdownRef = ref(null);
+
+const handleClickOutside = (event) => {
+  if (categoryDropdownRef.value && !categoryDropdownRef.value.contains(event.target))
+{isCategoryDropdownOpen.value = false;}
+}
 const filteredRecords = computed(() => {
   return monthlyRecords.value.filter((record) => {
-    return !filterType.value || record.type === filterType.value;
+    const matchesType = !filterType.value || record.type === filterType.value;
+    const matchesCategory = !selectedCategory.value || record.category === selectedCategory.value;
+    return matchesType && matchesCategory;
   });
 });
 
@@ -291,7 +362,7 @@ const categoryIcons = {
   공과금: '💡',
 };
 
-// 총 수입, 지출, 이체 내역 계산산
+// 총 수입, 지출, 이체 내역 계산
 const totalIncome = computed(() =>
   monthlyRecords.value
     .filter((r) => r.type === '수입')
@@ -345,8 +416,11 @@ const toggleMenu = (id) => {
   openMenuId.value = openMenuId.value === id ? null : id;
 };
 
+
+const editTarget = ref(null)
 const editRecord = (record) => {
-  alert(`수정 기능 - ${record.description}`);
+  editTarget.value = record;
+  isModalOpen.value = true;
 };
 
 const deleteRecord = async (id) => {
@@ -355,11 +429,31 @@ const deleteRecord = async (id) => {
     fetchRecords();
   }
 }
-const formattedYearMonth = computed(() => {
-  const m = String(currentMonth.value).padStart(2, '0');
-  return `${currentYear.value}년 ${m}월`;
-});
 
+const isCategoryDropdownOpen = ref(false);
+const selectedCategory = ref('');
+
+const toggleCategoryDropdown = () => {
+  isCategoryDropdownOpen.value = !isCategoryDropdownOpen.value;
+};
+
+
+const incomeCategories = ['급여','용돈'];
+const expenseCategories = ['식비', '교통', '쇼핑', '미용', '문화', '저축', '기타', '의료', '공과금','선물'];
+const allCategories = ['전체', ...incomeCategories, ...expenseCategories];
+
+const filterByCategory = (category) => {
+  if (category === '전체') {
+    selectedCategory.value = '';
+    filterType.value = '';
+  } else {
+    selectedCategory.value = category;
+    filterType.value = incomeCategories.includes(category)
+      ? '수입'
+      : '지출';
+  }
+  isCategoryDropdownOpen.value = false;
+};
 
 
 </script>
@@ -488,4 +582,45 @@ const formattedYearMonth = computed(() => {
 .dropdown-item:hover {
   background-color: #f1f3f5;
 }
+.calc-button {
+  position: fixed;
+  right: 30px;
+  bottom: 100px; /* +버튼 위쪽으로 배치해봤습니다. 원하는 대로 조절 */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px; /* 아이콘 크기 */
+  color: black;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+.calc-button:hover {
+  background-color: #fdb3b3;
+}
+
+.category-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.3rem 0;
+  min-width: 160px;
+}
+
+.category-dropdown .dropdown-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.category-dropdown .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
 </style>

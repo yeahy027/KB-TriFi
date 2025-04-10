@@ -61,7 +61,7 @@
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
               <option value="카드">💳 카드</option>
-              <option value="페이">💰페이(카카오,네이버 등)</option>
+              <option value="페이">💰 페이(카카오,네이버 등)</option>
             </select>
 
             <input type="text" v-model="form.description" placeholder="내용" />
@@ -130,15 +130,17 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
+import { useRoute } from 'vue-router';
 
 const emit = defineEmits(['close']);
 const store = useCounterStore();
 /* entry.userId = useUserStore.user.id; */
 const userStore = useUserStore();
+userStore.checkLocalStorage();
 const activeTab = ref('수입');
 
 const today = new Date().toISOString().split('T')[0];
@@ -157,10 +159,26 @@ const initialForm = () => ({
 
 const form = ref(initialForm());
 
+// 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
+const route = useRoute();
+
 // 탭 변경 시 form 초기화
 watch(activeTab, () => {
   Object.assign(form.value, initialForm());
+
+  // 고정 여부 쿼리 반영
+  if (route.query.fixed === 'true') {
+    form.value.fixed = true;
+  }
 });
+
+onMounted(() => {
+  // 탭도 URL 쿼리로 제어하고 싶다면
+  if (route.query.fixed === 'true') {
+    activeTab.value = '지출'; // watch가 작동하면서 체크됨
+  }
+});
+// 여기까지
 
 const formattedAmount = computed({
   get() {
@@ -203,7 +221,7 @@ const typeMap = {
 
 const submitForm = async () => {
   const entry = {
-    type: typeMap[activeTab.value],
+    type: activeTab.value,
     date: form.value.date,
   };
 
