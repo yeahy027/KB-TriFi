@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": "2",
+      "id": "aff5",
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
@@ -10,7 +10,7 @@
       "language": "Korean"
     },
     {
-      "id": "5da5",
+      "id": "aff4",
       "name": "김네비",
       "nickname": "네비게이션",
       "email": "test3@example.com",
@@ -63,7 +63,7 @@
   "transactions": [
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "수입",
       "date": "2025-04-03",
       "amount": 15000,
@@ -74,7 +74,7 @@
     },
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
@@ -85,7 +85,7 @@
     },
     {
       "id": "4",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-10",
       "amount": 15000,
@@ -96,7 +96,7 @@
     },
     {
       "id": "5",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-11",
       "amount": 1000,
@@ -107,7 +107,7 @@
     },
     {
       "id": "6",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-12",
       "amount": 100070,
@@ -120,7 +120,7 @@
   "fixedExpenses": [
     {
       "id": "2484",
-      "userId": "",
+      "userId": "aff4",
       "category": "",
       "amount": 100000,
       "payment": "카드",
