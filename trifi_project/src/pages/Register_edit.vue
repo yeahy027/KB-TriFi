@@ -29,6 +29,9 @@
         <div class="form-box">
           <div class="form" v-if="activeTab !== '이체'">
             <input type="date" v-model="form.date" placeholder="날짜" />
+            <p class="error-message" v-if="isTouched && !form.date">
+              날짜를 입력하세요
+            </p>
 
             <input
               type="text"
@@ -36,6 +39,9 @@
               @input="formattedAmount = $event.target.value"
               placeholder="금액"
             />
+            <p class="error-message" v-if="isTouched && !form.amount">
+              금액을 입력하세요
+            </p>
 
             <!-- ✅ 지출 탭일 때만 표시 -->
             <select
@@ -57,14 +63,45 @@
               <option value="기타">💊 의료</option>
               <option value="기타">💡 공과금</option>
             </select>
+            <p
+              class="error-message"
+              v-if="isTouched && activeTab === '지출' && !form.category"
+            >
+              카테고리를 선택하세요
+            </p>
+
+            <!-- 수입 카테고리 -->
+            <select
+              v-if="activeTab === '수입'"
+              v-model="form.category"
+              class="category-select"
+              :class="{ 'input-error': isTouched && !form.category }"
+            >
+              <option disabled value="">카테고리를 선택하세요</option>
+              <option value="급여">💰 급여</option>
+              <option value="용돈">💸 용돈</option>
+              <option value="기타">🪙 기타</option>
+            </select>
+            <p
+              class="error-message"
+              v-if="isTouched && activeTab === '수입' && !form.category"
+            >
+              카테고리를 선택하세요
+            </p>
             <select v-model="form.paymentMethod" class="payment-select">
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
               <option value="카드">💳 카드</option>
               <option value="페이">💰 페이(카카오,네이버 등)</option>
             </select>
+            <p class="error-message" v-if="isTouched && !form.paymentMethod">
+              방식을 선택하세요
+            </p>
 
             <input type="text" v-model="form.description" placeholder="내용" />
+            <p class="error-message" v-if="isTouched && !form.description">
+              내용을 입력하세요
+            </p>
 
             <!-- ✅ 고정 여부 체크 -->
             <label class="fixed-checkbox">
@@ -79,6 +116,10 @@
                 <option value="매주">🗓 매주</option>
                 <option value="매월">📅 매월</option>
               </select>
+              <p class="error-message" v-if="isTouched && !form.period">
+                주기를 선택하세요
+              </p>
+
               <div class="recurring-date-wrapper">
                 <label for="endDate">종료 날짜</label>
                 <input
@@ -87,23 +128,29 @@
                   v-model="form.endDate"
                   class="recurring-date"
                 />
+                <p class="error-message" v-if="isTouched && !form.endDate">
+                  종료 날짜를 입력하세요
+                </p>
+                <!-- 여기까지 -->
               </div>
             </div>
           </div>
           <div class="form" v-else>
             <input type="date" v-model="form.date" placeholder="날짜" />
+            <p class="error-message" v-if="isTouched && !form.date">
+              날짜를 입력하세요
+            </p>
+
             <input
               type="text"
               :value="formattedFrom"
               @input="formattedFrom = $event.target.value"
               placeholder="출금 금액"
             />
-            <!-- <input
-              type="text"
-              :value="formattedTo"
-              @input="formattedTo = $event.target.value"
-              placeholder="입금 금액"
-            /> -->
+            <p class="error-message" v-if="isTouched && !form.from">
+              출금 금액을 입력하세요
+            </p>
+
             <select v-model="form.category" class="category-select">
               <option disabled value="">카테고리를 선택하세요</option>
               <option value="식비">🍔 식비</option>
@@ -119,10 +166,30 @@
               <option value="기타">💊 의료</option>
               <option value="기타">💡 공과금</option>
             </select>
-            <input type="text" v-model="form.description" placeholder="메모" />
+            <p class="error-message" v-if="isTouched && !form.category">
+              카테고리를 선택하세요
+            </p>
+
+            <!-- <input type="text" v-model="form.description" placeholder="메모" /> -->
+            <input
+              type="text"
+              placeholder="내용"
+              v-model="form.description"
+              :class="{ 'input-error': isTouched && !form.description }"
+            />
+            <p class="error-message" v-if="isTouched && !form.description">
+              내용을 입력하세요
+            </p>
           </div>
 
-          <button class="submit-btn" @click="submitForm">등록</button>
+          <button
+            class="submit-btn"
+            :class="{ active: isFormValid }"
+            :disabled="!isFormValid"
+            @click="submitForm"
+          >
+            등록
+          </button>
         </div>
       </div>
     </div>
@@ -142,6 +209,7 @@ const store = useCounterStore();
 const userStore = useUserStore();
 userStore.checkLocalStorage();
 const activeTab = ref('수입');
+const isTouched = ref(false);
 
 const today = new Date().toISOString().split('T')[0];
 
@@ -171,6 +239,34 @@ const route = useRoute();
 //   onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
 // });
 
+// 등록 가능 여부를 판단하는 computed
+const isFormValid = computed(() => {
+  if (activeTab.value === '이체') {
+    return (
+      form.value.date &&
+      form.value.from &&
+      form.value.category &&
+      form.value.description
+    );
+  }
+
+  const baseValid =
+    form.value.date &&
+    form.value.amount &&
+    form.value.paymentMethod &&
+    form.value.description;
+
+  if (activeTab.value === '지출') {
+    if (!form.value.category) return false;
+  }
+
+  if (form.value.fixed) {
+    return baseValid && form.value.period && form.value.endDate;
+  }
+
+  return baseValid;
+});
+
 // 탭 변경 시 form 초기화
 // watch(activeTab, () => {
 //   Object.assign(form.value, initialForm());
@@ -189,7 +285,17 @@ onMounted(() => {
     activeTab.value = '지출'; // watch가 작동하면서 체크됨
   }
 });
-// 여기까지
+
+const formattedFrom = computed({
+  get() {
+    if (!form.value.from) return '';
+    return Number(form.value.from).toLocaleString() + '원';
+  },
+  set(value) {
+    const numeric = value.replace(/[^\d]/g, '');
+    form.value.from = numeric;
+  },
+});
 
 const formattedAmount = computed({
   get() {
@@ -201,18 +307,8 @@ const formattedAmount = computed({
     form.value.amount = numeric;
   },
 });
-/* const formattedFrom = computed({
-  get() {
-    if (!form.value.from) return '';
-    return Number(form.value.from).toLocaleString() + '원';
-  },
-  set(value) {
-    const numeric = value.replace(/[^\d]/g, '');
-    form.value.from = numeric;
-  },
-}); */
 
-const formattedTo = computed({
+/* const formattedTo = computed({
   get() {
     if (!form.value.to) return '';
     return Number(form.value.to).toLocaleString() + '원';
@@ -222,7 +318,7 @@ const formattedTo = computed({
     form.value.to = numeric;
   },
 });
-
+ */
 // 한글 → 서버용 영문 매핑
 const typeMap = {
   수입: 'income',
@@ -231,6 +327,9 @@ const typeMap = {
 };
 
 const submitForm = async () => {
+  isTouched.value = true;
+  if (!isFormValid.value) return;
+
   const entry = {
     type: activeTab.value,
     date: form.value.date,
@@ -421,7 +520,14 @@ const submitForm = async () => {
   padding: 10px 30px;
   border-radius: 20px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+.submit-btn.active {
+  background-color: #9c9a9a;
+  color: white;
+  cursor: pointer;
+}
+
 /* 고정 지출 + 수입 -> 종료 날짜 */
 .recurring-date-wrapper {
   width: 100%;
@@ -444,16 +550,18 @@ const submitForm = async () => {
 .category-select option[disabled] {
   color: #999;
 }
-</style>
+.input-error {
+  border: 2px solid #e63946 !important;
+  background-color: #fff0f0 !important;
+  box-shadow: 0 0 4px rgba(230, 57, 70, 0.3) !important;
+  transition: all 0.2s ease-in-out;
+}
 
-<!-- 사용할 부분에 추가해야 할 코드 <template>
-  <div>
-    <button @click="isModalOpen = true">+ 등록</button>
-    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
-  </div>
-</template>
-<script setup>
-import { ref } from 'vue'
-import RegisterEdit from '@/pages/Register_edit.vue'
-const isModalOpen = ref(false)
-</script> -->
+.error-message {
+  color: #e63946;
+  font-size: 0.75rem;
+  margin: 4px auto 10px;
+  max-width: 400px;
+  text-align: left;
+}
+</style>
