@@ -1,5 +1,5 @@
 <template>
-    <div v-if="hasValidData && !isEmptyData">
+    <div v-if="shouldRenderChart">
       <canvas ref="chartRef"></canvas>
     </div>
     <div v-else class="empty-box">
@@ -8,7 +8,7 @@
   </template>
   
   <script setup>
-  import { ref, watchEffect, onMounted, onBeforeUnmount, computed, nextTick } from 'vue'
+  import { ref, computed, watchEffect, onBeforeUnmount, nextTick } from 'vue'
   import { Chart, registerables } from 'chart.js'
   import { registerChart, unregisterChart } from '@/utils/chartManager'
   
@@ -24,23 +24,26 @@
   const chartRef = ref(null)
   let chartInstance = null
   
-  const hasValidData = computed(() => {
-    return (
-      props.data &&
-      Array.isArray(props.data.labels) && props.data.labels.length > 0 &&
-      Array.isArray(props.data.datasets) && props.data.datasets.length > 0
-    )
-  })
+  const hasValidLabels = computed(() =>
+    Array.isArray(props.data.labels) && props.data.labels.length > 0
+  )
   
-  // ✅ 모든 data 값이 0인지 체크
-  const isEmptyData = computed(() => {
-    return props.data.datasets.every(ds =>
+  const hasValidDatasets = computed(() =>
+    Array.isArray(props.data.datasets) && props.data.datasets.length > 0
+  )
+  
+  const isAllZero = computed(() =>
+    props.data.datasets.every(ds =>
       Array.isArray(ds.data) && ds.data.every(value => value === 0)
     )
-  })
+  )
+  
+  const shouldRenderChart = computed(() =>
+    props.data && hasValidLabels.value && hasValidDatasets.value && !isAllZero.value
+  )
   
   const renderChart = () => {
-    if (!hasValidData.value || !chartRef.value) return
+    if (!shouldRenderChart.value || !chartRef.value) return
   
     const ctx = chartRef.value.getContext('2d')
   
@@ -74,7 +77,7 @@
   }
   
   watchEffect(async () => {
-    if (hasValidData.value && !isEmptyData.value) {
+    if (shouldRenderChart.value) {
       await nextTick()
       renderChart()
     }
