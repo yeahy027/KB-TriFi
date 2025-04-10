@@ -401,7 +401,7 @@ onMounted(async () => {
   await fetchTotalSpending()
   await calculateDaysLeft()
   await fetchUserStats()
-  // const { data } = await axios.get(`/api/challengeAmount?userId=${userId}`)
+  // const { data } = await axios.get(/api/challengeAmount?userId=${userId})
   // if (data.length > 0) {
   //   spendingGoal.value = data[0].amount
   //   startDate.value = data[0].date
