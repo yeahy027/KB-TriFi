@@ -115,17 +115,6 @@
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
-    },
-    {
-      "id": "cf7f",
-      "type": "지출",
-      "date": "2025-04-09",
-      "userId": "aff4",
-      "amount": 30000,
-      "category": "교통",
-      "payment": "계좌이체(은행)",
-      "description": "교통비",
-      "fixed": true
     }
   ],
   "fixedExpenses": [
@@ -139,39 +128,6 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-05-09"
-    },
-    {
-      "id": "d302",
-      "userId": "aff4",
-      "category": "",
-      "amount": 13,
-      "payment": "페이",
-      "description": "13",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-04-30"
-    },
-    {
-      "id": "25c0",
-      "userId": "aff4",
-      "category": "",
-      "amount": 123,
-      "payment": "카드",
-      "description": "대중교통",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-05-08"
-    },
-    {
-      "id": "6651",
-      "userId": "aff4",
-      "category": "교통",
-      "amount": 123,
-      "payment": "페이",
-      "description": "테스트",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-05-28"
     }
   ]
 }
