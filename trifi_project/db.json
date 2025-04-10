@@ -66,5 +66,14 @@
       "amount": 30000,
       "date": "2025-04-09"
     }
+  ],
+  "challengeHistory": [
+    {
+      "id": 1,
+      "userId": "aff4",
+      "successCount": 2,
+      "participationCount": 3,
+      "maxStreak": 2
+    }
   ]
 }
