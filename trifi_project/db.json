@@ -122,6 +122,18 @@
       "date": "2025-04-10",
       "rotation": "매주",
       "endDate": "2025-04-16"
+    },
+    {
+      "id": "c84d",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "카드",
+      "description": "33333",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-17"
     }
   ]
 }

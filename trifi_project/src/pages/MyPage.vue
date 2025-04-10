@@ -38,6 +38,9 @@
           <div class="section-title">
             <h3>Cards</h3>
           </div>
+          <div class="comment">
+            <p>가계부와 연동할 카드 연결</p>
+          </div>
           <div class="card-box">
             <button class="slide-btn left" @click="prevCard"><</button>
 
@@ -61,7 +64,7 @@
         <!-- 고정지출 내역 -->
         <div class="expenses">
           <div class="section-title">
-            <h3>고정지출 내역</h3>
+            <h3>고정 거래 내역</h3>
           </div>
 
           <div class="expense-buttons">
@@ -70,7 +73,10 @@
               v-for="item in fixedExpenses"
               :key="item.id"
             >
-              {{ item.description }} &nbsp; - &nbsp; {{ item.amount }}
+              {{ item.description }} &nbsp;&nbsp;
+              <!-- 수입일 경우 +, 지출일 경우 - 표시 -->
+              {{ item.type === '수입' ? '+' : '-' }}
+              {{ item.amount }}
             </button>
           </div>
 
@@ -138,6 +144,36 @@ const handleLogout = () => {
   router.push('/');
 };
 
+// const handleDeleteAccount = async () => {
+//   const result = await Swal.fire({
+//     title: '회원 탈퇴 여부 확인',
+//     text: '정말로 탈퇴하시겠습니까?',
+//     icon: 'warning',
+//     showCancelButton: true,
+//     confirmButtonColor: '#d33',
+//     cancelButtonColor: '#3085d6',
+//     confirmButtonText: '예',
+//     cancelButtonText: '아니오',
+//   });
+
+//   if (result.isConfirmed) {
+
+//     userStore.deleteUser(() => {
+//       Swal.fire({
+//         title: '회원 탈퇴',
+//         text: '회원 탈퇴가 완료되었습니다.',
+//         icon: 'success',
+//         confirmButtonText: '확인',
+//         customClass: {
+//           title: 'fw-bold',
+//           confirmButton: 'btn btn-success',
+//         },
+//       });
+//       router.push('/');
+//     });
+//   }
+// };
+
 const handleDeleteAccount = async () => {
   const result = await Swal.fire({
     title: '회원 탈퇴 여부 확인',
@@ -151,19 +187,38 @@ const handleDeleteAccount = async () => {
   });
 
   if (result.isConfirmed) {
-    userStore.deleteUser(() => {
-      Swal.fire({
-        title: '회원 탈퇴',
-        text: '회원 탈퇴가 완료되었습니다.',
-        icon: 'success',
-        confirmButtonText: '확인',
-        customClass: {
-          title: 'fw-bold',
-          confirmButton: 'btn btn-success',
-        },
+    try {
+      // 1. userId를 변수로 저장
+      const userIdToDelete = user.value.id;
+
+      // 2. 먼저 fixedExpenses에서 해당 유저의 데이터 모두 가져오기
+      const res = await axios.get(
+        `/api/fixedExpenses?userId=${userIdToDelete}`
+      );
+
+      // 3. 해당 항목들을 하나씩 삭제 요청 보내기
+      await Promise.all(
+        res.data.map((item) => axios.delete(`/api/fixedExpenses/${item.id}`))
+      );
+
+      // 4. userStore에서 유저 삭제 처리
+      userStore.deleteUser(() => {
+        Swal.fire({
+          title: '회원 탈퇴',
+          text: '회원 탈퇴가 완료되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            title: 'fw-bold',
+            confirmButton: 'btn btn-success',
+          },
+        });
+        router.push('/');
       });
-      router.push('/');
-    });
+    } catch (err) {
+      console.error('회원 탈퇴 중 에러 발생:', err);
+      Swal.fire('오류', '회원 탈퇴 중 문제가 발생했습니다.', 'error');
+    }
   }
 };
 
@@ -264,6 +319,7 @@ const nextCard = () => {
 .content {
   display: flex;
   gap: 32px;
+  padding-top: 50px;
 }
 
 .cards,
@@ -284,6 +340,11 @@ const nextCard = () => {
 
 .section-title h3 {
   margin: 0;
+}
+
+.comment p {
+  margin-left: 10px;
+  opacity: 0.6;
 }
 
 .plus-fixlist {
@@ -417,7 +478,7 @@ const nextCard = () => {
 }
 
 .expense-btn {
-  background-color: rgba(244, 197, 66, 0.5);
+  /* background-color: rgba(244, 197, 66, 0.5); */
   border: none;
   border-radius: 8px;
   padding: 10px 14px;
@@ -431,6 +492,6 @@ const nextCard = () => {
 }
 
 .expense-btn:hover {
-  background-color: #e5b832;
+  background-color: #f4c542;
 }
 </style>
