@@ -117,6 +117,17 @@
       "date": "2025-04-10",
       "rotation": "매주",
       "endDate": null
+    },
+    {
+      "id": "e26a",
+      "userId": "4174",
+      "category": "",
+      "amount": 122222,
+      "payment": "카드",
+      "description": "용돈",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-06-11"
     }
   ]
 }

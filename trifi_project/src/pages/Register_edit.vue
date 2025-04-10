@@ -153,6 +153,7 @@ const initialForm = () => ({
   description: '',
   fixed: false,
   from: '',
+  period: '',
   /*   to: '', */
   /* memo: '', */
 });
