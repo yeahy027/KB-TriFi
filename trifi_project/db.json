@@ -26,30 +26,7 @@
       "password": "yeahy*027"
     }
   ],
-  "transactions": [
-    {
-      "id": "2",
-      "userId": "aff4",
-      "type": "수입",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "2",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "점심",
-      "fixed": false
-    }
-  ],
+  "transactions": [],
   "fixedExpenses": [
     {
       "id": "53c2",
