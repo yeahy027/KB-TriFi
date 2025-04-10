@@ -10,7 +10,8 @@
       <!-- (1) 이번달 지출 목표 카드 -->
       <div class="section-card left-card-1">
         <label class="section-title">이번달 지출 목표</label>
-        <p>입력한 이번 달 지출 목표를 지켜봅시다🪄</p>
+        <p>[ {{ userName }} ] 님, 목표까지 화이팅이에요!</p>
+        <p>입력한 이번 달 지출 목표를 지켜봅시다🪄</p><br>
         <!-- 목표 금액 표시 -->
         <template v-if="!isGoalLoading">
           <template v-if="goalExists && spendingGoal !== null">
@@ -22,6 +23,7 @@
               </span>
             </div>
             <button class="goal-button" :disabled="true" title="목표는 수정이 불가능합니다.">목표 금액 설정</button>
+            <br>
           </template>
           <template v-else>
             <div class="no-goal-box">등록된 목표 금액 내역이 없습니다.</div>
@@ -31,7 +33,7 @@
       </div>
 
       <!-- (2) 지출 비율 카드 -->
-      <div class="section-card left-card-2">
+      <!-- <div class="section-card left-card-2">
         <label class="section-title">지출 비율</label>
         <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다🪄</p>
         <div class="pie-chart">
@@ -41,7 +43,20 @@
           </svg>
           <span class="pie-label">{{ spendingPercent }}%</span>
         </div>
+      </div> -->
+      <!-- (2) 지출 비율 카드 -->
+      <div class="section-card left-card-2 grid-2">
+        <label class="section-title">지출 비율</label>
+        <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다🪄</p>
+        <div class="pie-chart">
+          <svg width="150" height="150" viewBox="0 0 36 36">
+            <circle class="circle-bg" cx="18" cy="18" r="15.9155" fill="none" stroke="#eee" stroke-width="3" />
+            <circle class="circle" cx="18" cy="18" r="15.9155" fill="none" stroke="#FF6B6B" stroke-width="3" :stroke-dasharray="animatedPie + ', 100'" />
+          </svg>
+          <span class="pie-label">{{ spendingPercent }}%</span>
+        </div>
       </div>
+
 
       <!-- (3) 비교 정보 카드 -->
       <!-- <div class="section-card left-card-3 grid-2">
@@ -355,7 +370,7 @@ onMounted(async () => {
 }
 
 /* 그리드 구성 */
-.challenge-grid {
+/* .challenge-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: repeat(3, 220px);
@@ -366,12 +381,37 @@ onMounted(async () => {
 }
 
 /* 왼쪽 카드 */
-.left-card-1, .left-card-2, .left-card-3 {
+/* .left-card-1, .left-card-2, .left-card-3 {
   grid-column: 1;
 }
 .left-card-1 { grid-row: 1; }
 .left-card-2 { grid-row: 2; }
-.left-card-3 { grid-row: 3; }
+.left-card-3 { grid-row: 3; } */
+
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 왼쪽 2칸 + 오른쪽 1칸 구조 */
+  grid-template-areas:
+    "left left"
+    "right right";
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.left-card-1 {
+  grid-column: 1;
+}
+
+.left-card-1, .left-card-2, .left-card-3 {
+  grid-column: 1;
+}
+
+/* .left-card-2.grid-2 {
+  grid-column: span 2;
+} */
+
+.left-card-1 { grid-row: 1; }
+.left-card-2 { grid-row: 2; }
 
 /* 오른쪽 */
 .right-card {
@@ -509,12 +549,22 @@ onMounted(async () => {
 }
 
 /* 파이 차트 */
-.pie-chart {
+/* .pie-chart {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+} */
+.pie-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 1rem auto;
 }
+
 .pie-label {
   position: absolute;
   font-size: 16px;
