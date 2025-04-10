@@ -19,7 +19,6 @@
       "language": "Korean"
     }
   ],
-
   "transactions": [
     {
       "id": "ce8b",
@@ -91,18 +90,6 @@
       "date": "2025-04-10",
       "rotation": "매주",
       "endDate": "2025-04-25"
-    },
-    {
-      "id": "825d",
-      "userId": "aff4",
-      "type": "지출",
-      "category": "기타",
-      "amount": 5000,
-      "payment": "페이",
-      "description": "넷플릭스",
-      "date": "2025-04-14",
-      "rotation": "매월",
-      "endDate": "2025-06-18"
     },
     {
       "id": "853c",
