@@ -23,10 +23,16 @@
       </div>
 <!-- 상단 필터 바 -->
 <div class="mb-3 d-flex justify-content-end align-items-center gap-2 flex-wrap">
-  <!-- 검색 버튼 -->
-   
+  <div class="d-flex align-items-center gap-2">
   
-  🔍
+  <input
+  type="text"
+  v-model="searchText"
+  placeholder="🔍 내역을 검색해보세요"
+  class="form-control form-control-sm rounded-pill px-2"
+  style="width: 200px; font-size: 14px; color: #333;"
+/>
+</div>
 
 
 
@@ -163,6 +169,8 @@
             {{ Number(record.amount).toLocaleString() }} 원
       <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
 
+
+
       <!-- 메뉴 영역 (⋯ 버튼 클릭 시 뜨는 팝업 메뉴) -->
 <div
   v-if="openMenuId === record.id"
@@ -190,6 +198,12 @@
   </div>
 </div>
 
+
+
+<!-- 내역이 없을 때 보여줄 메시지 -->
+<div v-if="Object.keys(groupedRecords).length === 0" class="text-center text-muted py-4">
+  🫥 해당하는 내역이 없습니다
+</div>
 
       <!-- 날짜별 내역 -->
       <div
@@ -288,9 +302,8 @@ const dateInput = ref(null);
 const showCalculator = ref(false);
 const editModalOpen = ref(false);    // RegisterReedit 모달 열림 여부
 const itemToEdit = ref(null); 
-const focusDateInput = () => {
-  dateInput.value?.focus()
-}
+
+
 
 
 
@@ -403,19 +416,21 @@ const fixedRecords = computed(() => {
   return fixedExpenses.value.filter((record) => {
     const start = new Date(record.date);
     const end = new Date(record.endDate);
-    const recordYear = start.getFullYear();
-    const recordMonth = start.getMonth() + 1;
-
-    // 현재 월에 해당하는 고정지출만 포함
-    return (
-      selectedYear >= recordYear &&
-      selectedMonth >= recordMonth &&
+    const isInMonth =
+      selectedYear >= start.getFullYear() &&
+      selectedMonth >= start.getMonth() + 1 &&
       start <= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth() + 1, 0) &&
-      end >= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth(), 1)
-    );
+      end >= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth(), 1);
+
+    const matchesType = !filterType.value || record.type === filterType.value;
+
+    // ✅ 카테고리 필터도 추가
+    const matchesCategory =
+      !selectedCategory.value || selectedCategory.value === '전체' || record.category === selectedCategory.value;
+
+    return isInMonth && matchesType && matchesCategory;
   });
 });
-
 const categoryDropdownRef = ref(null);
 
 const handleClickOutside = (event) => {
@@ -426,7 +441,8 @@ const filteredRecords = computed(() => {
   return monthlyRecords.value.filter((record) => {
     const matchesType = !filterType.value || record.type === filterType.value;
     const matchesCategory = !selectedCategory.value || record.category === selectedCategory.value;
-    return matchesType && matchesCategory;
+    const matchesSearch = !searchText.value || record.description.toLowerCase().includes(searchText.value.toLowerCase());
+    return matchesType && matchesCategory && matchesSearch;
   });
 });
 
@@ -597,6 +613,10 @@ function editItem(event) {
   itemToEdit.value = event;
   editModalOpen.value = true;
 }
+
+
+const searchText = ref('');
+
 
 </script>
 
