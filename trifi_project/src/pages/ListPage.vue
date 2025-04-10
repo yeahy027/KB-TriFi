@@ -193,7 +193,7 @@ const resetToThisMonth = () => {
   selectedDate.value = ''
 }
 
-// 요일 변환
+// 요일 변환환
 const formatDateWithDay = (dateStr) => {
   const date = new Date(dateStr);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -220,10 +220,8 @@ onUnmounted(() => {
     clearInterval(fetchInterval);
     fetchInterval = null;
   }
-})
+});
 
-
-// 달 별 계산산
 const monthlyRecords = computed(() => {
   return records.value.filter((record) => {
     const recordDate = new Date(record.date);
@@ -293,7 +291,7 @@ const categoryIcons = {
   공과금: '💡',
 };
 
-// 총 수입, 지출, 이체 내역 계산
+// 총 수입, 지출, 이체 내역 계산산
 const totalIncome = computed(() =>
   monthlyRecords.value
     .filter((r) => r.type === '수입')
@@ -322,7 +320,7 @@ const downloadExcel = () => {
   }));
 
    // 총합 정보 추가
-  excelData.push({});
+   excelData.push({});
   excelData.push({ 내용: ' *총 지출', 금액: totalExpense.value });
   excelData.push({ 내용: ' *총 수입', 금액: totalIncome.value });
   excelData.push({ 내용: ' *총 이체', 금액: totalTransfer.value });
@@ -357,11 +355,10 @@ const deleteRecord = async (id) => {
     fetchRecords();
   }
 }
-
-
-
-
-
+const formattedYearMonth = computed(() => {
+  const m = String(currentMonth.value).padStart(2, '0');
+  return `${currentYear.value}년 ${m}월`;
+});
 
 
 
