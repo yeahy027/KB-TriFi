@@ -74,7 +74,7 @@
 
             <div v-if="form.fixed">
               <select v-model="form.period" class="category-select">
-                <option disabled value="">주기를 선택하세요</option>
+                <option disabled value="" hidden>📌 주기를 선택하세요</option>
                 <option value="매일">📆 매일</option>
                 <option value="매주">🗓 매주</option>
                 <option value="매월">📅 매월</option>
@@ -147,6 +147,7 @@ const today = new Date().toISOString().split('T')[0];
 
 const props = defineProps({
   checked: Boolean,
+  onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
 });
 
 const initialForm = () => ({
@@ -157,6 +158,7 @@ const initialForm = () => ({
   description: '',
   fixed: false,
   from: '',
+  period: '',
   /*   to: '', */
   /* memo: '', */
 });
@@ -164,6 +166,10 @@ const initialForm = () => ({
 const form = ref(initialForm());
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
+
+// const props = defineProps({
+//   onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
+// });
 
 // 탭 변경 시 form 초기화
 // watch(activeTab, () => {
@@ -267,6 +273,7 @@ const submitForm = async () => {
           fixedEntry
         );
         console.log('✅ 고정 항목 등록 완료:', res.data);
+        props.onSubmitted?.();
       } catch (err) {
         console.error('❌ 고정 항목 전송 실패:', err);
       }
@@ -282,6 +289,7 @@ const submitForm = async () => {
   try {
     const res = await axios.post('http://localhost:3000/transactions', entry);
     console.log('서버 응답:', res.data);
+    props.onSubmitted?.();
   } catch (err) {
     console.error('전송 실패:', err);
   }
@@ -431,6 +439,9 @@ const submitForm = async () => {
 
   /* ✅ 글꼴 크기 조정도 가능 */
   font-size: 0.95rem;
+}
+.category-select option[disabled] {
+  color: #999;
 }
 </style>
 

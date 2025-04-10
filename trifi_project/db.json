@@ -5,7 +5,7 @@
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이",
+      "nickname": "홍순이12",
       "country": "Korea",
       "language": "Korean"
     },
@@ -41,6 +41,17 @@
       "payment": "현금",
       "description": "점심",
       "fixed": false
+    },
+    {
+      "id": "3",
+      "userId": "aff5",
+      "type": "지출",
+      "date": "2025-04-03",
+      "amount": 15000,
+      "category": "급여",
+      "payment": "현금",
+      "description": "알바비",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -49,12 +60,24 @@
       "userId": "aff4",
       "type": "수입",
       "category": "",
-      "amount": 500000,
+      "amount": 55555,
+      "payment": "페이",
+      "description": "test",
+      "date": "2025-04-16",
+      "rotation": "매주",
+      "endDate": null
+    },
+    {
+      "id": "6a6b",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 1200000,
       "payment": "카드",
-      "description": "월급",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-05-30"
+      "description": "용돈이지롱",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-05-08"
     }
   ]
 }

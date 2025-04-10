@@ -78,8 +78,11 @@ onMounted(async () => {
     fixedExpenses.value = response2.data
 
     pieData.value = getPieChartData(transactions.value, fixedExpenses.value)
+    console.log("pieData.value : ", pieData.value)
     topSpendingData.value = getTopSpendingData(transactions.value)
+    console.log("topSpendingData.value : ", topSpendingData.value)
     compareData.value = getCompareChartData(transactions.value, fixedExpenses.value, userId)
+    console.log("compareData.value : ", compareData.value)
   } catch (error) {
     console.error('트랜잭션 데이터를 불러오는 중 오류 발생:', error)
   }
