@@ -19,7 +19,6 @@
       "language": "Korean"
     }
   ],
-
   "transactions": [
     {
       "id": "ce8b",
@@ -52,6 +51,17 @@
       "category": "",
       "payment": "",
       "description": "",
+      "fixed": false
+    },
+    {
+      "id": "c4e9",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "2f84",
+      "amount": 132312,
+      "category": "급여",
+      "payment": "카드",
+      "description": "sdasd",
       "fixed": false
     }
   ],
