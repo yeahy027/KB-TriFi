@@ -5,7 +5,7 @@
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이",
+      "nickname": "홍순이12",
       "country": "Korea",
       "language": "Korean"
     },
@@ -64,78 +64,12 @@
     {
       "id": "2",
       "userId": 1,
-      "type": "수입",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "2",
-      "userId": 1,
       "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
       "category": "급여",
       "payment": "현금",
       "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "4",
-      "userId": 1,
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "문구점",
-      "fixed": false
-    },
-    {
-      "id": "5",
-      "userId": 1,
-      "type": "지출",
-      "date": "2025-04-11",
-      "amount": 1000,
-      "category": "교통",
-      "payment": "현금",
-      "description": "ㅁㅇㅁㅇ",
-      "fixed": false
-    },
-    {
-      "id": "6",
-      "userId": 1,
-      "type": "지출",
-      "date": "2025-04-12",
-      "amount": 100070,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "에이블리",
-      "fixed": false
-    },
-    {
-      "id": "fa23",
-      "type": "수입",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 1140000,
-      "category": "",
-      "payment": "카드",
-      "description": "일급",
-      "fixed": false
-    },
-    {
-      "id": "458e",
-      "type": "지출",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 120000,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "모자",
       "fixed": false
     }
   ],
@@ -152,15 +86,26 @@
       "endDate": "2025-05-09"
     },
     {
-      "id": "cab1",
-      "userId": "",
+      "id": "9f21",
+      "userId": "4174",
+      "category": "교통",
+      "amount": 115000,
+      "payment": "카드",
+      "description": "대중교통",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-05-08"
+    },
+    {
+      "id": "08f3",
+      "userId": "4174",
       "category": "",
       "amount": 1200000,
       "payment": "카드",
-      "description": "일급",
+      "description": "주급",
       "date": "2025-04-11",
-      "rotation": "매일",
-      "endDate": "2025-04-25"
+      "rotation": "매주",
+      "endDate": "2025-05-09"
     }
   ]
 }
