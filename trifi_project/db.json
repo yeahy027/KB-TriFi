@@ -59,8 +59,18 @@
       "payment": "현금",
       "description": "알바비",
       "fixed": false
+    },
+    {
+      "id": "f021",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "675e",
+      "amount": 15000,
+      "category": "식비",
+      "payment": "카드",
+      "description": "맥도날드",
+      "fixed": false
     }
-
   ],
   "fixedExpenses": [
     {
@@ -73,6 +83,18 @@
       "date": "2025-04-16",
       "rotation": "매주",
       "endDate": null
+    },
+    {
+      "id": "5fce",
+      "userId": "675e",
+      "type": "수입",
+      "category": "",
+      "amount": 11111,
+      "payment": "현금",
+      "description": "1111",
+      "date": "2025-04-10",
+      "rotation": "매일",
+      "endDate": "2025-04-14"
     }
   ]
 }

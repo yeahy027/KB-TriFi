@@ -24,13 +24,10 @@
 <!-- 상단 필터 바 -->
 <div class="mb-3 d-flex justify-content-end align-items-center gap-2 flex-wrap">
   <!-- 검색 버튼 -->
-  <button
-  class="btn btn-sm p-1"
-  style="border: none; background: transparent; box-shadow: none;"
-  @click="focusDateInput"
->
-  🔍검색하기
-</button>
+   
+  
+  🔍
+
 
 
  <!-- 카테고리별 내역 드롭다운 -->
@@ -134,6 +131,35 @@
 
      
       
+<!-- 고정지출 내역 -->
+<div v-if="fixedRecords.length" class="mb-5">
+  <div class="fw-bold border-bottom pb-1 mb-2">📌 고정 수입/지출 내역</div>
+  <div
+    v-for="record in fixedRecords"
+    :key="record.id"
+    class="d-flex align-items-center justify-content-between py-3 px-3 border position-relative"
+    style="background-color: #ffeef2; border-radius: 12px; margin-bottom: 10px;"
+  >
+    <span
+      class="badge me-3 d-flex align-items-center gap-1"
+      :class="getCategoryClass(record.category)"
+    >
+      {{ categoryIcons[record.category] || '❓' }} {{ record.category }}
+    </span>
+    <div class="flex-grow-1">
+      <div>{{ record.description }}</div>
+      <small class="text-muted">
+        {{ record.payment }} |
+        {{ formatDateWithDay(record.date) }} ~ {{ formatDateWithDay(record.endDate) }}
+      </small>
+    </div>
+    <div class="text-danger fw-bold">
+      {{ Number(record.amount).toLocaleString() }} 원
+      <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
+    </div>
+  </div>
+</div>
+
 
       <!-- 날짜별 내역 -->
       <div
@@ -225,9 +251,7 @@ const focusDateInput = () => {
   dateInput.value?.focus()
 }
 
-const clearSelectedDate = () => {
-  selectedDate.value = '';
-};
+
 
 const formattedMonth = computed(() => {
   const year = currentMonth.value.getFullYear();
@@ -266,7 +290,6 @@ let fetchInterval = null
 
 
 // 유저정보 가져오기
-
 const fetchRecords = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
@@ -289,7 +312,6 @@ const fetchFixedExpenses = async () => {
   });
   fixedExpenses.value = res.data; // fixedExpenses는 ref로 선언해줘야 함
 };
-
 
 
 
@@ -332,6 +354,26 @@ const monthlyRecords = computed(() => {
 });
 
 
+// 고정지출 내역
+const fixedRecords = computed(() => {
+  const selectedYear = currentMonth.value.getFullYear();
+  const selectedMonth = currentMonth.value.getMonth() + 1;
+
+  return fixedExpenses.value.filter((record) => {
+    const start = new Date(record.date);
+    const end = new Date(record.endDate);
+    const recordYear = start.getFullYear();
+    const recordMonth = start.getMonth() + 1;
+
+    // 현재 월에 해당하는 고정지출만 포함
+    return (
+      selectedYear >= recordYear &&
+      selectedMonth >= recordMonth &&
+      start <= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth() + 1, 0) &&
+      end >= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth(), 1)
+    );
+  });
+});
 
 const categoryDropdownRef = ref(null);
 
@@ -421,7 +463,7 @@ const downloadExcel = () => {
   }));
 
    // 총합 정보 추가
-   excelData.push({});
+  excelData.push({});
   excelData.push({ 내용: ' *총 지출', 금액: totalExpense.value });
   excelData.push({ 내용: ' *총 수입', 금액: totalIncome.value });
   excelData.push({ 내용: ' *총 이체', 금액: totalTransfer.value });
@@ -470,7 +512,6 @@ const toggleCategoryDropdown = () => {
 
 const incomeCategories = ['급여','용돈'];
 const expenseCategories = ['식비', '교통', '쇼핑', '미용', '문화', '저축', '기타', '의료', '공과금','선물'];
-const allCategories = ['전체', ...incomeCategories, ...expenseCategories];
 
 const filterByCategory = (category) => {
   if (category === '전체') {
