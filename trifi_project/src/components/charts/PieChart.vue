@@ -3,10 +3,11 @@
     <!-- 데이터 없을 때만 보여줄 안내 박스 -->
     <div
       v-if="!hasData"
-      class="absolute inset-0 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 text-gray-500 z-10 bg-white"
+      class="empty-box"
     >
-      <p class="text-lg font-medium">아직 등록된 내역이 없습니다</p>
+      <p class="text-muted">아직 등록된 내역이 없습니다 😢</p>
     </div>
+
 
     <!-- 항상 렌더되지만, 데이터 없으면 차트는 안 그림 -->
     <canvas ref="chartRef" class="w-full h-full" />
@@ -107,10 +108,29 @@ watch(() => props.data, async () => {
 div {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 300px;
 }
 canvas {
   width: 100%;
   height: 100%;
 }
+
+.empty-box {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
+  color: #888;
+  font-weight: 500;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
 </style>
