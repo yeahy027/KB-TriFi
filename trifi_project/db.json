@@ -104,6 +104,28 @@
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
+    },
+    {
+      "id": "09ac",
+      "type": "expense",
+      "date": "2025-04-10",
+      "userId": "",
+      "amount": 12000,
+      "category": "기타",
+      "payment": "카드",
+      "description": "병원",
+      "fixed": false
+    },
+    {
+      "id": "b688",
+      "type": "expense",
+      "date": "2025-04-10",
+      "userId": "4174",
+      "amount": 123000,
+      "category": "쇼핑",
+      "payment": "페이",
+      "description": "옷 쇼핑 ",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -205,6 +227,116 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-05-09"
+    },
+    {
+      "id": "4bcf",
+      "userId": "",
+      "category": "",
+      "amount": 12000,
+      "payment": "현금",
+      "description": "용돈용돈",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-05-10"
+    },
+    {
+      "id": "37c9",
+      "userId": "",
+      "category": "식비",
+      "amount": 0,
+      "payment": "현금",
+      "description": "짜장면 맛있다",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-05-10"
+    },
+    {
+      "id": "322a",
+      "userId": "",
+      "category": "식비",
+      "amount": 12000,
+      "payment": "현금",
+      "description": "짜장면",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-05-10"
+    },
+    {
+      "id": "679d",
+      "userId": "",
+      "category": "식비",
+      "amount": 13000,
+      "payment": "카드",
+      "description": "햄버거",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-05-10"
+    },
+    {
+      "id": "4c5a",
+      "userId": "4174",
+      "category": "",
+      "amount": 0,
+      "payment": "카드",
+      "description": "",
+      "date": "2025-04-10",
+      "rotation": "매일",
+      "endDate": null
+    },
+    {
+      "id": "c1fe",
+      "userId": "4174",
+      "category": "",
+      "amount": 0,
+      "payment": "카드",
+      "description": "",
+      "date": "2025-04-10",
+      "rotation": "매일",
+      "endDate": null
+    },
+    {
+      "id": "b18e",
+      "userId": "4174",
+      "category": "",
+      "amount": 0,
+      "payment": "카드",
+      "description": "",
+      "date": "2025-04-10",
+      "rotation": "매일",
+      "endDate": null
+    },
+    {
+      "id": "0063",
+      "userId": "4174",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "월급",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-24"
+    },
+    {
+      "id": "a393",
+      "userId": "4174",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "월급",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-06-10"
+    },
+    {
+      "id": "0550",
+      "userId": "",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "현금",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-06-10"
     }
   ]
 }

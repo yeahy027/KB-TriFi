@@ -61,7 +61,7 @@
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
               <option value="카드">💳 카드</option>
-              <option value="페이">💰페이(카카오,네이버 등)</option>
+              <option value="페이">💰 페이(카카오,네이버 등)</option>
             </select>
 
             <input type="text" v-model="form.description" placeholder="내용" />
