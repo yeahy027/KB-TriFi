@@ -41,29 +41,6 @@
       "payment": "현금",
       "description": "문구점",
       "fixed": false
-    },
-    {
-      "id": "03d0",
-      "type": "수입",
-      "date": "2025-04-10",
-      "userId": "aff5",
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": false
-    },
-    {
-      "id": "213a",
-      "type": "이체",
-      "date": "2025-04-10",
-      "userId": "aff4",
-      "amount": 10000,
-      "category": "식비",
-      "payment": "",
-      "description": "햄버거",
-      "fixed": false,
-      "from": 100000
     }
   ],
   "fixedExpenses": [
