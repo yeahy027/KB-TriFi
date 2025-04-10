@@ -9,14 +9,24 @@
       <!-- 왼쪽 3줄 -->
       <!-- (1) 이번달 지출 목표 카드 -->
       <div class="section-card left-card-1">
-        <label class="section-title">이번달 지출 목표</label>
+        <div class="section-header-with-tooltip">
+          <label class="section-title">이번달 지출 목표</label>
+          <!-- 말풍선을 이 위치로 이동 -->
+          <div v-if="daysLeft !== null" class="title-tooltip">
+            {{ 'D-' + daysLeft }}일 남음
+          </div>
+        </div>
+        <!-- <label class="section-title">이번달 지출 목표</label> -->
         <p>[ {{ userName }} ] 님, 목표까지 화이팅이에요!</p>
         <p>입력한 이번 달 지출 목표를 지켜봅시다🪄</p><br>
         <!-- 목표 금액 표시 -->
         <template v-if="!isGoalLoading">
           <template v-if="goalExists && spendingGoal !== null">
             <div class="progress-container">
-              <div class="progress-bar" :style="{ width: animatedProgress + '%' }"></div>
+              <!-- <div class="progress-bar" :style="{ width: animatedProgress + '%' }"></div> -->
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar" :style="{ width: animatedProgress + '%' }"></div>
+              </div>
               <span class="progress-text">
                 {{ currentSpending.toLocaleString() }}원 /
                 {{ formattedSpendingGoal }}원
@@ -26,8 +36,21 @@
             <br>
           </template>
           <template v-else>
-            <div class="no-goal-box">등록된 목표 금액 내역이 없습니다.</div>
-            <button class="goal-button" @click="openModal">목표 금액 설정</button>
+            <div class="no-goal-box">
+              <template v-if="isTodayFirstDay">
+                등록된 목표 금액 내역이 없습니다.
+              </template>
+              <template v-else>
+                현재는 목표 등록 기간이 아닙니다. 다음 챌린지를 기다려주세요 🙏
+              </template>
+            </div>
+
+            <button class="goal-button"
+                    :disabled="!isTodayFirstDay"
+                    @click="openModal"
+                    :title="isTodayFirstDay ? '목표를 설정하세요' : '매월 1일에만 설정 가능합니다'">
+              목표 금액 설정
+            </button>
           </template>
         </template>
       </div>
@@ -151,6 +174,28 @@ const goalExists = computed(() => spendingGoal.value > 0)
 const formattedSpendingGoal = computed(() =>
   spendingGoal.value ? spendingGoal.value.toLocaleString() : ''
 )
+
+const startDate = ref(null)
+const daysLeft = ref(null)
+
+const isTodayFirstDay = computed(() => {
+  const today = new Date()
+  return today.getDate() === 1
+})
+
+const calculateDaysLeft = () => {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth()
+
+  // 다음 달 1일 계산 (0-indexed month이므로 +1)
+  const nextMonth = new Date(year, month + 1, 1)
+
+  // 남은 일수 계산
+  const diff = Math.ceil((nextMonth - today) / (1000 * 60 * 60 * 24))
+  daysLeft.value = diff > 0 ? diff : 0
+  console.log("다음 챌린지까지 남은 일수 (D-):", daysLeft.value)
+}
 
 // 챌린지 성공 여부 판단 및 업데이트
 const checkChallengeStatus = async () => {
@@ -351,11 +396,20 @@ function closeModal() {
 
 // onMounted
 onMounted(async () => {
+  isGoalLoading.value = true
   await fetchGoal()
   await fetchTotalSpending()
+  await calculateDaysLeft()
   await fetchUserStats()
+  // const { data } = await axios.get(`/api/challengeAmount?userId=${userId}`)
+  // if (data.length > 0) {
+  //   spendingGoal.value = data[0].amount
+  //   startDate.value = data[0].date
+  //   calculateDaysLeft()
+  // }
   await fetchChallengeRanking()
   await checkChallengeStatus()
+  isGoalLoading.value = false
 })
 </script>
 
@@ -378,15 +432,7 @@ onMounted(async () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-}
-
-/* 왼쪽 카드 */
-/* .left-card-1, .left-card-2, .left-card-3 {
-  grid-column: 1;
-}
-.left-card-1 { grid-row: 1; }
-.left-card-2 { grid-row: 2; }
-.left-card-3 { grid-row: 3; } */
+} */
 
 .challenge-grid {
   display: grid;
@@ -398,20 +444,14 @@ onMounted(async () => {
   margin: 1rem;
 }
 
-.left-card-1 {
-  grid-column: 1;
-}
-
+/* 왼쪽 카드 */
 .left-card-1, .left-card-2, .left-card-3 {
   grid-column: 1;
 }
 
-/* .left-card-2.grid-2 {
-  grid-column: span 2;
-} */
-
 .left-card-1 { grid-row: 1; }
 .left-card-2 { grid-row: 2; }
+
 
 /* 오른쪽 */
 .right-card {
@@ -525,7 +565,37 @@ onMounted(async () => {
   margin-bottom: 20px;
   font-weight: 600;
 }
-.progress-container {
+
+.section-header-with-tooltip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.title-tooltip {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  position: relative;
+}
+
+.title-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #ff6b6b transparent transparent;
+}
+
+/* progress 컨테이너 부분 */
+/* .progress-container {
   background: #eee;
   height: 40px;
   border-radius: 7px;
@@ -546,15 +616,59 @@ onMounted(async () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+} */
+.progress-container {
+  position: relative;
+  margin-bottom: 10px;
+}
+.progress-bar-wrapper {
+  position: relative;
+  background-color: #eee;
+  border-radius: 10px;
+  height: 30px;
+  overflow: hidden;
+}
+.progress-bar {
+  background-color: #FF6B6B;
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s ease-in-out;
+}
+/* .progress-text {
+  margin-top: 5px;
+  font-size: 14px;
+} */
+.progress-text {
+  font-size: 16px;
+  color: #ffffff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.progress-tooltip {
+  position: absolute;
+  top: -35px;
+  transform: translateX(-50%);
+  background: #ff6b6b;
+  color: #ff3b3b;
+  padding: 5px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.progress-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ff6b6b transparent transparent transparent;
 }
 
 /* 파이 차트 */
-/* .pie-chart {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-} */
 .pie-chart {
   display: flex;
   justify-content: center;
