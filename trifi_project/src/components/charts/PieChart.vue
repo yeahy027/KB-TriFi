@@ -1,77 +1,142 @@
 <template>
-    <div style="max-width: 400px; margin: auto">
-      <canvas ref="chartRef" width="300" height="300"></canvas>
+  <div class="w-full h-full relative">
+    <!-- 데이터 없을 때만 보여줄 안내 박스 -->
+    <div
+      v-if="!hasData"
+      class="empty-box"
+    >
+      <p class="text-muted">아직 등록된 내역이 없습니다 😢</p>
     </div>
-  </template>  
-  
-  <script setup>
-  import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
-  import { Chart, registerables } from 'chart.js'
-  import { registerChart, unregisterChart } from '@/utils/chartManager'
-  
-  Chart.register(...registerables)
-  
-  const props = defineProps({
+
+
+    <!-- 항상 렌더되지만, 데이터 없으면 차트는 안 그림 -->
+    <canvas ref="chartRef" class="w-full h-full" />
+  </div>
+</template>
+
+<script setup>
+import { ref, watch, onMounted, nextTick, computed } from 'vue'
+import { Chart, registerables } from 'chart.js'
+
+Chart.register(...registerables)
+
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true
+  }
+})
+
+const chartRef = ref(null)
+let chartInstance = null
+
+// 데이터 유무 체크
+const hasData = computed(() => {
+  return props.data && props.data.length > 0
+})
+
+function renderChart() {
+  if (!chartRef.value || !hasData.value) return
+
+  const ctx = chartRef.value.getContext('2d')
+
+  // 기존 차트가 있다면 파괴
+  if (chartInstance) {
+    chartInstance.destroy()
+  }
+
+  chartInstance = new Chart(ctx, {
+    type: 'pie',
     data: {
-      type: Array,
-      required: true,
+      labels: props.data.map(item => item.name),
+      datasets: [{
+        label: '지출',
+        data: props.data.map(item => item.value),
+        backgroundColor: [
+          '#FF6384', '#36A2EB', '#FFCE56',
+          '#8AFFC1', '#FFD08A', '#A58AFF'
+        ],
+        borderColor: '#ffffff',
+        borderWidth: 2
+      }]
     },
-  })
-  
-  const chartRef = ref(null)
-  let chartInstance = null
-  
-  const renderChart = () => {
-    if (chartInstance) {
-      chartInstance.destroy()
-    }
-  
-    const ctx = chartRef.value.getContext('2d')
-    chartInstance = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: props.data.map(item => item.name),
-        datasets: [{
-          data: props.data.map(item => item.value),
-          backgroundColor: ['#E8FD94', '#2A4185', '#A6C1FF', '#FFD6A5'],
-          borderWidth: 1,
-        }]
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: 50 // 숫자를 늘릴수록 아래로 내려감
+        }
       },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
+      radius: '110%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#333',
+            padding: 30,
+            font: {
+              size: 14
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: context => {
+              const value = context.parsed
+              return `${context.label}: ${value.toLocaleString()}원`
+            }
           }
         }
       }
-    })
-  
-    registerChart(chartInstance)
-  }
-  
-  onMounted(() => {
-    if (props.data && props.data.length > 0) {
-      renderChart()
     }
   })
-  
-  // ✅ data가 변경되면 차트 다시 렌더링
-  watch(() => props.data, (newVal) => {
-    if (newVal && newVal.length > 0) {
-      renderChart()
-    }
-  }, { deep: true })
-  
-  onBeforeUnmount(() => {
-    unregisterChart(chartInstance)
-    chartInstance?.destroy()
-  })
-  </script>
-  
-  <style scoped>
-  canvas {
-    max-width: 100%;
+}
+
+onMounted(() => {
+  if (hasData.value) {
+    renderChart()
   }
-  </style>
-  
+})
+
+watch(() => props.data, async () => {
+  await nextTick()
+  if (hasData.value) {
+    renderChart()
+  } else if (chartInstance) {
+    chartInstance.destroy()
+    chartInstance = null
+  }
+})
+</script>
+
+<style scoped>
+div {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.empty-box {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
+  color: #888;
+  font-weight: 500;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+</style>

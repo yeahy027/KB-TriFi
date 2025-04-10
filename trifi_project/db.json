@@ -5,7 +5,7 @@
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이",
+      "nickname": "홍순이12",
       "country": "Korea",
       "language": "Korean"
     },
@@ -35,58 +35,36 @@
   ],
   "transactions": [
     {
-      "id": "9b0b",
+      "id": "2",
+      "userId": "aff4",
       "type": "수입",
-      "date": "2025-04-10",
-      "userId": "4174",
-      "amount": 1200000,
-      "category": "",
-      "payment": "카드",
-      "description": "용돈",
-      "fixed": false
-    },
-    {
-      "id": "8010",
-      "type": "지출",
-      "date": "2025-04-10",
-      "userId": "bd8d",
-      "amount": 120000,
-      "category": "기타",
-      "payment": "카드",
-      "description": "펌펌",
-      "fixed": false
-    },
-    {
-      "id": "9d00",
-      "type": "수입",
-      "date": "2025-04-25",
-      "userId": "bd8d",
-      "amount": 120000,
-      "category": "",
-      "payment": "카드",
-      "description": "용돈이지롱",
-      "fixed": false
-    },
-    {
-      "id": "0ba1",
-      "type": "수입",
-      "date": "2025-04-17",
-      "userId": "bd8d",
-      "amount": 150000,
-      "category": "",
-      "payment": "카드",
-      "description": "길가다가 주움",
-      "fixed": false
-    },
-    {
-      "id": "dd64",
-      "type": "지출",
-      "date": "2025-04-20",
-      "userId": "bd8d",
-      "amount": 130000,
+      "date": "2025-04-03",
+      "amount": 15000,
       "category": "식비",
       "payment": "카드",
-      "description": "빵먹음",
+      "description": "점심",
+      "fixed": false
+    },
+    {
+      "id": "2",
+      "userId": "aff4",
+      "type": "지출",
+      "date": "2025-04-03",
+      "amount": 15000,
+      "category": "급여",
+      "payment": "현금",
+      "description": "점심",
+      "fixed": false
+    },
+    {
+      "id": "3",
+      "userId": "aff5",
+      "type": "지출",
+      "date": "2025-04-03",
+      "amount": 15000,
+      "category": "급여",
+      "payment": "현금",
+      "description": "알바비",
       "fixed": false
     }
   ],
