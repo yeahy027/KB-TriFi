@@ -64,17 +64,6 @@
     {
       "id": "2",
       "userId": "aff4",
-      "type": "수입",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "2",
-      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
@@ -93,41 +82,32 @@
       "payment": "카드",
       "description": "문구점",
       "fixed": false
-    },
-    {
-      "id": "5",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-11",
-      "amount": 1000,
-      "category": "교통",
-      "payment": "현금",
-      "description": "ㅁㅇㅁㅇ",
-      "fixed": false
-    },
-    {
-      "id": "6",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-12",
-      "amount": 100070,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "에이블리",
-      "fixed": false
     }
   ],
   "fixedExpenses": [
     {
       "id": "2484",
       "userId": "aff4",
-      "category": "",
+      "category": "지추",
+      "type":"지출",
       "amount": 100000,
       "payment": "카드",
       "description": "캐시백",
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-05-09"
+    },
+    {
+      "id": "7103",
+      "userId": "aff4",
+      "category": "식비",
+      "amount": 100000,
+      "type":"수입",
+      "payment": "카드",
+      "description": "햄버거먹음",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-05-01"
     }
   ]
 }

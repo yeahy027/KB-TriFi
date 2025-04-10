@@ -45,11 +45,8 @@
             <div class="create-card">
               <!-- 캡처처럼 가운데 + 원형 영역과 안내문구 -->
               <div class="card-add-circle">
-                <div class="plus-sign" @click="isCardFormOpen = true">+</div>
-                <RegisterCard
-                  v-if="isCardFormOpen"
-                  @close="isCardFormOpen = false"
-                />
+                <div class="plus-sign" @click="isModalOpen = true">+</div>
+                <RegisterCard v-if="isModalOpen" @close="isModalOpen = false" />
               </div>
               <p class="instruction">위의 + 버튼을 눌러 카드를 등록해 주세요</p>
             </div>
@@ -59,28 +56,15 @@
           </div>
         </div>
 
-        <!-- 고정지출 내역 -->
         <div class="expenses">
           <div class="section-title">
             <h3>고정지출 내역</h3>
           </div>
-
-          <div class="expense-buttons">
-            <button
-              class="expense-btn"
-              v-for="item in fixedExpenses"
-              :key="item.id"
-            >
-              {{ item.description }} &nbsp; - &nbsp; {{ item.date }}
-            </button>
-          </div>
-
-          <!-- 모달로 고정지출 추가 -->
-          <button class="plus-fixlist" @click="isModalOpen = true">
-            고정지출 추가하기
-          </button>
-          <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
-
+          <ul class="expense-list">
+            <RouterLink to="/registeredit">
+              <input class="plus-fixlist" placeholder="고정지출 추가하기" />
+            </RouterLink>
+          </ul>
         </div>
       </div>
     </div>
@@ -89,34 +73,23 @@
 
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
-import RegisterEdit from '@/pages/Register_edit.vue';
-import RegisterCard from './RegisterCard.vue';
 import { useUserStore } from '@/stores/userStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Swal from 'sweetalert2';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import RegisterCard from './RegisterCard.vue';
 
 const userStore = useUserStore(); // Pinia store 가져오기
 const user = computed(() => userStore.user); // 최신 user 데이터
 const router = useRouter();
 const isModalOpen = ref(false);
+
+// 모달 열림/닫힘 상태
 const isCardFormOpen = ref(false);
 
 // 카드 상세정보 입력 예시 데이터
 const newCardName = ref(''); // 필요하다면 v-model로 사용
-const fixedExpenses = ref([]);
-
-onMounted(async () => {
-  try {
-    const res = await axios.get('/api/fixedExpenses'); // db.json에서 고정지출 가져오기
-    fixedExpenses.value = res.data.filter(
-      (item) => item.userId === user.value.id
-    );
-  } catch (err) {
-    console.error('고정지출 불러오기 실패:', err);
-  }
-});
 
 onMounted(() => {
   userStore.checkLocalStorage();
@@ -182,8 +155,6 @@ const prevCard = () => {
 const nextCard = () => {
   console.log('다음 카드');
 };
-
-// gotoRegisterCard는 어디에서 필요한건가요?
 const goToRegisterCard = () => {
   router.push('/registercard'); // RegisterCard.vue 경로로 이동
 };
@@ -276,10 +247,10 @@ const goToRegisterCard = () => {
 
 .plus-fixlist {
   border: none;
-  border-radius: 8px;
+  border-radius: 10%;
   cursor: pointer;
   font-weight: 500;
-  width: 500px;
+  width: 300px;
   height: 50px;
   padding-left: 20px;
 }
@@ -393,32 +364,5 @@ const goToRegisterCard = () => {
   border-radius: 6px;
   padding: 8px 12px;
   cursor: pointer;
-}
-
-/* 수정 */
-.expense-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-top: 5px;
-  padding-bottom: 15px;
-}
-
-.expense-btn {
-  background-color: rgba(244, 197, 66, 0.5);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  padding-left: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: left;
-  font-size: 14px;
-  transition: background-color 0.2s;
-  width: 500px;
-}
-
-.expense-btn:hover {
-  background-color: #e5b832;
 }
 </style>

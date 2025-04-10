@@ -4,23 +4,21 @@
       <!-- 상단 헤더(월/년도, 통계 표시) -->
       <div class="header">
         <!-- 월 이동 버튼/월 표시 영역 -->
-        <!-- 월 선택 및 날짜 -->
-        <div
-          class="d-flex align-items-center justify-content-center gap-2 mb-3"
-        >
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
-          <strong class="month-text mx-auto"
-          style="cursor:pointer; font-size: xx-large;"
-          @click="goToCalender">{{ formattedYearMonth }}</strong>
+          <strong
+            class="month-text mx-auto"
+            style="cursor: pointer; font-size: xx-large;"
+            @click="goToCalender"
+          >
+            {{ formattedYearMonth }}
+          </strong>
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
-          <button
-            class="btn btn-outline-primary btn-sm"
-            @click="resetToThisMonth"
-          >
+          <button class="btn btn-outline-primary btn-sm" @click="resetToThisMonth">
             📅이번 달
           </button>
         </div>
@@ -57,9 +55,7 @@
             :class="{ active: eventFilter === '이체' }"
             @click="setFilter('이체')"
           >
-            🏦 이체 ({{ transferCount }}건)<br />{{
-              formatCurrency(transferSum)
-            }}
+            🏦 이체 ({{ transferCount }}건)<br />{{ formatCurrency(transferSum) }}
           </div>
         </div>
       </div>
@@ -79,20 +75,35 @@
               :class="{
                 'not-current-month': day.month !== currentMonth,
                 sunday: day.dateObj.getDay() === 0,
-                saturday: day.dateObj.getDay() === 6,
+                saturday: day.dateObj.getDay() === 6
               }"
-              @mouseenter="
-                dayEvents(day.dateStr).length > 0 && openPreview(day.dateStr)
-              "
+              @mouseenter="dayEvents(day.dateStr).length > 0 && openPreview(day.dateStr)"
               @mouseleave="closePreview"
             >
-              <!-- 날짜 표시 (오늘이면 today-badge 클래스 추가) -->
+              <!-- 날짜 숫자 -->
               <div
-                class="day-number"
-                :class="{ 'today-badge': isToday(day.dateObj) }"
-              >
-                {{ day.dateObj.getDate() }}
-              </div>
+  class="day-number"
+  :class="{ 'today-badge': isToday(day.dateObj) }"
+>
+  {{ day.dateObj.getDate() }}
+
+  <!-- (중요) 해당 날짜에 매칭되는 고정 항목 표시 -->
+  <template
+    v-for="(fexp, idx) in fixedExpensesForDay(day.dateStr)"
+    :key="idx"
+  >
+    <span style="margin-left: 4px;">
+      📌
+      <!-- 수입이면 +, 지출이면 - 표시 -->
+      <template v-if="fexp.type === '지출'">
+        - {{ fexp.amount.toLocaleString() }}원
+      </template>
+      <template v-else-if="fexp.type === '수입'">
+        + {{ fexp.amount.toLocaleString() }}원
+      </template>
+    </span>
+  </template>
+</div>
 
               <!-- 말풍선 팝업(hover) - 해당 날짜에 마우스 올라갔을 때만 표시 -->
               <div v-if="previewDateStr === day.dateStr" class="popup-bubble">
@@ -144,7 +155,7 @@
         </tbody>
       </table>
 
-      <!-- 모달로 등록 폼 열기 -->
+      <!-- 등록 폼 모달 (예시) -->
     </div>
     <button class="add-button" @click="isModalOpen = true">+</button>
     <button class="calc-button" @click="showCalculator = true">
@@ -152,11 +163,11 @@
     </button>
 
     <!-- 계산기 컴포넌트 -->
-    <Calculator 
+    <Calculator
       :visible="showCalculator"
-      @close="showCalculator = false"></Calculator>
+      @close="showCalculator = false"
+    ></Calculator>
     <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
-    
   </AppLayout>
 </template>
 
@@ -177,78 +188,162 @@ function formatDateStr(dateObj) {
   return `${yyyy}-${mm}-${dd}`;
 }
 
-// 가장 상단 setup 내에 선언
+// 날짜 더하기 유틸(일)
+function addDays(dateObj, days) {
+  const newDate = new Date(dateObj);
+  newDate.setDate(newDate.getDate() + days);
+  return newDate;
+}
+// 날짜 더하기 유틸(월)
+function addMonths(dateObj, months) {
+  const newDate = new Date(dateObj);
+  newDate.setMonth(newDate.getMonth() + months);
+  return newDate;
+}
+
+/**
+ * startDate ~ endDate 사이 rotation(매일/매주/매월)에 따라
+ * 모든 날짜 문자열(YYYY-MM-DD) 배열을 만들어 반환
+ */
+function generateDatesBetween(startDateStr, endDateStr, rotation) {
+  const result = [];
+  const start = new Date(startDateStr);
+  const end = new Date(endDateStr);
+
+  if (isNaN(start) || isNaN(end)) return result;
+
+  let current = new Date(start);
+
+  while (current <= end) {
+    result.push(formatDateStr(current));
+
+    if (rotation === '매일') {
+      current = addDays(current, 1);
+    } else if (rotation === '매주') {
+      current = addDays(current, 7);
+    } else if (rotation === '매월') {
+      current = addMonths(current, 1);
+    } else {
+      // 다른 값이면 중단
+      break;
+    }
+  }
+  return result;
+}
+
+// 달력에서 클릭된 이벤트 id
 const selectedEventId = ref(null);
 
-// 원하는 기본 연/월
+// 기본 연/월
 const currentYear = ref(2025);
 const currentMonth = ref(4);
 
-// 이벤트 목록 (초기에는 빈 배열)
+// 일반 이벤트 목록
 const events = ref([]);
 
-// hover 중인 날짜(미리보기 팝업을 띄울 날짜)
+// fixedExpenses(실제로는 고정 지출/수입 겸용)
+const fixedExpenses = ref([]);
+
+// 마우스 hover 중인 날짜
 const previewDateStr = ref(null);
 
-// 필터 상태 ('all', '수입', '지출', '이체')
+// 필터('all', '수입', '지출', '이체')
 const eventFilter = ref('all');
-const showCalculator = ref(false);
 
-// 모달 열림 여부
+// 모달 / 계산기
+const showCalculator = ref(false);
 const isModalOpen = ref(false);
 
-// 주기적으로 폴링할 타이머
+// 주기적 폴링 타이머
 let fetchInterval = null;
 
-/** 서버에서 이벤트 목록 가져오는 함수 **/
+/** 서버에서 일반 트랜잭션 가져오기 */
 async function fetchEvents() {
   try {
     const res = await axios.get('http://localhost:3000/transactions');
-    events.value = res.data; // db.json의 transactions 배열
+    events.value = res.data;
   } catch (error) {
-    console.error('이벤트 목록을 가져오는 중 오류 발생:', error);
+    console.error('이벤트 목록 오류:', error);
   }
 }
 
-/** onMounted에서 첫 로딩 + 주기적 폴링 **/
+/** 서버에서 고정 지출/수입(fixedExpenses) 가져오기 */
+async function fetchFixedExpenses() {
+  try {
+    const res = await axios.get('http://localhost:3000/fixedExpenses');
+    fixedExpenses.value = res.data;
+  } catch (error) {
+    console.error('고정 항목 목록 오류:', error);
+  }
+}
+
+/** onMounted 시점에 한번 실행 + 폴링 */
 onMounted(() => {
-  // 첫 로딩
-  fetchEvents();
-  // 예시: 5초 간격으로 폴링
-  fetchInterval = setInterval(() => {
-    fetchEvents();
-  }, 5000);
+  fetchAll();
+  fetchInterval = setInterval(fetchAll, 5000);
 });
+
+function fetchAll() {
+  fetchEvents();
+  fetchFixedExpenses();
+}
 
 onUnmounted(() => {
-  if (fetchInterval) {
-    clearInterval(fetchInterval);
-  }
+  if (fetchInterval) clearInterval(fetchInterval);
 });
 
-/** --- 달력 관련 --- **/
+/**
+ * rotation에 따라 날짜별 이벤트로 펼쳐주는 computed
+ *  fixedExpenses 배열에 있는 각 항목(fe)이
+ *    - type: "수입" or "지출"
+ *    - date, endDate, rotation: 주기
+ *    - amount, description ...
+ */
+const expandedFixedExpenses = computed(() => {
+  const result = [];
+  for (const fe of fixedExpenses.value) {
+    const dates = generateDatesBetween(fe.date, fe.endDate, fe.rotation);
+    for (const d of dates) {
+      result.push({
+        id: `fixed-${fe.id}-${d}`,     // 중복 방지용
+        date: d,
+        amount: fe.amount,
+        description: fe.description || '고정항목',
+        type: fe.type,                // "지출" or "수입"
+        isFixed: true,
+      });
+    }
+  }
+  return result;
+});
+
+/**
+ * 최종적으로 달력에 표시할 모든 이벤트:
+ *   1) 기존 transactions
+ *   2) expandedFixedExpenses (고정항목)
+ */
+const allEvents = computed(() => {
+  return [...events.value, ...expandedFixedExpenses.value];
+});
+
+/** --- 달력 계산 --- **/
 // YYYY-MM 표시
 const formattedYearMonth = computed(() => {
   const m = String(currentMonth.value).padStart(2, '0');
   return `${currentYear.value}년 ${m}월`;
 });
-
 // 요일 헤더
 const dayNames = computed(() => ['일', '월', '화', '수', '목', '금', '토']);
 
-// 달력 주차 계산
+// weeks: 달력용 2차원 배열
 const weeks = computed(() => {
-  const firstDayOfMonth = new Date(
-    currentYear.value,
-    currentMonth.value - 1,
-    1
-  );
+  const firstDayOfMonth = new Date(currentYear.value, currentMonth.value - 1, 1);
   const lastDayOfMonth = new Date(currentYear.value, currentMonth.value, 0);
   const lastDate = lastDayOfMonth.getDate();
   const startDay = firstDayOfMonth.getDay();
 
   const cells = [];
-  // 이전 달(빈칸)
+  // 이전 달
   for (let i = 0; i < startDay; i++) {
     const prevDate = new Date(
       currentYear.value,
@@ -270,7 +365,7 @@ const weeks = computed(() => {
       month: currentMonth.value,
     });
   }
-  // 다음 달(빈칸)
+  // 다음 달
   const remaining = 7 - (cells.length % 7);
   if (remaining < 7) {
     for (let i = 1; i <= remaining; i++) {
@@ -282,7 +377,8 @@ const weeks = computed(() => {
       });
     }
   }
-  // 7일씩 잘라 weeks 배열
+
+  // 7칸씩 잘라서 주차 구성
   const result = [];
   for (let i = 0; i < cells.length; i += 7) {
     result.push(cells.slice(i, i + 7));
@@ -290,18 +386,18 @@ const weeks = computed(() => {
   return result;
 });
 
-/** --- "월별"에 해당하는 events 필터링 --- **/
+/** --- 현재 달에 속한 이벤트들 --- **/
 const monthlyEvents = computed(() => {
-  return events.value.filter((ev) => {
+  return allEvents.value.filter((ev) => {
     const [y, m] = ev.date.split('-');
     return Number(y) === currentYear.value && Number(m) === currentMonth.value;
   });
 });
 
-/** --- 월별 통계 --- **/
+/** --- 통계 --- **/
 // 전체 건수
 const totalCount = computed(() => monthlyEvents.value.length);
-// 수입이면 +, 지출/이체면 - 처리하여 합산
+// 총액(수입=+, 지출/이체=-)
 const totalAmount = computed(() => {
   return monthlyEvents.value.reduce((acc, ev) => {
     if (ev.type === '수입') {
@@ -340,7 +436,7 @@ const transferCount = computed(
 );
 
 /** --- methods --- **/
-// hover 시 팝업 열기/닫기
+// hover 팝업
 function openPreview(dateStr) {
   previewDateStr.value = dateStr;
 }
@@ -348,21 +444,21 @@ function closePreview() {
   previewDateStr.value = null;
 }
 
-// 클릭 시 필터 변경
+// 필터 변경
 function setFilter(type) {
   eventFilter.value = type;
 }
 
-// 해당 날짜의 이벤트 (현재 필터가 'all'이거나 타입이 일치해야 표시)
+// 특정 날짜의 이벤트 (필터 반영)
 function dayEvents(dateStr) {
-  return events.value.filter(
+  return allEvents.value.filter(
     (e) =>
       e.date === dateStr &&
       (eventFilter.value === 'all' || e.type === eventFilter.value)
   );
 }
 
-// 오늘 날짜 판별
+// 오늘 판별
 function isToday(dateObj) {
   const today = new Date();
   return (
@@ -373,10 +469,9 @@ function isToday(dateObj) {
 }
 
 /**
- *  (중요) 캘린더에 표시될 이벤트 금액 포맷팅
- *   - 수입: + 붙여주기
- *   - 지출/이체: - 붙여주기
- *   - 3자리 콤마 처리(toLocaleString())
+ * 달력 표시용 금액 포맷
+ *  - 수입: + 붙여주기
+ *  - 지출/이체: - 붙여주기
  */
 function formattedAmount(evt) {
   if (evt.type === '수입') {
@@ -387,12 +482,17 @@ function formattedAmount(evt) {
   return evt.amount.toLocaleString();
 }
 
-// 통화 포맷 (통계 부분에 사용) -> 3자리 콤마 + "원"
+// 통화 포맷
 function formatCurrency(value) {
   if (typeof value === 'number') {
     return value.toLocaleString() + '원';
   }
   return String(value);
+}
+
+// 특정 날짜의 (고정) 항목만 뽑기
+function fixedExpensesForDay(dateStr) {
+  return expandedFixedExpenses.value.filter((fe) => fe.date === dateStr);
 }
 
 // 이전 달
@@ -404,7 +504,6 @@ function prevMonth() {
     currentMonth.value--;
   }
 }
-
 // 다음 달
 function nextMonth() {
   if (currentMonth.value === 12) {
@@ -414,25 +513,22 @@ function nextMonth() {
     currentMonth.value++;
   }
 }
-
 function resetToThisMonth() {
   const today = new Date();
   currentYear.value = today.getFullYear();
-  currentMonth.value = today.getMonth() + 1; // JS에서 month는 0부터 시작하므로 +1
+  currentMonth.value = today.getMonth() + 1;
 }
 
-// 이벤트 클릭 시 선택/해제
+// 이벤트 클릭 -> 열기/닫기
 function onEventClick(event) {
-  // 같은 이벤트를 두 번 클릭하면 닫히도록 (토글)
   selectedEventId.value = selectedEventId.value === event.id ? null : event.id;
 }
 
-// 이벤트 삭제
+// 이벤트 삭제 (transactions에만 해당)
 async function deleteEvent(id) {
   if (confirm('정말 삭제하시겠습니까?')) {
     try {
       await axios.delete(`http://localhost:3000/transactions/${id}`);
-      // 삭제 후 local events 배열에서 제외
       events.value = events.value.filter((ev) => ev.id !== id);
       alert('삭제되었습니다.');
     } catch (error) {
@@ -444,11 +540,9 @@ async function deleteEvent(id) {
 
 // 이벤트 수정
 function editEvent(event) {
-  // 원하는 로직
   alert(`"${event.description}" 수정하기 버튼 클릭됨!`);
 }
 </script>
-
 
 <style scoped>
 .calendar-container {
@@ -551,11 +645,11 @@ function editEvent(event) {
   padding: 0 2px;
 }
 .event.수입 {
-  background-color: #9cc0cb7c;
+  background-color: #9cc0cb7c; /* 파란톤 */
   color: blue;
 }
 .event.지출 {
-  background-color: rgba(255, 192, 225, 0.494);
+  background-color: rgba(255, 192, 225, 0.494); /* 핑크톤 */
   color: red;
 }
 .event.이체 {
@@ -618,10 +712,11 @@ function editEvent(event) {
 .add-button:hover {
   background-color: #fdb3b3;
 }
+/* 계산기 버튼 */
 .calc-button {
   position: fixed;
   right: 30px;
-  bottom: 100px; /* +버튼 위쪽으로 배치해봤습니다. 원하는 대로 조절 */
+  bottom: 100px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
