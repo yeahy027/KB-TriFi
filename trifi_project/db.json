@@ -35,36 +35,25 @@
   ],
   "transactions": [
     {
-      "id": "2",
-      "userId": "aff4",
+      "id": "7dae",
       "type": "수입",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "식비",
+      "date": "2025-04-10",
+      "userId": "bd8d",
+      "amount": 43242,
+      "category": "용돈",
+      "payment": "현금",
+      "description": "ㄳㅈㅅㅈㅅ",
+      "fixed": false
+    },
+    {
+      "id": "a074",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "bd8d",
+      "amount": 4324234,
+      "category": "용돈",
       "payment": "카드",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "2",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "3",
-      "userId": "aff5",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "알바비",
+      "description": "ㅅㄱ",
       "fixed": false
     }
   ],
@@ -91,6 +80,18 @@
       "date": "2025-04-11",
       "rotation": "매주",
       "endDate": "2025-05-08"
+    },
+    {
+      "id": "5c72",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 213123,
+      "payment": "현금",
+      "description": "123",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-25"
     }
   ]
 }
