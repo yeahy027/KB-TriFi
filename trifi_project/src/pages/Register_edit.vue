@@ -61,7 +61,7 @@
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
               <option value="카드">💳 카드</option>
-              <option value="페이">💰페이(카카오,네이버 등)</option>
+              <option value="페이">💰 페이(카카오,네이버 등)</option>
             </select>
 
             <input type="text" v-model="form.description" placeholder="내용" />
@@ -140,6 +140,7 @@ const emit = defineEmits(['close']);
 const store = useCounterStore();
 /* entry.userId = useUserStore.user.id; */
 const userStore = useUserStore();
+userStore.checkLocalStorage();
 const activeTab = ref('수입');
 
 const today = new Date().toISOString().split('T')[0];
@@ -220,7 +221,7 @@ const typeMap = {
 
 const submitForm = async () => {
   const entry = {
-    type: typeMap[activeTab.value],
+    type: activeTab.value,
     date: form.value.date,
   };
 

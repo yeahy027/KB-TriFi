@@ -157,10 +157,10 @@
       "category": "",
       "amount": 123,
       "payment": "카드",
-      "description": "테스트입니다",
+      "description": "대중교통",
       "date": "2025-04-10",
       "rotation": "매주",
-      "endDate": "2025-04-24"
+      "endDate": "2025-05-08"
     },
     {
       "id": "6651",
