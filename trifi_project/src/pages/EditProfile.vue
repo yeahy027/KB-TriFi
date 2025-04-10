@@ -122,6 +122,15 @@ const fields = [
     placeholder: 'Enter your email',
     type: 'email',
   },
+
+  // 비밀번호 수정 추가
+  {
+    label: '비밀번호',
+    model: 'password',
+    placeholder: 'Enter new password',
+    type: 'password',
+  },
+  // 비밀번호 수정 추가
 ];
 
 const updateProfile = async () => {
