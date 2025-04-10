@@ -136,7 +136,15 @@
         </div>
       </div>
       <button class="add-button" @click="isModalOpen = true">+</button>
-      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+    <button class="calc-button" @click="showCalculator = true">
+      <i class="bi bi-calculator"></i>
+    </button>
+
+    <!-- 계산기 컴포넌트 -->
+    <Calculator 
+      :visible="showCalculator"
+      @close="showCalculator = false"></Calculator>
+    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
   </AppLayout>
 </template>
@@ -149,6 +157,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useRouter } from 'vue-router';
 import RegisterEdit from '@/pages/Register_edit.vue';
+import Calculator from './Calculator.vue';
 
 const router = useRouter();
 const isModalOpen = ref(false);
@@ -161,6 +170,7 @@ const records = ref([])
 const filterType = ref('')
 const selectedDate = ref('')
 const dateInput = ref(null);
+const showCalculator = ref(false);
 
 const focusDateInput = () => {
   dateInput.value?.focus()
@@ -487,5 +497,22 @@ const formattedYearMonth = computed(() => {
 
 .dropdown-item:hover {
   background-color: #f1f3f5;
+}
+.calc-button {
+  position: fixed;
+  right: 30px;
+  bottom: 100px; /* +버튼 위쪽으로 배치해봤습니다. 원하는 대로 조절 */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px; /* 아이콘 크기 */
+  color: black;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+.calc-button:hover {
+  background-color: #fdb3b3;
 }
 </style>
