@@ -253,14 +253,18 @@ const eventFilter = ref('all');
 // 모달 / 계산기
 const showCalculator = ref(false);
 const isModalOpen = ref(false);
-
 // 주기적 폴링 타이머
 let fetchInterval = null;
 
 /** 서버에서 일반 트랜잭션 가져오기 */
 async function fetchEvents() {
   try {
-    const res = await axios.get('http://localhost:3000/transactions');
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
+    if(!userId) return; 
+    const res = await axios.get('http://localhost:3000/transactions',{
+      params: {userId}
+    });
     events.value = res.data;
   } catch (error) {
     console.error('이벤트 목록 오류:', error);

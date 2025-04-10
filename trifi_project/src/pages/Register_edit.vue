@@ -247,6 +247,7 @@ const submitForm = async () => {
       const fixedEntry = {
         userId: entry.userId,
         category: entry.category,
+        type: entry.type,
         amount: entry.amount,
         payment: entry.payment,
         description: entry.description,
