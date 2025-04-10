@@ -267,8 +267,6 @@ let fetchInterval = null
 // 유저정보 가져오기
 const user = JSON.parse(localStorage.getItem("user"));
 
-
-
 const fetchRecords = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
