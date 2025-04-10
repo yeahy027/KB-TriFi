@@ -89,6 +89,18 @@
       "date": "2025-04-10",
       "rotation": "매일",
       "endDate": "2025-04-23"
+    },
+    {
+      "id": "f28b",
+      "userId": "aff5",
+      "type": "지출",
+      "category": "교통",
+      "amount": 150000,
+      "payment": "현금",
+      "description": "지하철",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-22"
     }
   ]
 }

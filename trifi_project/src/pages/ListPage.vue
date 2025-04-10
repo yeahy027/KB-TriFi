@@ -346,7 +346,7 @@ onMounted(() => {
   fetchInterval = setInterval(() => {
     fetchRecords();
     fetchFixedExpenses();
-  }, 5000);
+  }, 1000);
 
   document.addEventListener('click', handleClickOutside);
 });
