@@ -5,7 +5,7 @@
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이12",
+      "nickname": "홍순이",
       "country": "Korea",
       "language": "Korean"
     },
@@ -19,45 +19,11 @@
       "language": "Korean"
     },
     {
-      "id": "aff3",
-      "name": "점다운",
-      "nickname": "다우니",
-      "email": "test4@example.com",
-      "password": "test4",
-      "country": "Korea",
-      "language": "Korean"
-    },
-    {
-      "id": "801d",
-      "name": "점다운",
-      "nickname": "다우니",
-      "email": "test4@example.com",
-      "password": "test4",
-      "country": "Korea",
-      "language": "Korean"
-    },
-    {
-      "id": "03b8",
-      "name": "송지호",
-      "nickname": "송송",
-      "email": "test5@example.com",
-      "password": "test5",
-      "country": "Korea",
-      "language": "Korean"
-    },
-    {
-      "id": "7a3b",
-      "name": "머머",
-      "nickname": "머니요hi",
-      "email": "money@example.com",
-      "password": "1234"
-    },
-    {
-      "id": "4174",
-      "name": "강",
-      "nickname": "서현",
-      "email": "seohyun0916@naver.com",
-      "password": "1234"
+      "id": "675e",
+      "name": "김예영",
+      "nickname": "예영",
+      "email": "yeahy027@naver.com",
+      "password": "yeahy*027"
     }
   ],
   "transactions": [
@@ -82,52 +48,19 @@
       "payment": "현금",
       "description": "점심",
       "fixed": false
-    },
-    {
-      "id": "4",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "문구점",
-      "fixed": false
-    },
-    {
-      "id": "5",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-11",
-      "amount": 1000,
-      "category": "교통",
-      "payment": "현금",
-      "description": "ㅁㅇㅁㅇ",
-      "fixed": false
-    },
-    {
-      "id": "6",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-12",
-      "amount": 100070,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "에이블리",
-      "fixed": false
     }
   ],
   "fixedExpenses": [
     {
-      "id": "2484",
-      "userId": "aff4",
+      "id": "53c2",
+      "userId": "675e",
       "category": "",
-      "amount": 100000,
-      "payment": "카드",
-      "description": "캐시백",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-05-09"
+      "amount": 55555,
+      "payment": "페이",
+      "description": "test",
+      "date": "2025-04-16",
+      "rotation": "매주",
+      "endDate": null
     }
   ]
 }
