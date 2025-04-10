@@ -126,6 +126,17 @@
       "payment": "계좌이체(은행)",
       "description": "교통비",
       "fixed": true
+    },
+    {
+      "id": "e17c",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "4174",
+      "amount": 1230000,
+      "category": "식비",
+      "payment": "카드",
+      "description": "먹방",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -172,6 +183,28 @@
       "date": "2025-04-10",
       "rotation": "매월",
       "endDate": "2025-05-28"
+    },
+    {
+      "id": "d9dd",
+      "userId": "4174",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "용돈",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-06-10"
+    },
+    {
+      "id": "5a52",
+      "userId": "4174",
+      "category": "식비",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "회식",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-06-10"
     }
   ]
 }
