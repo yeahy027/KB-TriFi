@@ -82,20 +82,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 실제 카드 상세정보를 입력할 폼/모달(간단 예시) -->
-    <!-- <div v-if="isCardFormOpen" class="card-detail-modal">
-      <div class="card-detail-content">
-        <h2>카드 정보 입력</h2> -->
-    <!-- 여기에 세부내용 폼(카드 이름, 번호 등) 넣으시면 됩니다. -->
-    <!-- <form @submit.prevent="submitCardInfo"> -->
-    <!-- 예: <input type="text" placeholder="카드명" v-model="newCardName" /> -->
-    <!-- 필요한 내용은 직접 채우시면 됩니다 -->
-    <!-- <button type="submit">저장</button>
-        </form>
-        <button class="close-btn" @click="closeCardForm">닫기</button>
-      </div>
-    </div> -->
   </AppLayout>
 </template>
 

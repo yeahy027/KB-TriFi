@@ -5,7 +5,7 @@
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이",
+      "nickname": "홍순이12",
       "country": "Korea",
       "language": "Korean"
     },
@@ -238,6 +238,28 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-04-30"
+    },
+    {
+      "id": "25c0",
+      "userId": "2",
+      "category": "",
+      "amount": 123,
+      "payment": "카드",
+      "description": "테스트입니다",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-24"
+    },
+    {
+      "id": "6651",
+      "userId": "2",
+      "category": "교통",
+      "amount": 123,
+      "payment": "페이",
+      "description": "테스트",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-05-28"
     }
   ]
 }
