@@ -237,9 +237,9 @@ const form = ref(initialForm());
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
 
-const props = defineProps({
+/* const props = defineProps({
   onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
-});
+}); */
 
 // 등록 가능 여부를 판단하는 computed
 const isFormValid = computed(() => {

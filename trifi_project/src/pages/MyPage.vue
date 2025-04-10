@@ -189,30 +189,6 @@ const handleDeleteAccount = async () => {
   }
 };
 
-// 고정지출 추가 모달 열기
-// const openExpenseModal = () => {
-//   isModalOpen.value = true;
-// };
-
-// // RegisterEdit에서 emit('fixedExpenseSaved')하면 실행될 메서드
-// const handleFixedExpenseSaved = (newOrUpdatedExpense) => {
-//   // 만약 id가 있으면 편집 기능이고, 없으면 새로 생성된 것이라고 가정
-//   const idx = fixedExpenses.value.findIndex(
-//     (item) => item.id === newOrUpdatedExpense.id
-//   );
-
-//   if (idx !== -1) {
-//     // 이미 존재하는 항목 -> 업데이트
-//     fixedExpenses.value.splice(idx, 1, newOrUpdatedExpense);
-//   } else {
-//     // 새로운 항목 -> 추가
-//     fixedExpenses.value.push(newOrUpdatedExpense);
-//   }
-
-//   // 모달 닫기
-//   isModalOpen.value = false;
-// };
-
 // 카드 슬라이드
 const prevCard = () => {
   console.log('이전 카드');

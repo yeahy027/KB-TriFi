@@ -9,13 +9,28 @@
       <!-- 유저 정보 섹션 -->
       <div class="account-section">
         <div class="account-header">
-          <label for="profileUpload">
+          <label for="profileUpload" class="profile-img-wrapper">
             <img
               class="basic-img"
               :src="profilePreview"
               alt="User profile"
               style="cursor: pointer"
             />
+            <div class="overlay">
+              <svg
+                class="camera-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                height="32"
+                viewBox="0 0 24 24"
+                width="32"
+                fill="white"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path
+                  d="M12 8a4 4 0 100 8 4 4 0 000-8zm8-3h-3.17l-1.83-2H8L6.17 5H3a1 1 0 00-1 1v14a1 1 0 001 1h18a1 1 0 001-1V6a1 1 0 00-1-1zm-9 13a5 5 0 110-10 5 5 0 010 10z"
+                />
+              </svg>
+            </div>
           </label>
           <input
             type="file"
@@ -198,5 +213,38 @@ select[disabled] {
 .edit-button {
   margin-left: auto;
   margin-right: 110px;
+}
+
+.profile-img-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.profile-img-wrapper .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(100, 100, 100, 0.5);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.profile-img-wrapper:hover .overlay {
+  opacity: 1;
+}
+
+.camera-icon {
+  width: 32px;
+  height: 32px;
 }
 </style>

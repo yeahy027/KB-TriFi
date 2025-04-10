@@ -138,7 +138,7 @@
     v-for="record in fixedRecords"
     :key="record.id"
     class="d-flex align-items-center justify-content-between py-3 px-3 border position-relative"
-    style="background-color: #ffeef2; border-radius: 12px; margin-bottom: 10px;"
+    style="background-color: ivory; border-radius: 12px; margin-bottom: 10px;"
   >
     <span
       class="badge me-3 d-flex align-items-center gap-1"
@@ -153,8 +153,14 @@
         {{ formatDateWithDay(record.date) }} ~ {{ formatDateWithDay(record.endDate) }}
       </small>
     </div>
-    <div class="text-danger fw-bold">
-      {{ Number(record.amount).toLocaleString() }} 원
+    <div
+            :class="
+              record.type === '수입'
+                ? 'text-primary fw-bold'
+                : 'text-danger fw-bold'
+            "
+          >
+            {{ Number(record.amount).toLocaleString() }} 원
       <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
 
       <!-- 메뉴 영역 (⋯ 버튼 클릭 시 뜨는 팝업 메뉴) -->
@@ -166,7 +172,7 @@
   <div
     class="px-2 py-1 text-dark"
     style="cursor: pointer;"
-    @click="editFixedExpense(record)"
+    @click.stop="editItem(event)"
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
@@ -224,7 +230,7 @@
           
           <!-- 수정,삭제 드롭다운 메뉴 -->
           <div v-if="openMenuId === record.id" class="dropdown-menu-custom">
-            <button class="dropdown-item" @click="editRecord(record)">
+            <button class="dropdown-item" @click.stop="editItem(record)">
               수정
             </button>
             <button class="dropdown-item" @click="deleteRecord(record.id)">
@@ -237,6 +243,15 @@
     <button class="calc-button" @click="showCalculator = true">
       <i class="bi bi-calculator"></i>
     </button>
+
+
+
+    <RegisterReEdit
+      v-if="editModalOpen"
+      :existingData="itemToEdit"
+      @close="editModalOpen = false"
+    />
+    
 
     <!-- 계산기 컴포넌트 -->
     <Calculator 
@@ -256,6 +271,7 @@ import { saveAs } from 'file-saver';
 import { useRouter } from 'vue-router';
 import RegisterEdit from '@/pages/Register_edit.vue';
 import Calculator from './Calculator.vue';
+import RegisterReEdit from './RegisterReEdit.vue';
 
 const router = useRouter();
 const isModalOpen = ref(false);
@@ -270,7 +286,8 @@ const filterType = ref('')
 const selectedDate = ref('')
 const dateInput = ref(null);
 const showCalculator = ref(false);
-
+const editModalOpen = ref(false);    // RegisterReedit 모달 열림 여부
+const itemToEdit = ref(null); 
 const focusDateInput = () => {
   dateInput.value?.focus()
 }
@@ -521,14 +538,15 @@ const downloadExcel = () => {
 };
 
 // 내역 수정, 삭제
-const openMenuId = ref(null);
+
 
 const toggleMenu = (id) => {
   openMenuId.value = openMenuId.value === id ? null : id;
 };
 
-
+const openMenuId = ref(null);
 const editTarget = ref(null)
+
 const editRecord = (record) => {
   editTarget.value = record;
   isModalOpen.value = true;
@@ -575,7 +593,10 @@ const filterByCategory = (category) => {
   }
   isCategoryDropdownOpen.value = false;
 };
-
+function editItem(event) {
+  itemToEdit.value = event;
+  editModalOpen.value = true;
+}
 
 </script>
 
