@@ -17,16 +17,32 @@
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
-    },
-    {
-      "id": "675e",
-      "name": "김예영",
-      "nickname": "예영",
-      "email": "yeahy027@naver.com",
-      "password": "1234"
     }
   ],
-  "transactions": [],
+  "transactions": [
+    {
+      "id": "7dae",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "bd8d",
+      "amount": 43242,
+      "category": "용돈",
+      "payment": "현금",
+      "description": "ㄳㅈㅅㅈㅅ",
+      "fixed": false
+    },
+    {
+      "id": "a074",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "bd8d",
+      "amount": 4324234,
+      "category": "용돈",
+      "payment": "카드",
+      "description": "ㅅㄱ",
+      "fixed": false
+    }
+  ],
   "fixedExpenses": [
     {
       "id": "c84d",
@@ -41,6 +57,30 @@
       "endDate": null
     },
     {
+      "id": "6a6b",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "용돈이지롱",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-05-08"
+    },
+    {
+      "id": "5c72",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 213123,
+      "payment": "현금",
+      "description": "123",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-25"
+    },
+    {
       "id": "825d",
       "userId": "aff4",
       "type": "지출",
@@ -51,18 +91,6 @@
       "date": "2025-04-14",
       "rotation": "매월",
       "endDate": "2025-06-18"
-    },
-    {
-      "id": "7622",
-      "userId": "675e",
-      "type": "수입",
-      "category": "",
-      "amount": 300000,
-      "payment": "현금",
-      "description": "노래방",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-04-30"
     }
   ]
 }
