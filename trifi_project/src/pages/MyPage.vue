@@ -81,17 +81,14 @@
           </div>
 
           <!-- 모달로 고정지출 추가 -->
-          <button class="plus-fixlist" @click="openExpenseModal">
-            고정지출 추가하기
+          <button class="plus-fixlist" @click="isModalOpen = true">
+            고정 거래 내역 추가하기
           </button>
-          <!-- 
-            @close : RegisterEdit에서 닫기 버튼 누르면 모달 닫음
-            @fixedExpenseSaved : RegisterEdit에서 등록/수정이 끝나면 새 데이터(또는 수정된 데이터)를 부모로 emit
-          -->
           <RegisterEdit
             v-if="isModalOpen"
             @close="isModalOpen = false"
-            @fixedExpenseSaved="handleFixedExpenseSaved"
+            @update="fetchFixedExpenses"
+            :checked="true"
           />
         </div>
       </div>
@@ -144,36 +141,6 @@ const handleLogout = () => {
   router.push('/');
 };
 
-// const handleDeleteAccount = async () => {
-//   const result = await Swal.fire({
-//     title: '회원 탈퇴 여부 확인',
-//     text: '정말로 탈퇴하시겠습니까?',
-//     icon: 'warning',
-//     showCancelButton: true,
-//     confirmButtonColor: '#d33',
-//     cancelButtonColor: '#3085d6',
-//     confirmButtonText: '예',
-//     cancelButtonText: '아니오',
-//   });
-
-//   if (result.isConfirmed) {
-
-//     userStore.deleteUser(() => {
-//       Swal.fire({
-//         title: '회원 탈퇴',
-//         text: '회원 탈퇴가 완료되었습니다.',
-//         icon: 'success',
-//         confirmButtonText: '확인',
-//         customClass: {
-//           title: 'fw-bold',
-//           confirmButton: 'btn btn-success',
-//         },
-//       });
-//       router.push('/');
-//     });
-//   }
-// };
-
 const handleDeleteAccount = async () => {
   const result = await Swal.fire({
     title: '회원 탈퇴 여부 확인',
@@ -223,28 +190,28 @@ const handleDeleteAccount = async () => {
 };
 
 // 고정지출 추가 모달 열기
-const openExpenseModal = () => {
-  isModalOpen.value = true;
-};
+// const openExpenseModal = () => {
+//   isModalOpen.value = true;
+// };
 
-// RegisterEdit에서 emit('fixedExpenseSaved')하면 실행될 메서드
-const handleFixedExpenseSaved = (newOrUpdatedExpense) => {
-  // 만약 id가 있으면 편집 기능이고, 없으면 새로 생성된 것이라고 가정
-  const idx = fixedExpenses.value.findIndex(
-    (item) => item.id === newOrUpdatedExpense.id
-  );
+// // RegisterEdit에서 emit('fixedExpenseSaved')하면 실행될 메서드
+// const handleFixedExpenseSaved = (newOrUpdatedExpense) => {
+//   // 만약 id가 있으면 편집 기능이고, 없으면 새로 생성된 것이라고 가정
+//   const idx = fixedExpenses.value.findIndex(
+//     (item) => item.id === newOrUpdatedExpense.id
+//   );
 
-  if (idx !== -1) {
-    // 이미 존재하는 항목 -> 업데이트
-    fixedExpenses.value.splice(idx, 1, newOrUpdatedExpense);
-  } else {
-    // 새로운 항목 -> 추가
-    fixedExpenses.value.push(newOrUpdatedExpense);
-  }
+//   if (idx !== -1) {
+//     // 이미 존재하는 항목 -> 업데이트
+//     fixedExpenses.value.splice(idx, 1, newOrUpdatedExpense);
+//   } else {
+//     // 새로운 항목 -> 추가
+//     fixedExpenses.value.push(newOrUpdatedExpense);
+//   }
 
-  // 모달 닫기
-  isModalOpen.value = false;
-};
+//   // 모달 닫기
+//   isModalOpen.value = false;
+// };
 
 // 카드 슬라이드
 const prevCard = () => {

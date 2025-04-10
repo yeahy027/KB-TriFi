@@ -23,106 +23,11 @@
       "name": "김예영",
       "nickname": "예영",
       "email": "yeahy027@naver.com",
-      "password": "yeahy*027"
+      "password": "1234"
     }
   ],
   "transactions": [],
   "fixedExpenses": [
-    {
-      "id": "2484",
-      "userId": "aff4",
-      "category": "지추",
-      "type": "지출",
-      "amount": 100000,
-      "payment": "카드",
-      "description": "캐시백",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-05-09"
-    },
-    {
-      "id": "7103",
-      "userId": "aff4",
-      "category": "식비",
-      "amount": 100000,
-      "type": "수입",
-      "payment": "카드",
-      "description": "햄버거먹음",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-05-01"
-    },
-    {
-      "id": "9029",
-      "userId": "aff4",
-      "category": "",
-      "amount": 11,
-      "payment": "현금",
-      "description": "3",
-      "date": "2025-04-10",
-      "rotation": "매일",
-      "endDate": "2025-04-24"
-    },
-    {
-      "id": "8cc1",
-      "userId": "aff4",
-      "category": "",
-      "type": "수입",
-      "amount": 11,
-      "payment": "카드",
-      "description": "111",
-      "date": "2025-04-10",
-      "rotation": "매일",
-      "endDate": "2025-04-17"
-    },
-    {
-      "id": "b811",
-      "userId": "675e",
-      "type": "수입",
-      "category": "",
-      "amount": 333,
-      "payment": "현금",
-      "description": "1111",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-04-24"
-    },
-    {
-      "id": "8bec",
-      "userId": "675e",
-      "type": "수입",
-      "category": "",
-      "amount": 11,
-      "payment": "현금",
-      "description": "11",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-04-30"
-    },
-    {
-      "id": "42ef",
-      "userId": "aff4",
-      "type": "수입",
-      "category": "",
-      "amount": 11,
-      "payment": "카드",
-      "description": "1",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-05-09"
-    },
-    {
-      "id": "9d3a",
-      "userId": "aff4",
-      "type": "수입",
-      "category": "",
-      "amount": 11,
-      "payment": "현금",
-      "description": "11",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-04-16"
-    },
     {
       "id": "c84d",
       "userId": "aff4",
@@ -133,7 +38,19 @@
       "description": "33333",
       "date": "2025-04-10",
       "rotation": "매주",
-      "endDate": "2025-04-17"
+      "endDate": null
+    },
+    {
+      "id": "825d",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "기타",
+      "amount": 5000,
+      "payment": "페이",
+      "description": "넷플릭스",
+      "date": "2025-04-14",
+      "rotation": "매월",
+      "endDate": "2025-06-18"
     }
   ]
 }

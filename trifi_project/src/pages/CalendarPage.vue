@@ -3,13 +3,15 @@
     <div class="calendar-container">
       <!-- 상단 헤더(월/년도, 통계 표시) -->
       <div class="header" :class="seasonClass">
-        <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+        <div
+          class="d-flex align-items-center justify-content-center gap-2 mb-3"
+        >
           <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
             <i class="bi bi-chevron-left"></i>
           </button>
           <strong
             class="month-text mx-auto"
-            style="cursor: pointer; font-size: xx-large;"
+            style="cursor: pointer; font-size: xx-large"
             @click="showDatePicker"
           >
             {{ formattedMonth }}
@@ -17,7 +19,10 @@
           <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
             <i class="bi bi-chevron-right"></i>
           </button>
-          <button class="btn btn-outline-primary btn-sm" @click="resetToThisMonth">
+          <button
+            class="btn btn-outline-primary btn-sm"
+            @click="resetToThisMonth"
+          >
             📅이번 달
           </button>
         </div>
@@ -54,7 +59,9 @@
             :class="{ active: eventFilter === '이체' }"
             @click="setFilter('이체')"
           >
-            🏦 이체 ({{ transferCount }}건)<br />{{ formatCurrency(transferSum) }}
+            🏦 이체 ({{ transferCount }}건)<br />{{
+              formatCurrency(transferSum)
+            }}
           </div>
         </div>
       </div>
@@ -74,15 +81,20 @@
               :class="{
                 'not-current-month': day.month !== currentMonth,
                 sunday: day.dateObj.getDay() === 0,
-                saturday: day.dateObj.getDay() === 6
+                saturday: day.dateObj.getDay() === 6,
               }"
-              @mouseenter="dayEvents(day.dateStr).length > 0 && openPreview(day.dateStr)"
+              @mouseenter="
+                dayEvents(day.dateStr).length > 0 && openPreview(day.dateStr)
+              "
               @mouseleave="closePreview"
             >
               <!-- 날짜 숫자 -->
               <div class="day-number">
                 <!-- 오늘이면 .today-badge 클래스 추가 -->
-                <span class="day-badge" :class="{ 'today-badge': isToday(day.dateObj) }">
+                <span
+                  class="day-badge"
+                  :class="{ 'today-badge': isToday(day.dateObj) }"
+                >
                   {{ day.dateObj.getDate() }}
                 </span>
 
@@ -98,8 +110,9 @@
                       {{ fexp.amount.toLocaleString() }}원
                       <span
                         v-if="i < fixedExpensesForDay(day.dateStr).length - 1"
-                        > / </span
                       >
+                        /
+                      </span>
                     </template>
                   </span>
                 </template>
@@ -184,7 +197,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
-import RegisterReEdit from './RegisterReedit.vue';
+import RegisterReEdit from './RegisterReEdit.vue';
 import Calculator from './Calculator.vue';
 
 import axios from 'axios';
@@ -236,23 +249,23 @@ function generateDatesBetween(startDateStr, endDateStr, rotation) {
 }
 
 /** --- 전역 상태들 --- **/
-const selectedEventId = ref(null);   // 클릭된 이벤트 ID
-const editModalOpen = ref(false);    // RegisterReedit 모달 열림 여부
-const itemToEdit = ref(null);        // 수정할 항목 데이터
+const selectedEventId = ref(null); // 클릭된 이벤트 ID
+const editModalOpen = ref(false); // RegisterReedit 모달 열림 여부
+const itemToEdit = ref(null); // 수정할 항목 데이터
 
 const currentYear = ref(2025);
 const currentMonth = ref(4);
 
-const events = ref([]);         // 일반 이벤트
-const fixedExpenses = ref([]);  // 고정 이벤트
+const events = ref([]); // 일반 이벤트
+const fixedExpenses = ref([]); // 고정 이벤트
 
-const previewDateStr = ref(null);    // hover 미리보기
-const eventFilter = ref('all');      // 'all', '수입', '지출', '이체'
+const previewDateStr = ref(null); // hover 미리보기
+const eventFilter = ref('all'); // 'all', '수입', '지출', '이체'
 
-const showCalculator = ref(false);   // 계산기
-const isModalOpen = ref(false);      // RegisterEdit(등록용) 모달
+const showCalculator = ref(false); // 계산기
+const isModalOpen = ref(false); // RegisterEdit(등록용) 모달
 
-let fetchInterval = null;            // 폴링 interval
+let fetchInterval = null; // 폴링 interval
 
 /** --- onMounted에서 데이터 fetch + interval 설정 --- **/
 onMounted(() => {
@@ -272,7 +285,7 @@ function fetchAll() {
 /** 일반 트랜잭션 불러오기 */
 async function fetchEvents() {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
     if (!userId) return;
     const res = await axios.get('http://localhost:3000/transactions', {
@@ -287,7 +300,7 @@ async function fetchEvents() {
 /** 고정 항목 불러오기 */
 async function fetchFixedExpenses() {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
     const res = await axios.get('http://localhost:3000/fixedExpenses', {
       params: { userId },
@@ -319,7 +332,7 @@ const expandedFixedExpenses = computed(() => {
         date: d,
         amount: fe.amount,
         description: fe.description || '고정항목',
-        type: fe.type,  // "지출" or "수입"
+        type: fe.type, // "지출" or "수입"
         isFixed: true,
       });
     }
@@ -341,7 +354,11 @@ const formattedMonth = computed(() => {
 const dayNames = computed(() => ['일', '월', '화', '수', '목', '금', '토']);
 
 const weeks = computed(() => {
-  const firstDayOfMonth = new Date(currentYear.value, currentMonth.value - 1, 1);
+  const firstDayOfMonth = new Date(
+    currentYear.value,
+    currentMonth.value - 1,
+    1
+  );
   const lastDayOfMonth = new Date(currentYear.value, currentMonth.value, 0);
   const lastDate = lastDayOfMonth.getDate();
   const startDay = firstDayOfMonth.getDay();
@@ -405,29 +422,29 @@ const totalAmount = computed(() => {
     else return acc - ev.amount;
   }, 0);
 });
-const incomeSum = computed(() => 
+const incomeSum = computed(() =>
   monthlyEvents.value
     .filter((ev) => ev.type === '수입')
     .reduce((acc, ev) => acc + ev.amount, 0)
 );
-const incomeCount = computed(() => 
-  monthlyEvents.value.filter((ev) => ev.type === '수입').length
+const incomeCount = computed(
+  () => monthlyEvents.value.filter((ev) => ev.type === '수입').length
 );
 const expenseSum = computed(() =>
   monthlyEvents.value
     .filter((ev) => ev.type === '지출')
     .reduce((acc, ev) => acc + ev.amount, 0)
 );
-const expenseCount = computed(() =>
-  monthlyEvents.value.filter((ev) => ev.type === '지출').length
+const expenseCount = computed(
+  () => monthlyEvents.value.filter((ev) => ev.type === '지출').length
 );
 const transferSum = computed(() =>
   monthlyEvents.value
     .filter((ev) => ev.type === '이체')
     .reduce((acc, ev) => acc + ev.amount, 0)
 );
-const transferCount = computed(() =>
-  monthlyEvents.value.filter((ev) => ev.type === '이체').length
+const transferCount = computed(
+  () => monthlyEvents.value.filter((ev) => ev.type === '이체').length
 );
 
 /** --- methods --- **/
@@ -448,7 +465,7 @@ function setFilter(type) {
 function dayEvents(dateStr) {
   return allEvents.value.filter(
     (e) =>
-      e.date === dateStr && 
+      e.date === dateStr &&
       (eventFilter.value === 'all' || e.type === eventFilter.value)
   );
 }
@@ -466,7 +483,8 @@ function isToday(dateObj) {
 // 달력 표시 금액
 function formattedAmount(evt) {
   if (evt.type === '수입') return `+ ${evt.amount.toLocaleString()}`;
-  if (evt.type === '지출' || evt.type === '이체') return `- ${evt.amount.toLocaleString()}`;
+  if (evt.type === '지출' || evt.type === '이체')
+    return `- ${evt.amount.toLocaleString()}`;
   return evt.amount.toLocaleString();
 }
 
