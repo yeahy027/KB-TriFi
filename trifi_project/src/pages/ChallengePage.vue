@@ -66,13 +66,19 @@
           <!-- <li v-for="user in challengeRanking" :key="user.id">
             {{ user.name }} - {{ user.savedPercent }}%
           </li> -->
-          <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
+          <!-- <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
             <span>{{ index + 1 }}위 - </span>{{ user.name }} - {{ user.savedPercent }}%
+          </li> -->
+          <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
+            <span>{{ user.name }}</span>
+            <span class="percent">{{ user.savedPercent }}%</span>
           </li>
         </ul>
+        <br>
 
         <div class="challenge-summary">
           <h3>⭐ 챌린지 누적 성과 ⭐</h3>
+          <p>[ {{ userName }} ] 님이 참여하신 챌린지 누적 성과 입니다</p>
           <div class="summary-metrics">
             <div class="stat-card">
               <div class="stat-icon">📅</div>
@@ -85,7 +91,7 @@
               <div class="stat-label">최대 연속 성공</div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon">🏅</div>
+              <div class="stat-icon">🎯</div>
               <div class="stat-value">{{ challengeParticipation }}<span>회</span></div>
               <div class="stat-label">챌린지 참여 횟수</div>
             </div>
@@ -106,6 +112,7 @@ const userStore = useUserStore()
 userStore.checkLocalStorage()
 
 const userId = userStore.user.id
+const userName = userStore.user.name
 
 const spendingGoal = ref(0)
 const currentSpending = ref(0)
@@ -243,18 +250,40 @@ async function fetchUserStats() {
 }
 
 // 챌린지 순위표 불러오기
+// async function fetchChallengeRanking() {
+//   try {
+//     const { data } = await axios.get('/api/users')
+//     const ranked = data
+//       .map(user => ({
+//         id: user.id,
+//         name: user.name,
+//         savedPercent: ((user.challengeSuccessCount || 0) / (user.challengeParticipation || 1) * 100).toFixed(1)
+//       }))
+//       .sort((a, b) => b.savedPercent - a.savedPercent)
+
+//     challengeRanking.value = ranked
+//   } catch (err) {
+//     console.error('순위 불러오기 실패:', err)
+//   }
+// }
+
+// 챌린지 순위표 계산
+const rankedChallengeRanking = computed(() => {
+  return challengeRanking.value
+    .map(user => ({
+      id: user.id,
+      name: user.name,
+      savedPercent: ((user.challengeSuccessCount || 0) / (user.challengeParticipation || 1) * 100).toFixed(1)
+    }))
+    .sort((a, b) => b.savedPercent - a.savedPercent)
+})
+
+
+// 챌린지 순위표 불러오기
 async function fetchChallengeRanking() {
   try {
     const { data } = await axios.get('/api/users')
-    const ranked = data
-      .map(user => ({
-        id: user.id,
-        name: user.name,
-        savedPercent: ((user.challengeSuccessCount || 0) / (user.challengeParticipation || 1) * 100).toFixed(1)
-      }))
-      .sort((a, b) => b.savedPercent - a.savedPercent)
-
-    challengeRanking.value = ranked
+    challengeRanking.value = data
   } catch (err) {
     console.error('순위 불러오기 실패:', err)
   }
@@ -311,6 +340,7 @@ onMounted(async () => {
   await fetchTotalSpending()
   await fetchUserStats()
   await fetchChallengeRanking()
+  await checkChallengeStatus()
 })
 </script>
 
@@ -384,34 +414,32 @@ onMounted(async () => {
 }
 
 
-/* 순위표 */
-.ranking-header {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  color: #333;
-}
-.ranking-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px 0;
-}
-.ranking-list li {
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
-
 /* 챌린지 요약 */
 .challenge-summary h3 {
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 16px;
   font-weight: 600;
+  text-align: center;
+  color: #333;
 }
+
+.challenge-summary p {
+  font-size: 12px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+}
+
 .summary-metrics {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 5%;
+  overflow: hidden;
 }
 .stat-card {
   display: flex;
@@ -466,7 +494,7 @@ onMounted(async () => {
   position: relative;
 }
 .progress-bar {
-  height: 50px;
+  height: 60px;
   background-color: #FF6B6B;
   width: 0%;
   transition: width 0.5s ease;
@@ -479,6 +507,8 @@ onMounted(async () => {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* 파이 차트 */
 .pie-chart {
   display: flex;
   align-items: center;
@@ -540,4 +570,58 @@ onMounted(async () => {
   background: #ccc;
   color: black;
 }
+
+/* 챌린지 순위표 */
+.ranking-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #333;
+}
+
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.ranking-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 16px;
+}
+
+.ranking-list li:last-child {
+  border-bottom: none;
+}
+
+.ranking-list li:nth-child(1)::before {
+  content: "🥇 ";
+}
+
+.ranking-list li:nth-child(2)::before {
+  content: "🥈 ";
+}
+
+.ranking-list li:nth-child(3)::before {
+  content: "🥉 ";
+}
+
+.ranking-list li span {
+  font-weight: 500;
+  color: #444;
+}
+
+.ranking-list li .percent {
+  color: #FF6B6B;
+  font-weight: bold;
+}
+
 </style>
