@@ -203,7 +203,7 @@ const typeMap = {
 
 const submitForm = async () => {
   const entry = {
-    type: typeMap[activeTab.value],
+    type: activeTab.value,
     date: form.value.date,
   };
 
