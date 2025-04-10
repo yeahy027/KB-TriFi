@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": "2",
+      "id": "aff5",
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
@@ -10,7 +10,7 @@
       "language": "Korean"
     },
     {
-      "id": "5da5",
+      "id": "aff4",
       "name": "김네비",
       "nickname": "네비게이션",
       "email": "test3@example.com",
@@ -63,7 +63,7 @@
   "transactions": [
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "수입",
       "date": "2025-04-03",
       "amount": 15000,
@@ -74,7 +74,7 @@
     },
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
@@ -85,7 +85,7 @@
     },
     {
       "id": "4",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-10",
       "amount": 15000,
@@ -96,7 +96,7 @@
     },
     {
       "id": "5",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-11",
       "amount": 1000,
@@ -107,7 +107,7 @@
     },
     {
       "id": "6",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-12",
       "amount": 100070,
@@ -117,54 +117,21 @@
       "fixed": false
     },
     {
-      "id": "d2c0",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": false
-    },
-    {
-      "id": "2d32",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 11111,
-      "category": "",
-      "payment": "현금",
-      "description": "1111",
-      "fixed": false
-    },
-    {
-      "id": "d764",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 11111,
-      "category": "",
-      "payment": "현금",
-      "description": "1111",
-      "fixed": false
-    },
-    {
-      "id": "02da",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 11111,
-      "category": "",
-      "payment": "현금",
-      "description": "1111",
-      "fixed": false
+      "id": "cf7f",
+      "type": "지출",
+      "date": "2025-04-09",
+      "userId": "aff4",
+      "amount": 30000,
+      "category": "교통",
+      "payment": "계좌이체(은행)",
+      "description": "교통비",
+      "fixed": true
     }
   ],
   "fixedExpenses": [
     {
       "id": "2484",
-      "userId": "",
+      "userId": "aff4",
       "category": "",
       "amount": 100000,
       "payment": "카드",
@@ -175,7 +142,7 @@
     },
     {
       "id": "d302",
-      "userId": null,
+      "userId": "aff4",
       "category": "",
       "amount": 13,
       "payment": "페이",
@@ -186,7 +153,7 @@
     },
     {
       "id": "25c0",
-      "userId": "2",
+      "userId": "aff4",
       "category": "",
       "amount": 123,
       "payment": "카드",
@@ -197,7 +164,7 @@
     },
     {
       "id": "6651",
-      "userId": "2",
+      "userId": "aff4",
       "category": "교통",
       "amount": 123,
       "payment": "페이",
