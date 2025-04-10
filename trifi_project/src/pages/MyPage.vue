@@ -38,12 +38,14 @@
           <div class="section-title">
             <h3>Cards</h3>
           </div>
+          <div class="comment">
+            <p>가계부와 연동할 카드 연결</p>
+          </div>
           <div class="card-box">
             <button class="slide-btn left" @click="prevCard"><</button>
 
             <!-- 여기부터 카드 추가 UI -->
             <div class="create-card">
-              <!-- 캡처처럼 가운데 + 원형 영역과 안내문구 -->
               <div class="card-add-circle">
                 <div class="plus-sign" @click="isCardFormOpen = true">+</div>
                 <RegisterCard
@@ -62,7 +64,7 @@
         <!-- 고정지출 내역 -->
         <div class="expenses">
           <div class="section-title">
-            <h3>고정지출 내역</h3>
+            <h3>고정 거래 내역</h3>
           </div>
 
           <div class="expense-buttons">
@@ -71,15 +73,26 @@
               v-for="item in fixedExpenses"
               :key="item.id"
             >
-              {{ item.description }} &nbsp; - &nbsp; {{ item.amount }}
+              {{ item.description }} &nbsp;&nbsp;
+              <!-- 수입일 경우 +, 지출일 경우 - 표시 -->
+              {{ item.type === '수입' ? '+' : '-' }}
+              {{ item.amount }}
             </button>
           </div>
 
           <!-- 모달로 고정지출 추가 -->
-          <button class="plus-fixlist" @click="isModalOpen = true">
+          <button class="plus-fixlist" @click="openExpenseModal">
             고정지출 추가하기
           </button>
-          <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+          <!-- 
+            @close : RegisterEdit에서 닫기 버튼 누르면 모달 닫음
+            @fixedExpenseSaved : RegisterEdit에서 등록/수정이 끝나면 새 데이터(또는 수정된 데이터)를 부모로 emit
+          -->
+          <RegisterEdit
+            v-if="isModalOpen"
+            @close="isModalOpen = false"
+            @fixedExpenseSaved="handleFixedExpenseSaved"
+          />
         </div>
       </div>
     </div>
@@ -96,35 +109,70 @@ import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-const userStore = useUserStore(); // Pinia store 가져오기
-const user = computed(() => userStore.user); // 최신 user 데이터
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 const router = useRouter();
+
+// 모달 열고 닫기 상태
 const isModalOpen = ref(false);
 const isCardFormOpen = ref(false);
 
-// 카드 상세정보 입력 예시 데이터
-const newCardName = ref(''); // 필요하다면 v-model로 사용
+// 고정지출 목록
 const fixedExpenses = ref([]);
 
-onMounted(async () => {
+onMounted(() => {
+  userStore.checkLocalStorage();
+  fetchFixedExpenses();
+});
+
+// 고정지출 목록 불러오기 함수
+const fetchFixedExpenses = async () => {
   try {
-    const res = await axios.get('/api/fixedExpenses'); // db.json에서 고정지출 가져오기
+    const res = await axios.get('/api/fixedExpenses');
+    // 현재 유저 id에 맞는 고정지출만 필터링
     fixedExpenses.value = res.data.filter(
       (item) => item.userId === user.value.id
     );
   } catch (err) {
     console.error('고정지출 불러오기 실패:', err);
   }
-});
+};
 
-onMounted(() => {
-  userStore.checkLocalStorage();
-});
-
+// 회원 관련 함수
 const handleLogout = () => {
   userStore.logoutUser();
   router.push('/');
 };
+
+// const handleDeleteAccount = async () => {
+//   const result = await Swal.fire({
+//     title: '회원 탈퇴 여부 확인',
+//     text: '정말로 탈퇴하시겠습니까?',
+//     icon: 'warning',
+//     showCancelButton: true,
+//     confirmButtonColor: '#d33',
+//     cancelButtonColor: '#3085d6',
+//     confirmButtonText: '예',
+//     cancelButtonText: '아니오',
+//   });
+
+//   if (result.isConfirmed) {
+
+//     userStore.deleteUser(() => {
+//       Swal.fire({
+//         title: '회원 탈퇴',
+//         text: '회원 탈퇴가 완료되었습니다.',
+//         icon: 'success',
+//         confirmButtonText: '확인',
+//         customClass: {
+//           title: 'fw-bold',
+//           confirmButton: 'btn btn-success',
+//         },
+//       });
+//       router.push('/');
+//     });
+//   }
+// };
 
 const handleDeleteAccount = async () => {
   const result = await Swal.fire({
@@ -139,52 +187,72 @@ const handleDeleteAccount = async () => {
   });
 
   if (result.isConfirmed) {
-    userStore.deleteUser(() => {
-      Swal.fire({
-        title: '회원 탈퇴',
-        text: '회원 탈퇴가 완료되었습니다.',
-        icon: 'success',
-        confirmButtonText: '확인',
-        customClass: {
-          title: 'fw-bold',
-          confirmButton: 'btn btn-success',
-        },
+    try {
+      // 1. userId를 변수로 저장
+      const userIdToDelete = user.value.id;
+
+      // 2. 먼저 fixedExpenses에서 해당 유저의 데이터 모두 가져오기
+      const res = await axios.get(
+        `/api/fixedExpenses?userId=${userIdToDelete}`
+      );
+
+      // 3. 해당 항목들을 하나씩 삭제 요청 보내기
+      await Promise.all(
+        res.data.map((item) => axios.delete(`/api/fixedExpenses/${item.id}`))
+      );
+
+      // 4. userStore에서 유저 삭제 처리
+      userStore.deleteUser(() => {
+        Swal.fire({
+          title: '회원 탈퇴',
+          text: '회원 탈퇴가 완료되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            title: 'fw-bold',
+            confirmButton: 'btn btn-success',
+          },
+        });
+        router.push('/');
       });
-      router.push('/');
-    });
+    } catch (err) {
+      console.error('회원 탈퇴 중 에러 발생:', err);
+      Swal.fire('오류', '회원 탈퇴 중 문제가 발생했습니다.', 'error');
+    }
   }
 };
 
-// 카드 추가 모달 열기
-const openCardForm = () => {
-  isCardFormOpen.value = true;
+// 고정지출 추가 모달 열기
+const openExpenseModal = () => {
+  isModalOpen.value = true;
 };
 
-// 카드 추가 모달 닫기
-const closeCardForm = () => {
-  isCardFormOpen.value = false;
+// RegisterEdit에서 emit('fixedExpenseSaved')하면 실행될 메서드
+const handleFixedExpenseSaved = (newOrUpdatedExpense) => {
+  // 만약 id가 있으면 편집 기능이고, 없으면 새로 생성된 것이라고 가정
+  const idx = fixedExpenses.value.findIndex(
+    (item) => item.id === newOrUpdatedExpense.id
+  );
+
+  if (idx !== -1) {
+    // 이미 존재하는 항목 -> 업데이트
+    fixedExpenses.value.splice(idx, 1, newOrUpdatedExpense);
+  } else {
+    // 새로운 항목 -> 추가
+    fixedExpenses.value.push(newOrUpdatedExpense);
+  }
+
+  // 모달 닫기
+  isModalOpen.value = false;
 };
 
-// 카드 정보 제출
-const submitCardInfo = () => {
-  // TODO: 폼 데이터( newCardName 등 )를 활용하여 서버 통신 or store 업데이트
-  console.log('카드 정보:', newCardName.value);
-
-  // 저장 후 모달 닫기
-  isCardFormOpen.value = false;
-};
-
-// 카드 슬라이드 기능
+// 카드 슬라이드
 const prevCard = () => {
   console.log('이전 카드');
 };
+
 const nextCard = () => {
   console.log('다음 카드');
-};
-
-// gotoRegisterCard는 어디에서 필요한건가요?
-const goToRegisterCard = () => {
-  router.push('/registercard'); // RegisterCard.vue 경로로 이동
 };
 </script>
 
@@ -251,6 +319,7 @@ const goToRegisterCard = () => {
 .content {
   display: flex;
   gap: 32px;
+  padding-top: 50px;
 }
 
 .cards,
@@ -271,6 +340,11 @@ const goToRegisterCard = () => {
 
 .section-title h3 {
   margin: 0;
+}
+
+.comment p {
+  margin-left: 10px;
+  opacity: 0.6;
 }
 
 .plus-fixlist {
@@ -404,7 +478,7 @@ const goToRegisterCard = () => {
 }
 
 .expense-btn {
-  background-color: rgba(244, 197, 66, 0.5);
+  /* background-color: rgba(244, 197, 66, 0.5); */
   border: none;
   border-radius: 8px;
   padding: 10px 14px;
@@ -418,6 +492,6 @@ const goToRegisterCard = () => {
 }
 
 .expense-btn:hover {
-  background-color: #e5b832;
+  background-color: #f4c542;
 }
 </style>

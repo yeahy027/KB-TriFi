@@ -11,7 +11,6 @@
         <span style="color: #e44027">Keeper</span>
       </h5>
     </div>
-    div>
     <ul class="nav flex-column gap-2">
       <li v-for="item in menuItems" :key="item.to">
         <router-link

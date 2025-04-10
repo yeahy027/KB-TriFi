@@ -5,7 +5,7 @@
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이12",
+      "nickname": "홍순이",
       "country": "Korea",
       "language": "Korean"
     },
@@ -24,73 +24,116 @@
       "nickname": "예영",
       "email": "yeahy027@naver.com",
       "password": "yeahy*027"
-    },
-    {
-      "id": "bd8d",
-      "name": "강",
-      "nickname": "서현",
-      "email": "seohyun0916@naver.com",
-      "password": "1234"
     }
   ],
-  "transactions": [
-    {
-      "id": "2",
-      "userId": "aff4",
-      "type": "수입",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "2",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "3",
-      "userId": "aff5",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "알바비",
-      "fixed": false
-    }
-  ],
+  "transactions": [],
   "fixedExpenses": [
     {
-      "id": "53c2",
-      "userId": "675e",
-      "category": "",
-      "amount": 55555,
-      "payment": "페이",
-      "description": "test",
-      "date": "2025-04-16",
-      "rotation": "매주",
-      "endDate": null
+      "id": "2484",
+      "userId": "aff4",
+      "category": "지추",
+      "type": "지출",
+      "amount": 100000,
+      "payment": "카드",
+      "description": "캐시백",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-05-09"
     },
     {
-      "id": "6a6b",
-      "userId": "bd8d",
+      "id": "7103",
+      "userId": "aff4",
+      "category": "식비",
+      "amount": 100000,
+      "type": "수입",
+      "payment": "카드",
+      "description": "햄버거먹음",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-05-01"
+    },
+    {
+      "id": "9029",
+      "userId": "aff4",
+      "category": "",
+      "amount": 11,
+      "payment": "현금",
+      "description": "3",
+      "date": "2025-04-10",
+      "rotation": "매일",
+      "endDate": "2025-04-24"
+    },
+    {
+      "id": "8cc1",
+      "userId": "aff4",
+      "category": "",
+      "type": "수입",
+      "amount": 11,
+      "payment": "카드",
+      "description": "111",
+      "date": "2025-04-10",
+      "rotation": "매일",
+      "endDate": "2025-04-17"
+    },
+    {
+      "id": "b811",
+      "userId": "675e",
       "type": "수입",
       "category": "",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "용돈이지롱",
-      "date": "2025-04-11",
+      "amount": 333,
+      "payment": "현금",
+      "description": "1111",
+      "date": "2025-04-10",
       "rotation": "매주",
-      "endDate": "2025-05-08"
+      "endDate": "2025-04-24"
+    },
+    {
+      "id": "8bec",
+      "userId": "675e",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "현금",
+      "description": "11",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
+    },
+    {
+      "id": "42ef",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "카드",
+      "description": "1",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-05-09"
+    },
+    {
+      "id": "9d3a",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "현금",
+      "description": "11",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-16"
+    },
+    {
+      "id": "c84d",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "",
+      "amount": 11,
+      "payment": "카드",
+      "description": "33333",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-17"
     }
   ],
   "challengeAmount": [
