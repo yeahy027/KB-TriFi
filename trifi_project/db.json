@@ -51,6 +51,18 @@
       "date": "2025-04-14",
       "rotation": "매월",
       "endDate": "2025-06-18"
+    },
+    {
+      "id": "7622",
+      "userId": "675e",
+      "type": "수입",
+      "category": "",
+      "amount": 300000,
+      "payment": "현금",
+      "description": "노래방",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
     }
   ]
 }
