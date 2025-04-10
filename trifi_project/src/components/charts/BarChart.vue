@@ -3,10 +3,11 @@
     <!-- 데이터 없을 때만 보여줄 안내 박스 -->
     <div
       v-if="!hasData"
-      class="absolute inset-0 z-10 flex justify-center items-center bg-white border-2 border-dashed border-gray-300 rounded-xl text-gray-500 text-base font-medium"
+      class="empty-box"
     >
-      아직 등록된 내역이 없습니다 😢
+      <p class="text-muted">아직 등록된 내역이 없습니다 😢</p>
     </div>
+
 
     <!-- 항상 존재하는 canvas (단, 데이터 없으면 차트는 그리지 않음) -->
     <canvas ref="chartRef" />
@@ -138,4 +139,23 @@ canvas {
   padding: 24px;
   position: relative;
 }
+
+.empty-box {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
+  color: #888;
+  font-weight: 500;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
 </style>

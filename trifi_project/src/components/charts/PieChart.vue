@@ -63,12 +63,18 @@ function renderChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: 50 // 숫자를 늘릴수록 아래로 내려감
+        }
+      },
+      radius: '110%',
       plugins: {
         legend: {
           position: 'bottom',
           labels: {
             color: '#333',
-            padding: 20,
+            padding: 30,
             font: {
               size: 14
             }
