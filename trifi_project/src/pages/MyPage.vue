@@ -74,17 +74,6 @@
               class="position-relative"
               style="width: 500px"
             >
-              <button class="expense-btn" @click="toggleMenu(item.id)">
-                {{ item.description }} &nbsp;&nbsp;
-                {{ item.type === '수입' ? '+' : '-' }}{{ item.amount }}
-                <RegisterReEdit
-                  v-if="editModalOpen"
-                  :existingData="itemToEdit"
-                  @close="editModalOpen = false"
-                  :checked="true"
-                />
-              </button>
-
               <!-- 드롭다운 메뉴 -->
               <div
                 v-if="openMenuId === item.id"
@@ -108,6 +97,16 @@
                   삭제
                 </div>
               </div>
+              <button class="expense-btn" @click="toggleMenu(item.id)">
+                {{ item.description }} &nbsp;&nbsp;
+                {{ item.type === '수입' ? '+' : '-' }}{{ item.amount }}
+                <RegisterReEdit
+                  v-if="editModalOpen"
+                  :existingData="itemToEdit"
+                  @close="editModalOpen = false"
+                  :checked="true"
+                />
+              </button>
             </div>
           </div>
 
@@ -136,7 +135,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import RegisterReEdit from './RegisterReEdit.vue';
+import RegisterReEdit from './RegisterReedit.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
