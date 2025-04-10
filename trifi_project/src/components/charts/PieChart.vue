@@ -1,118 +1,116 @@
 <template>
-  <div class="chart-wrapper">
-    <div v-if="data.length === 0" class="empty-chart">
-      <div class="empty-box">
-        아직 등록된 내역이 없습니다 😢
-      </div>
+  <div class="w-full h-full relative">
+    <!-- 데이터 없을 때만 보여줄 안내 박스 -->
+    <div
+      v-if="!hasData"
+      class="absolute inset-0 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 text-gray-500 z-10 bg-white"
+    >
+      <p class="text-lg font-medium">아직 등록된 내역이 없습니다</p>
     </div>
-    <canvas v-else ref="chartRef" width="300" height="300"></canvas>
+
+    <!-- 항상 렌더되지만, 데이터 없으면 차트는 안 그림 -->
+    <canvas ref="chartRef" class="w-full h-full" />
   </div>
 </template>
- 
-  
-  <script setup>
-  import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
-  import { Chart, registerables } from 'chart.js'
-  import { registerChart, unregisterChart } from '@/utils/chartManager'
-  
-  Chart.register(...registerables)
-  
-  const props = defineProps({
+
+<script setup>
+import { ref, watch, onMounted, nextTick, computed } from 'vue'
+import { Chart, registerables } from 'chart.js'
+
+Chart.register(...registerables)
+
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true
+  }
+})
+
+const chartRef = ref(null)
+let chartInstance = null
+
+// 데이터 유무 체크
+const hasData = computed(() => {
+  return props.data && props.data.length > 0
+})
+
+function renderChart() {
+  if (!chartRef.value || !hasData.value) return
+
+  const ctx = chartRef.value.getContext('2d')
+
+  // 기존 차트가 있다면 파괴
+  if (chartInstance) {
+    chartInstance.destroy()
+  }
+
+  chartInstance = new Chart(ctx, {
+    type: 'pie',
     data: {
-      type: Array,
-      required: true,
+      labels: props.data.map(item => item.name),
+      datasets: [{
+        label: '지출',
+        data: props.data.map(item => item.value),
+        backgroundColor: [
+          '#FF6384', '#36A2EB', '#FFCE56',
+          '#8AFFC1', '#FFD08A', '#A58AFF'
+        ],
+        borderColor: '#ffffff',
+        borderWidth: 2
+      }]
     },
-  })
-  
-  const chartRef = ref(null)
-  let chartInstance = null
-  
-  const renderChart = () => {
-    if (chartInstance) {
-      chartInstance.destroy()
-    }
-  
-    const ctx = chartRef.value.getContext('2d')
-    chartInstance = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: props.data.map(item => item.name),
-        datasets: [{
-          data: props.data.map(item => item.value),
-          backgroundColor: ['#E8FD94', '#2A4185', '#A6C1FF', '#FFD6A5'],
-          borderWidth: 1,
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#333',
+            padding: 20,
+            font: {
+              size: 14
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: context => {
+              const value = context.parsed
+              return `${context.label}: ${value.toLocaleString()}원`
+            }
           }
         }
       }
-    })
-  
-    registerChart(chartInstance)
+    }
+  })
+}
+
+onMounted(() => {
+  if (hasData.value) {
+    renderChart()
   }
-  
-  onMounted(() => {
-    if (props.data && props.data.length > 0) {
-      renderChart()
-    }
-  })
-  
-  // ✅ data가 변경되면 차트 다시 렌더링
-  watch(() => props.data, (newVal) => {
-    if (newVal && newVal.length > 0) {
-      renderChart()
-    }
-  }, { deep: true })
-  
-  onBeforeUnmount(() => {
-    unregisterChart(chartInstance)
-    chartInstance?.destroy()
-  })
-  </script>
-  
-  <style scoped>
-  canvas {
-  max-width: 95%;
-  height: 100%;
-}
+})
 
-.chart-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 380px; /* 기존보다 크게 */
-  padding: 24px;
+watch(() => props.data, async () => {
+  await nextTick()
+  if (hasData.value) {
+    renderChart()
+  } else if (chartInstance) {
+    chartInstance.destroy()
+    chartInstance = null
+  }
+})
+</script>
+
+<style scoped>
+div {
   position: relative;
+  width: 100%;
+  height: 400px;
 }
-
-.empty-chart {
+canvas {
   width: 100%;
   height: 100%;
 }
-
-.empty-box {
-  width: 100%;
-  height: 100%;
-  border: 2px dashed #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #777;
-  font-size: 1.1rem;
-  font-weight: 500;
-  background-color: #f9f9f9;
-  border-radius: 16px;
-  padding: 30px;
-  text-align: center;
-  margin-left: -20px;
-}
-
-
-  </style>
-  
-  
+</style>
