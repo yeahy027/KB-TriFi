@@ -44,24 +44,27 @@
       "password": "test5",
       "country": "Korea",
       "language": "Korean"
+    },
+    {
+      "id": "7a3b",
+      "name": "머머",
+      "nickname": "머니요hi",
+      "email": "money@example.com",
+      "password": "1234"
+    },
+    {
+      "id": "4174",
+      "name": "강",
+      "nickname": "서현",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
     {
-      "id": "1",
-      "userId": 1,
-      "type": "income",
-      "date": "2025-04-01",
-      "amount": 3000000,
-      "category": "월급",
-      "payment": "계좌이체(은행)",
-      "description": "4월 월급",
-      "fixed": true
-    },
-    {
       "id": "2",
       "userId": 1,
-      "type": "expense",
+      "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
       "category": "식비",
@@ -70,20 +73,9 @@
       "fixed": false
     },
     {
-      "id": "3",
-      "userId": 1,
-      "type": "expense",
-      "date": "2025-04-07",
-      "amount": 18000,
-      "category": "교통",
-      "payment": "카드",
-      "description": "지하철 정기권",
-      "fixed": false
-    },
-    {
       "id": "4",
       "userId": 1,
-      "type": "expense",
+      "type": "지출",
       "date": "2025-04-10",
       "amount": 15000,
       "category": "쇼핑",
@@ -94,7 +86,7 @@
     {
       "id": "5",
       "userId": 1,
-      "type": "income",
+      "type": "지출",
       "date": "2025-04-11",
       "amount": 1000,
       "category": "교통",
@@ -105,7 +97,7 @@
     {
       "id": "6",
       "userId": 1,
-      "type": "income",
+      "type": "지출",
       "date": "2025-04-12",
       "amount": 10077770,
       "category": "쇼핑",
@@ -213,6 +205,28 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-06-09"
+    },
+    {
+      "id": "cfae",
+      "userId": "",
+      "category": "",
+      "amount": 12222,
+      "payment": "현금",
+      "description": "알바+용돈",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-05-09"
+    },
+    {
+      "id": "d302",
+      "userId": null,
+      "category": "",
+      "amount": 13,
+      "payment": "페이",
+      "description": "13",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-04-30"
     }
   ]
 }

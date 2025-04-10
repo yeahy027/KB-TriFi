@@ -138,4 +138,7 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(timer);
 });
+const Mypage = () => {
+  router.push(`/mypage`);
+};
 </script>

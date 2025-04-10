@@ -13,7 +13,6 @@
             src="../assets/basic-img.png"
             alt="User profile"
           />
-
           <div class="user-info">
             <h2>{{ user.nickname }}</h2>
             <p>{{ user.email }}</p>
@@ -38,19 +37,23 @@
         <div class="cards">
           <div class="section-title">
             <h3>Cards</h3>
-            <!-- <button class="plus-card" @click="addCard">+</button> -->
           </div>
           <div class="card-box">
             <button class="slide-btn left" @click="prevCard"><</button>
 
+            <!-- 여기부터 카드 추가 UI -->
             <div class="create-card">
-              <div class="create-text">
-                <div style="color: #e3fc87; font-size: 18px">
-                  카드를 추가하세요
-                </div>
-                <button class="plus-card" @click="waitPlease">+</button>
+              <!-- 캡처처럼 가운데 + 원형 영역과 안내문구 -->
+              <div class="card-add-circle">
+                <div class="plus-sign" @click="isCardFormOpen = true">+</div>
+                <RegisterCard
+                  v-if="isCardFormOpen"
+                  @close="isCardFormOpen = false"
+                />
               </div>
+              <p class="instruction">위의 + 버튼을 눌러 카드를 등록해 주세요</p>
             </div>
+            <!-- 여기까지 카드 추가 UI -->
 
             <button class="slide-btn right" @click="nextCard">></button>
           </div>
@@ -79,12 +82,27 @@
         </div>
       </div>
     </div>
+
+    <!-- 실제 카드 상세정보를 입력할 폼/모달(간단 예시) -->
+    <!-- <div v-if="isCardFormOpen" class="card-detail-modal">
+      <div class="card-detail-content">
+        <h2>카드 정보 입력</h2> -->
+    <!-- 여기에 세부내용 폼(카드 이름, 번호 등) 넣으시면 됩니다. -->
+    <!-- <form @submit.prevent="submitCardInfo"> -->
+    <!-- 예: <input type="text" placeholder="카드명" v-model="newCardName" /> -->
+    <!-- 필요한 내용은 직접 채우시면 됩니다 -->
+    <!-- <button type="submit">저장</button>
+        </form>
+        <button class="close-btn" @click="closeCardForm">닫기</button>
+      </div>
+    </div> -->
   </AppLayout>
 </template>
 
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
+import RegisterCard from './RegisterCard.vue';
 import { useUserStore } from '@/stores/userStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -94,6 +112,11 @@ import axios from 'axios';
 const userStore = useUserStore(); // Pinia store 가져오기
 const user = computed(() => userStore.user); // 최신 user 데이터
 const router = useRouter();
+const isModalOpen = ref(false);
+const isCardFormOpen = ref(false);
+
+// 카드 상세정보 입력 예시 데이터
+const newCardName = ref(''); // 필요하다면 v-model로 사용
 const fixedExpenses = ref([]);
 
 onMounted(async () => {
@@ -114,14 +137,6 @@ onMounted(() => {
 const handleLogout = () => {
   userStore.logoutUser();
   router.push('/');
-};
-
-const waitPlease = () => {
-  Swal.fire({
-    title: '점검 중',
-    text: '점검 중입니다.',
-    icon: 'info',
-  });
 };
 
 const handleDeleteAccount = async () => {
@@ -153,17 +168,37 @@ const handleDeleteAccount = async () => {
   }
 };
 
+// 카드 추가 모달 열기
+const openCardForm = () => {
+  isCardFormOpen.value = true;
+};
+
+// 카드 추가 모달 닫기
+const closeCardForm = () => {
+  isCardFormOpen.value = false;
+};
+
+// 카드 정보 제출
+const submitCardInfo = () => {
+  // TODO: 폼 데이터( newCardName 등 )를 활용하여 서버 통신 or store 업데이트
+  console.log('카드 정보:', newCardName.value);
+
+  // 저장 후 모달 닫기
+  isCardFormOpen.value = false;
+};
+
 // 카드 슬라이드 기능
 const prevCard = () => {
   console.log('이전 카드');
 };
-
 const nextCard = () => {
   console.log('다음 카드');
 };
 
-// 모달 열림 여부
-const isModalOpen = ref(false);
+// gotoRegisterCard는 어디에서 필요한건가요?
+const goToRegisterCard = () => {
+  router.push('/registercard'); // RegisterCard.vue 경로로 이동
+};
 </script>
 
 <style scoped>
@@ -251,21 +286,6 @@ const isModalOpen = ref(false);
   margin: 0;
 }
 
-.plus-card {
-  border: none;
-  border-radius: 30%;
-  font-size: 24px;
-  cursor: pointer;
-  color: #f4c542;
-  font-weight: bold;
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .plus-fixlist {
   border: none;
   border-radius: 8px;
@@ -311,38 +331,80 @@ const isModalOpen = ref(false);
   right: 20px;
 }
 
-.expense-list {
-  list-style: none;
-  padding: 0;
-  font-weight: bold;
-  padding-top: 10px;
-}
-.expense-list li {
-  padding-top: 10px;
-  margin-bottom: 8px;
-}
-
+/* 카드 추가 버튼 스타일 */
 .create-card {
-  background-color: #253a82;
+  background-color: #f9f9ec;
   width: 330px;
   height: 200px;
   border-radius: 16px;
   display: flex;
-  align-items: center; /* 세로축 중앙 */
-  justify-content: center; /* 가로축 중앙 */
-}
-
-.create-text {
-  text-align: center;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  width: 200px;
-  height: 100px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-add-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.plus-sign {
+  display: flex;
+  align-content: center;
+  justify-items: center;
+  font-size: 50px;
+  color: #999;
+  margin-right: 4px;
+}
+
+.add-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.instruction {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+/* 카드 입력 폼 모달 예시 */
+.card-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.card-detail-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 300px;
+}
+
+.close-btn {
+  margin-top: 10px;
+  background-color: #f4c542;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
 /* 수정 */
