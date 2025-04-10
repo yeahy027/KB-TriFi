@@ -17,13 +17,6 @@
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
-    },
-    {
-      "id": "675e",
-      "name": "김예영",
-      "nickname": "예영",
-      "email": "yeahy027@naver.com",
-      "password": "yeahy*027"
     }
   ],
   "transactions": [
@@ -52,15 +45,16 @@
   ],
   "fixedExpenses": [
     {
-      "id": "53c2",
-      "userId": "675e",
+      "id": "e318",
+      "userId": "aff4",
+      "type": "수입",
       "category": "",
-      "amount": 55555,
-      "payment": "페이",
-      "description": "test",
-      "date": "2025-04-16",
-      "rotation": "매주",
-      "endDate": null
+      "amount": 500000,
+      "payment": "카드",
+      "description": "월급",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-05-30"
     }
   ]
 }
