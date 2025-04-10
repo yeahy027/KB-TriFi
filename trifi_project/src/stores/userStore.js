@@ -36,49 +36,6 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  // 액션 - 사용자 정보 수정하기
-  // const updateUser = async (updatedUser) => {
-  //   try {
-  //     const response = await axios.put(
-  //       `/api/users/${states.user.id}`,
-  //       updatedUser
-  //     );
-  //     if (response.status === 200) {
-  //       states.user = { ...states.user, ...updatedUser };
-
-  //       // 사용자 정보 저장
-  //       localStorage.setItem('user', JSON.stringify(states.user));
-
-  //       // Swal.fire({
-  //       //   title: '업데이트 성공',
-  //       //   text: '프로필이 성공적으로 업데이트되었습니다!',
-  //       //   icon: 'success',
-  //       //   confirmButtonText: '확인',
-  //       // }).then((result) => {
-  //       //   if (result.isConfirmed) {
-  //       //     router.push('/mypage');
-  //       //   }
-  //       // });
-  //       alert('프로필이 성공적으로 업데이트되었습니다!');
-  //     } else {
-  //       // Swal.fire({
-  //       //   title: '업데이트 실패',
-  //       //   text: '프로필이 업데이트에 실패하였습니다',
-  //       //   icon: 'warning',
-  //       // });
-  //       alert('프로필 업데이트 실패');
-  //     }
-  //   } catch (error) {
-  //     console.error('프로필 업데이트 실패:', error);
-  //     // Swal.fire({
-  //     //   title: '오류 발생',
-  //     //   text: '프로필 업데이트 중 오류가 발생했습니다.',
-  //     //   icon: 'error',
-  //     // });
-  //     alert('프로필 업데이트 중 오류가 발생했습니다.');
-  //   }
-  // };
-
   const updateUser = async (updatedUser, router) => {
     try {
       const response = await axios.put(
