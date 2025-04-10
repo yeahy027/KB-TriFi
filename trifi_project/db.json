@@ -21,17 +21,6 @@
   ],
   "transactions": [
     {
-      "id": "ce8b",
-      "type": "수입",
-      "date": "2025-04-10",
-      "userId": "aff5",
-      "amount": 5000000,
-      "category": "",
-      "payment": "현금",
-      "description": "국민은행",
-      "fixed": false
-    },
-    {
       "id": "5e00",
       "type": "지출",
       "date": "2025-04-10",
@@ -85,18 +74,18 @@
       "userId": "aff5",
       "type": "지출",
       "category": "교통",
-      "amount": 150000,
+      "amount": 15000,
       "payment": "현금",
-      "description": "지하철 정기권",
+      "description": "지하철",
       "date": "2025-04-10",
       "rotation": "매월",
-      "endDate": "2025-04-23"
+      "endDate": "2025-04-17"
     },
     {
-      "id": "4dde",
+      "id": "0940",
       "userId": "aff5",
       "type": "수입",
-      "category": "",
+      "category": "급여",
       "amount": 3000000,
       "payment": "현금",
       "description": "월급",
