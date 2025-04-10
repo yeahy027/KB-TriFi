@@ -52,6 +52,17 @@
       "payment": "현금",
       "description": "알바비",
       "fixed": false
+    },
+    {
+      "id": "e25a",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "aff4",
+      "amount": 12000,
+      "category": "",
+      "payment": "카드",
+      "description": "밥",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -66,6 +77,30 @@
       "date": "2025-04-16",
       "rotation": "매주",
       "endDate": null
+    },
+    {
+      "id": "6a6b",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "용돈이지롱",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-05-08"
+    },
+    {
+      "id": "825d",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "기타",
+      "amount": 5000,
+      "payment": "페이",
+      "description": "넷플릭스",
+      "date": "2025-04-14",
+      "rotation": "매월",
+      "endDate": "2025-06-18"
     }
   ]
 }
