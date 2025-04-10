@@ -115,50 +115,6 @@
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
-    },
-    {
-      "id": "d2c0",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": false
-    },
-    {
-      "id": "2d32",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 11111,
-      "category": "",
-      "payment": "현금",
-      "description": "1111",
-      "fixed": false
-    },
-    {
-      "id": "d764",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 11111,
-      "category": "",
-      "payment": "현금",
-      "description": "1111",
-      "fixed": false
-    },
-    {
-      "id": "02da",
-      "type": "income",
-      "date": "2025-04-10",
-      "userId": "",
-      "amount": 11111,
-      "category": "",
-      "payment": "현금",
-      "description": "1111",
-      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -172,39 +128,6 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-05-09"
-    },
-    {
-      "id": "d302",
-      "userId": null,
-      "category": "",
-      "amount": 13,
-      "payment": "페이",
-      "description": "13",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-04-30"
-    },
-    {
-      "id": "25c0",
-      "userId": "2",
-      "category": "",
-      "amount": 123,
-      "payment": "카드",
-      "description": "테스트입니다",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-04-24"
-    },
-    {
-      "id": "6651",
-      "userId": "2",
-      "category": "교통",
-      "amount": 123,
-      "payment": "페이",
-      "description": "테스트",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-05-28"
     }
   ]
 }

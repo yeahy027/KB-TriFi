@@ -42,6 +42,8 @@
           <span class="pie-label">{{ spendingPercent }}%</span>
         </div>
       </div>
+
+      <!-- 비슷한 나이대 / 월급 대비 지출 정보 -->
       <div class="section-card full-width grid-2">
         <div class="info-block">
           <label class="section-title">비슷한 나이대의 지출</label>
@@ -49,9 +51,33 @@
         </div>
         <div class="info-block">
           <label class="section-title">비슷한 월급 대비 지출</label>
-          <div class="ranking-circle">상위<br /><strong>{{ spendingRank }}%</strong></div>
+          <div class="ranking-circle">
+            상위<br />
+            <strong>{{ spendingRank }}%</strong>
+          </div>
         </div>
       </div>
+
+      <!-- [New] 챌린지 누적 성과 섹션 -->
+      <div class="section-card full-width challenge-summary-card">
+        <label class="section-title">챌린지 누적 성과</label>
+        <div class="summary-metrics">
+          <div class="metric">
+            <div class="metric-value">{{ totalNoSpendDays }}</div>
+            <div class="metric-label">누적 무지출일</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">{{ maxNoSpendStreak }}</div>
+            <div class="metric-label">최대 연속 성공</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">{{ challengeParticipation }}</div>
+            <div class="metric-label">참여 횟수</div>
+          </div>
+        </div>
+      </div>
+      <!-- / 챌린지 누적 성과 섹션 끝 -->
+
     </div>
   </AppLayout>
 </template>
@@ -60,6 +86,7 @@
 import { ref, computed, onMounted } from 'vue'
 import AppLayout from '@/components/AppLayout.vue'
 
+/* 기존 로직 */
 const spendingGoal = ref(300000)
 const currentSpending = ref(150000)
 const spendingRank = ref(60)
@@ -69,7 +96,7 @@ const spendingRate = computed(() =>
   ((currentSpending.value / spendingGoal.value) * 100).toFixed(1)
 )
 
-// 애니메이션 값
+/* 진행바 & 파이 그래프 애니메이션 값 */
 const animatedProgress = ref(0)
 const animatedPie = ref(0)
 
@@ -96,9 +123,15 @@ onMounted(() => {
     }
   }, 20)
 })
+
+/* [New] 챌린지 누적 성과 관련 state */
+const totalNoSpendDays = ref(12)          // 누적 무지출일
+const maxNoSpendStreak = ref(5)          // 최대 연속 성공
+const challengeParticipation = ref(3)     // 참여 횟수
 </script>
 
 <style scoped>
+/* 기본 레이아웃 */
 .challenge-container {
   padding: 24px;
   max-width: 1200px;
@@ -129,6 +162,7 @@ onMounted(() => {
   font-weight: 600;
 }
 
+/* 진행바 */
 .progress-container {
   background-color: #eee;
   height: 52px;
@@ -155,6 +189,34 @@ onMounted(() => {
   color: #000;
 }
 
+/* 파이 그래프 */
+.pie-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 12px;
+}
+
+.pie-label {
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.circle-bg {
+  stroke: #ddd;
+}
+
+.circle {
+  transform: rotate(-90deg);
+  transform-origin: center;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s ease-out;
+}
+
+/* 비교 섹션 */
 .grid-2 {
   display: flex;
   flex-direction: row;
@@ -199,29 +261,32 @@ onMounted(() => {
   flex-direction: column;
 }
 
-.pie-chart {
+/* [New] 챌린지 누적 성과 */
+.challenge-summary-card {
+  height: auto; /* 높이 고정 대신, 내용 따라 늘어나게 */
+}
+
+.summary-metrics {
   display: flex;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-top: 12px;
+  text-align: center;
+  gap: 16px;
 }
 
-.pie-label {
-  position: absolute;
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
+.metric {
+  flex: 1;
 }
 
-.circle-bg {
-  stroke: #ddd;
+.metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #FF6B6B;
 }
 
-.circle {
-  transform: rotate(-90deg);
-  transform-origin: center;
-  stroke-linecap: round;
-  transition: stroke-dasharray 1s ease-out;
+.metric-label {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #666;
 }
 </style>
