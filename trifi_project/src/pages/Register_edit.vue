@@ -203,7 +203,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 import { useRoute } from 'vue-router';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'update']);
 const store = useCounterStore();
 /* entry.userId = useUserStore.user.id; */
 const userStore = useUserStore();
@@ -212,6 +212,11 @@ const activeTab = ref('수입');
 const isTouched = ref(false);
 
 const today = new Date().toISOString().split('T')[0];
+
+const props = defineProps({
+  checked: Boolean,
+  onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
+});
 
 const initialForm = () => ({
   date: today,
@@ -227,13 +232,12 @@ const initialForm = () => ({
 });
 
 const form = ref(initialForm());
-
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
 
-const props = defineProps({
-  onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
-});
+// const props = defineProps({
+//   onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
+// });
 
 // 등록 가능 여부를 판단하는 computed
 const isFormValid = computed(() => {
@@ -264,16 +268,18 @@ const isFormValid = computed(() => {
 });
 
 // 탭 변경 시 form 초기화
-watch(activeTab, () => {
-  Object.assign(form.value, initialForm());
+// watch(activeTab, () => {
+//   Object.assign(form.value, initialForm());
 
-  // 고정 여부 쿼리 반영
-  if (route.query.fixed === 'true') {
-    form.value.fixed = true;
-  }
-});
+//   // 고정 여부 쿼리 반영
+//   if (route.query.fixed === 'true') {
+//     form.value.fixed = true;
+//   }
+// });
 
 onMounted(() => {
+  form.value.fixed = props.checked;
+
   // 탭도 URL 쿼리로 제어하고 싶다면
   if (route.query.fixed === 'true') {
     activeTab.value = '지출'; // watch가 작동하면서 체크됨
@@ -352,6 +358,7 @@ const submitForm = async () => {
         userId: entry.userId,
         type: entry.type,
         category: entry.category,
+        // type: entry.type,
         amount: entry.amount,
         payment: entry.payment,
         description: entry.description,
@@ -366,11 +373,12 @@ const submitForm = async () => {
           fixedEntry
         );
         console.log('✅ 고정 항목 등록 완료:', res.data);
-        props.onSubmitted?.();
+        // emit('fixedExpenseSaved', res.data);
       } catch (err) {
         console.error('❌ 고정 항목 전송 실패:', err);
       }
 
+      emit('update');
       emit('close');
       return;
     }
