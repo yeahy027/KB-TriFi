@@ -50,9 +50,9 @@
             class="btn btn-sm"
             :class="[
               'btn-outline-danger',
-              filterType === 'expense' ? 'active-btn' : '',
+              filterType === '지출' ? 'active-btn' : '',
             ]"
-            @click="filterType = 'expense'"
+            @click="filterType = '지출'"
           >
             💸 지출 {{ totalExpense.toLocaleString() }}원
           </button>
@@ -60,9 +60,9 @@
             class="btn btn-sm"
             :class="[
               'btn-outline-primary',
-              filterType === 'income' ? 'active-btn' : '',
+              filterType === '수입' ? 'active-btn' : '',
             ]"
-            @click="filterType = 'income'"
+            @click="filterType = '수입'"
           >
             💰 수입 {{ totalIncome.toLocaleString() }}원
           </button>
@@ -70,9 +70,9 @@
             class="btn btn-sm"
             :class="[
               'btn-outline-success',
-              filterType === 'transfer' ? 'active-btn' : '',
+              filterType === '이체' ? 'active-btn' : '',
             ]"
-            @click="filterType = 'transfer'"
+            @click="filterType = '이체'"
           >
             💰 이체 {{ totalTransfer.toLocaleString() }}원
           </button>
@@ -115,7 +115,7 @@
           </div>
           <div
             :class="
-              record.type === 'income'
+              record.type === '수입'
                 ? 'text-primary fw-bold'
                 : 'text-danger fw-bold'
             "
@@ -304,17 +304,17 @@ const categoryIcons = {
 // 총 수입, 지출, 이체 내역 계산산
 const totalIncome = computed(() =>
   monthlyRecords.value
-    .filter((r) => r.type === 'income')
+    .filter((r) => r.type === '수입')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
 const totalExpense = computed(() =>
   monthlyRecords.value
-    .filter((r) => r.type === 'expense')
+    .filter((r) => r.type === '지출')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
 const totalTransfer = computed(() =>
   monthlyRecords.value
-    .filter((r) => r.type === 'transfer')
+    .filter((r) => r.type === '이체')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
 

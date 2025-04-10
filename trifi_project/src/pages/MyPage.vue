@@ -62,27 +62,10 @@
           </div>
           <ul class="expense-list">
             <RouterLink to="/registeredit">
-              <input
-                class="plus-fixlist"
-                placeholder="고정지출 추가하기"
-              />
+              <input class="plus-fixlist" placeholder="고정지출 추가하기" />
             </RouterLink>
           </ul>
         </div>
-      </div>
-    </div>
-
-    <!-- 실제 카드 상세정보를 입력할 폼/모달(간단 예시) -->
-    <div v-if="isCardFormOpen" class="card-detail-modal">
-      <div class="card-detail-content">
-        <h2>카드 정보 입력</h2>
-        <!-- 여기에 세부내용 폼(카드 이름, 번호 등) 넣으시면 됩니다. -->
-        <form @submit.prevent="submitCardInfo">
-          <!-- 예: <input type="text" placeholder="카드명" v-model="newCardName" /> -->
-          <!-- 필요한 내용은 직접 채우시면 됩니다 -->
-          <button type="submit">저장</button>
-        </form>
-        <button class="close-btn" @click="closeCardForm">닫기</button>
       </div>
     </div>
   </AppLayout>
@@ -315,7 +298,7 @@ const goToRegisterCard = () => {
   border-radius: 16px;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
@@ -327,7 +310,7 @@ const goToRegisterCard = () => {
   border: 1px solid #ccc;
   background-color: #fff;
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   margin-bottom: 10px;
   cursor: pointer;
