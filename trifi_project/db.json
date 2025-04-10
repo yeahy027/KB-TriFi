@@ -115,6 +115,50 @@
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
+    },
+    {
+      "id": "d2c0",
+      "type": "income",
+      "date": "2025-04-10",
+      "userId": "",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
+    },
+    {
+      "id": "2d32",
+      "type": "income",
+      "date": "2025-04-10",
+      "userId": "",
+      "amount": 11111,
+      "category": "",
+      "payment": "현금",
+      "description": "1111",
+      "fixed": false
+    },
+    {
+      "id": "d764",
+      "type": "income",
+      "date": "2025-04-10",
+      "userId": "",
+      "amount": 11111,
+      "category": "",
+      "payment": "현금",
+      "description": "1111",
+      "fixed": false
+    },
+    {
+      "id": "02da",
+      "type": "income",
+      "date": "2025-04-10",
+      "userId": "",
+      "amount": 11111,
+      "category": "",
+      "payment": "현금",
+      "description": "1111",
+      "fixed": false
     }
   ],
   "fixedExpenses": [

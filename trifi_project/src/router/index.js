@@ -30,9 +30,9 @@ const router = createRouter({
       component: () => import("../pages/ListPage.vue"),
     },
     {
-      path: "/goal",
-      name: "goal",
-      component: () => import("../pages/GoalPage.vue"),
+      path: "/challenge",
+      name: "challenge",
+      component: () => import("../pages/ChallengePage.vue"),
     },
 
     {
