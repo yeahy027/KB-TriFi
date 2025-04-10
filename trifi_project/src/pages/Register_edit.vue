@@ -259,6 +259,7 @@ const submitForm = async () => {
         userId: entry.userId,
         type: entry.type,
         category: entry.category,
+        type: entry.type,
         amount: entry.amount,
         payment: entry.payment,
         description: entry.description,
@@ -273,7 +274,7 @@ const submitForm = async () => {
           fixedEntry
         );
         console.log('✅ 고정 항목 등록 완료:', res.data);
-        props.onSubmitted?.();
+        emit('fixedExpenseSaved', res.data);
       } catch (err) {
         console.error('❌ 고정 항목 전송 실패:', err);
       }
@@ -296,6 +297,8 @@ const submitForm = async () => {
 
   emit('close');
 };
+
+
 </script>
 
 <style scoped>
