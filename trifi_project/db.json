@@ -79,16 +79,16 @@
       "endDate": null
     },
     {
-      "id": "5fce",
+      "id": "d336",
       "userId": "675e",
-      "type": "수입",
-      "category": "",
-      "amount": 11111,
+      "type": "지출",
+      "category": "식비",
+      "amount": 11111111,
       "payment": "현금",
-      "description": "1111",
+      "description": "마시쩡",
       "date": "2025-04-10",
       "rotation": "매일",
-      "endDate": "2025-04-14"
+      "endDate": "2025-04-23"
     }
   ]
 }

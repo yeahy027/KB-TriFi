@@ -156,6 +156,30 @@
     <div class="text-danger fw-bold">
       {{ Number(record.amount).toLocaleString() }} 원
       <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
+
+      <!-- 메뉴 영역 (⋯ 버튼 클릭 시 뜨는 팝업 메뉴) -->
+<div
+  v-if="openMenuId === record.id"
+  class="position-absolute end-0 mt-2 p-2 bg-white border rounded shadow-sm"
+  style="z-index: 100; min-width: 100px;"
+>
+  <div
+    class="px-2 py-1 text-dark"
+    style="cursor: pointer;"
+    @click="editFixedExpense(record)"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+  >
+    수정
+  </div>
+  <div
+    class="px-2 py-1 text-dark"
+    style="cursor: pointer;"
+    @click="deleteFixedExpense(record.id)"
+  >
+    삭제
+  </div>
+</div>
     </div>
   </div>
 </div>
@@ -435,21 +459,36 @@ const categoryIcons = {
 };
 
 // 총 수입, 지출, 이체 내역 계산
-const totalIncome = computed(() =>
-  monthlyRecords.value
+const totalIncome = computed(() => {
+  const normalIncome = monthlyRecords.value
     .filter((r) => r.type === '수입')
-    .reduce((sum, r) => sum + Number(r.amount), 0)
-);
-const totalExpense = computed(() =>
-  monthlyRecords.value
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+  const fixedIncome = fixedRecords.value
+    .filter((r) => r.type === '수입')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+  return normalIncome + fixedIncome;
+});
+
+const totalExpense = computed(() => {
+  const normalExpense = monthlyRecords.value
     .filter((r) => r.type === '지출')
-    .reduce((sum, r) => sum + Number(r.amount), 0)
-);
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+  const fixedExpense = fixedRecords.value
+    .filter((r) => r.type === '지출')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+  return normalExpense + fixedExpense;
+});
+
 const totalTransfer = computed(() =>
   monthlyRecords.value
     .filter((r) => r.type === '이체')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
+
 
 // 엑셀 데이터 변환
 const downloadExcel = () => {
@@ -495,12 +534,23 @@ const editRecord = (record) => {
   isModalOpen.value = true;
 };
 
+
+
+
 const deleteRecord = async (id) => {
   if (confirm('정말 삭제하시겠습니까?')) {
     await axios.delete(`http://localhost:3000/transactions/${id}`);
     fetchRecords();
   }
 }
+
+const deleteFixedExpense = async (id) => {
+  if (confirm('정말 삭제하시겠습니까?')) {
+    await axios.delete(`http://localhost:3000/fixedExpenses/${id}`);
+    fetchFixedExpenses();
+    openMenuId.value = null;
+  }
+};
 
 const isCategoryDropdownOpen = ref(false);
 const selectedCategory = ref('');
