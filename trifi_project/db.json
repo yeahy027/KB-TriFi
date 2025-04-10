@@ -75,5 +75,14 @@
       "participationCount": 3,
       "maxStreak": 2
     }
+  ],
+  "challengeSuccess": [
+    {
+      "id": 1,
+      "userId": "aff4",
+      "year": 2025,
+      "month": 4,
+      "success": true
+    }
   ]
 }

@@ -63,8 +63,11 @@
         <!-- 별 아이콘 -->
         <div class="ranking-header">⭐ 챌린지 순위표 ⭐</div>
         <ul class="ranking-list">
-          <li v-for="user in challengeRanking" :key="user.id">
+          <!-- <li v-for="user in challengeRanking" :key="user.id">
             {{ user.name }} - {{ user.savedPercent }}%
+          </li> -->
+          <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
+            <span>{{ index + 1 }}위 - </span>{{ user.name }} - {{ user.savedPercent }}%
           </li>
         </ul>
 
@@ -115,6 +118,7 @@ const isGoalLoading = ref(true)
 const totalNoSpendDays = ref(0)
 const maxNoSpendStreak = ref(0)
 const challengeParticipation = ref(0)
+const currentStreak = ref(0) // 연속 성공일을 프론트에서 추적
 
 // 챌린지 순위표
 const challengeRanking = ref([])
@@ -126,20 +130,27 @@ const formattedSpendingGoal = computed(() =>
   spendingGoal.value ? spendingGoal.value.toLocaleString() : ''
 )
 
-// 챌린지 성공 조건 체크
+// 챌린지 성공 여부 판단 및 업데이트
 const checkChallengeStatus = async () => {
   const now = new Date()
   const year = now.getFullYear()
   const month = now.getMonth() + 1
 
-  // 이미 성공 처리된 기록이 있다면 중복 방지
-  const res = await axios.get(`/api/challengeSuccess?userId=${userId}&year=${year}&month=${month}`)
-  if (res.data.length > 0) return
+  const { data: prevSuccess } = await axios.get(`/api/challengeSuccess?userId=${userId}&year=${year}&month=${month}`)
+  if (prevSuccess.length > 0) return
+
+  const { data: historyRes } = await axios.get(`/api/challengeHistory?userId=${userId}`)
+  const history = historyRes[0]
 
   if (currentSpending.value > spendingGoal.value) {
     alert('💸 이번달 지출이 목표를 초과했어요! 챌린지 실패 😢')
+
+    // 실패 → streak 초기화
+    currentStreak.value = 0
   } else {
     alert('🎉 이번달 챌린지를 성공했어요! 축하합니다 🥳')
+
+    // 성공 처리
     await axios.post('/api/challengeSuccess', {
       userId,
       year,
@@ -147,19 +158,21 @@ const checkChallengeStatus = async () => {
       success: true
     })
 
-    const userStatRes = await axios.get(`/api/users/${userId}`)
-    const user = userStatRes.data
+    // streak 업데이트
+    currentStreak.value += 1
+    const newMaxStreak = Math.max(currentStreak.value, history.maxStreak || 0)
 
-    await axios.patch(`/api/users/${userId}`, {
-      challengeSuccessCount: (user.challengeSuccessCount || 0) + 1,
-      challengeParticipation: (user.challengeParticipation || 0) + 1
+    await axios.patch(`/api/challengeHistory/${history.id}`, {
+      successCount: (history.successCount || 0) + 1,
+      maxStreak: newMaxStreak
     })
 
     fetchUserStats()
   }
 }
 
-// 목표 금액 서버 저장
+
+// 목표 금액 설정 + 참여 횟수 증가
 async function submitGoal() {
   const goalAmount = parseInt(newGoal.value)
   if (!goalAmount) return
@@ -171,6 +184,24 @@ async function submitGoal() {
     } else {
       await axios.post('/api/challengeAmount', { userId, amount: goalAmount })
     }
+
+    // challengeHistory 참여 횟수 증가
+    const { data: historyRes } = await axios.get(`/api/challengeHistory?userId=${userId}`)
+    if (historyRes.length > 0) {
+      const history = historyRes[0]
+      await axios.patch(`/api/challengeHistory/${history.id}`, {
+        participationCount: (history.participationCount || 0) + 1
+      })
+    } else {
+      // 최초 참여 시 challengeHistory 생성
+      await axios.post(`/api/challengeHistory`, {
+        userId,
+        successCount: 0,
+        maxStreak: 0,
+        participationCount: 1
+      })
+    }
+
     spendingGoal.value = goalAmount
     closeModal()
     await fetchTotalSpending()
@@ -199,12 +230,15 @@ async function fetchGoal() {
 // 사용자 누적 성과 불러오기
 async function fetchUserStats() {
   try {
-    const { data } = await axios.get(`/api/users/${userId}`)
-    totalNoSpendDays.value = data.challengeSuccessCount || 0
-    maxNoSpendStreak.value = data.maxSuccessStreak || 0
-    challengeParticipation.value = data.challengeParticipation || 0
+    const { data } = await axios.get(`/api/challengeHistory?userId=${userId}`)
+    if (data.length > 0) {
+      const stat = data[0]
+      totalNoSpendDays.value = stat.successCount || 0
+      maxNoSpendStreak.value = stat.maxStreak || 0
+      challengeParticipation.value = stat.participationCount || 0
+    }
   } catch (err) {
-    console.error('유저 성과 불러오기 실패:', err)
+    console.error('챌린지 성과 불러오기 실패:', err)
   }
 }
 
@@ -235,13 +269,20 @@ const fetchTotalSpending = async () => {
     ])
 
     const spendingTransactions = transactionsRes.data.filter(item => item.type === '지출')
+    console.log("spendingTransactions : ", spendingTransactions)
     const spendingFixed = fixedExpensesRes.data.filter(item => item.type === '지출')
+    console.log("spendingFixed : ", spendingFixed)
 
     const total = [...spendingTransactions, ...spendingFixed]
       .reduce((sum, item) => sum + Number(item.amount), 0)
 
+    console.log("total : ", total)
+
     currentSpending.value = total
+    console.log("currentSpending.value : ", currentSpending.value)
     spendingPercent.value = spendingGoal.value > 0 ? Math.round((total / spendingGoal.value) * 100) : 0
+    console.log("spendingPercent.value : ", spendingPercent.value)
+    
 
     animatedProgress.value = spendingPercent.value
     animatedPie.value = spendingPercent.value
