@@ -24,36 +24,72 @@
       "nickname": "예영",
       "email": "yeahy027@naver.com",
       "password": "1234"
+    },
+    {
+      "id": "2f84",
+      "name": "가",
+      "nickname": "머니키퍼",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
-<<<<<<< HEAD
   "transactions": [
     {
-      "id": "7dae",
+      "id": "3f6d",
       "type": "수입",
       "date": "2025-04-10",
       "userId": "bd8d",
-      "amount": 43242,
-      "category": "용돈",
+      "amount": 3424243,
+      "category": "급여",
       "payment": "현금",
-      "description": "ㄳㅈㅅㅈㅅ",
+      "description": "ㅎㄹㅇㅎㅇ",
       "fixed": false
     },
     {
-      "id": "a074",
+      "id": "8daa",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "2f84",
+      "amount": 12222,
+      "category": "교통",
+      "payment": "현금",
+      "description": "ㅎㅇㅀㄹㅇㅎ",
+      "fixed": false
+    },
+    {
+      "id": "1a65",
+      "type": "수입",
+      "date": "2025-04-16",
+      "userId": "2f84",
+      "amount": 3213123,
+      "category": "용돈",
+      "payment": "현금",
+      "description": "ㄷㄱㅈㄱㅈ",
+      "fixed": false
+    },
+    {
+      "id": "7d5b",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "2f84",
+      "amount": 432783498,
+      "category": "기타",
+      "payment": "카드",
+      "description": "ㄹㅇㄴㄹㄹㅇㄴ",
+      "fixed": false
+    },
+    {
+      "id": "8d6b",
       "type": "수입",
       "date": "2025-04-10",
-      "userId": "bd8d",
-      "amount": 4324234,
-      "category": "용돈",
+      "userId": "2f84",
+      "amount": 432,
+      "category": "급여",
       "payment": "카드",
-      "description": "ㅅㄱ",
+      "description": "ㄷㅈ",
       "fixed": false
     }
   ],
-=======
-  "transactions": [],
->>>>>>> 34c5d720b27b38065e1bf044e871407d0875c60a
   "fixedExpenses": [
     {
       "id": "c84d",
@@ -68,30 +104,6 @@
       "endDate": null
     },
     {
-<<<<<<< HEAD
-      "id": "6a6b",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "용돈이지롱",
-      "date": "2025-04-11",
-      "rotation": "매주",
-      "endDate": "2025-05-08"
-    },
-    {
-      "id": "5c72",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 213123,
-      "payment": "현금",
-      "description": "123",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-04-25"
-=======
       "id": "825d",
       "userId": "aff4",
       "type": "지출",
@@ -102,7 +114,18 @@
       "date": "2025-04-14",
       "rotation": "매월",
       "endDate": "2025-06-18"
->>>>>>> 34c5d720b27b38065e1bf044e871407d0875c60a
+    },
+    {
+      "id": "405b",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "급여",
+      "amount": 1222,
+      "payment": "현금",
+      "description": "43242",
+      "date": "2025-04-10",
+      "rotation": "매일",
+      "endDate": "2025-07-08"
     }
   ]
 }
