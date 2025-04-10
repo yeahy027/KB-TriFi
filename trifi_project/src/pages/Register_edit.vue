@@ -163,6 +163,10 @@ const form = ref(initialForm());
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
 
+const props = defineProps({
+  onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
+});
+
 // 탭 변경 시 form 초기화
 watch(activeTab, () => {
   Object.assign(form.value, initialForm());
@@ -263,6 +267,7 @@ const submitForm = async () => {
           fixedEntry
         );
         console.log('✅ 고정 항목 등록 완료:', res.data);
+        props.onSubmitted?.();
       } catch (err) {
         console.error('❌ 고정 항목 전송 실패:', err);
       }
@@ -277,6 +282,7 @@ const submitForm = async () => {
   try {
     const res = await axios.post('http://localhost:3000/transactions', entry);
     console.log('서버 응답:', res.data);
+    props.onSubmitted?.();
   } catch (err) {
     console.error('전송 실패:', err);
   }
