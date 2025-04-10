@@ -246,7 +246,7 @@ const isFormValid = computed(() => {
   if (activeTab.value === '이체') {
     return (
       form.value.date !== '' &&
-      form.value.from !== '' &&
+      form.value.amount !== '' &&
       form.value.category !== '' &&
       form.value.description !== ''
     );
