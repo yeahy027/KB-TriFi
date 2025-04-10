@@ -71,6 +71,39 @@
       "payment": "현금",
       "description": "점심",
       "fixed": false
+    },
+    {
+      "id": "4",
+      "userId": 1,
+      "type": "지출",
+      "date": "2025-04-10",
+      "amount": 15000,
+      "category": "쇼핑",
+      "payment": "카드",
+      "description": "문구점",
+      "fixed": false
+    },
+    {
+      "id": "5",
+      "userId": 1,
+      "type": "지출",
+      "date": "2025-04-11",
+      "amount": 1000,
+      "category": "교통",
+      "payment": "현금",
+      "description": "ㅁㅇㅁㅇ",
+      "fixed": false
+    },
+    {
+      "id": "6",
+      "userId": 1,
+      "type": "지출",
+      "date": "2025-04-12",
+      "amount": 100070,
+      "category": "쇼핑",
+      "payment": "카드",
+      "description": "에이블리",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
