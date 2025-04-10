@@ -21,17 +21,6 @@
   ],
   "transactions": [
     {
-      "id": "ce8b",
-      "type": "수입",
-      "date": "2025-04-10",
-      "userId": "aff5",
-      "amount": 5000000,
-      "category": "",
-      "payment": "현금",
-      "description": "국민은행",
-      "fixed": false
-    },
-    {
       "id": "5e00",
       "type": "지출",
       "date": "2025-04-10",
@@ -40,6 +29,39 @@
       "category": "쇼핑",
       "payment": "현금",
       "description": "문구점",
+      "fixed": false
+    },
+    {
+      "id": "5892",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 100000,
+      "category": "기타",
+      "payment": "현금",
+      "description": "적금넣기",
+      "fixed": false
+    },
+    {
+      "id": "bbc0",
+      "type": "이체",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 0,
+      "category": "기타",
+      "payment": "",
+      "description": "생일선물",
+      "fixed": false
+    },
+    {
+      "id": "0c86",
+      "type": "이체",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 0,
+      "category": "기타",
+      "payment": "",
+      "description": "미용..",
       "fixed": false
     }
   ],
@@ -93,18 +115,6 @@
       "endDate": "2025-06-18"
     },
     {
-      "id": "4dde",
-      "userId": "aff5",
-      "type": "수입",
-      "category": "",
-      "amount": 3000000,
-      "payment": "현금",
-      "description": "월급",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-04-10"
-    },
-    {
       "id": "4dab",
       "userId": "aff5",
       "type": "지출",
@@ -115,6 +125,18 @@
       "date": "2025-04-10",
       "rotation": "매월",
       "endDate": "2025-04-17"
+    },
+    {
+      "id": "0940",
+      "userId": "aff5",
+      "type": "수입",
+      "category": "급여",
+      "amount": 3000000,
+      "payment": "현금",
+      "description": "월급",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-10"
     }
   ]
 }

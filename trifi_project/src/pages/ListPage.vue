@@ -39,11 +39,11 @@
  <!-- 카테고리별 내역 드롭다운 -->
 <div class="dropdown position-relative" ref="categoryDropdownRef">
   <button
-    class="btn btn-outline-dark btn-sm"
-    @click="toggleCategoryDropdown"
-  >
-    📊 카테고리별 내역
-  </button>
+  class="btn btn-outline-dark btn-sm rounded-pill"
+  @click="toggleCategoryDropdown"
+>
+  📊 카테고리별 내역
+</button>
   <div
     v-if="isCategoryDropdownOpen"
     class="category-dropdown"
@@ -89,7 +89,7 @@
         class="bg-white rounded p-3 shadow-sm mb-4 d-flex justify-content-between align-items-center"
       >
         <div>
-          <strong>전체 내역 {{ monthlyRecords.length }}건</strong>
+          <strong>전체 내역 {{ monthlyRecordsWithFixed.length }}건</strong>
         </div>
         <div class="d-flex gap-3 align-items-center">
           <button
@@ -138,14 +138,22 @@
      
       
 <!-- 고정지출 내역 -->
-<div v-if="fixedRecords.length" class="mb-5">
-  <div class="fw-bold border-bottom pb-1 mb-2">📌 고정 수입/지출 내역</div>
+<div class="mb-2 d-flex justify-content-between align-items-center">
+  <div class="fw-bold">📌 고정 수입/지출 내역</div>
+  <button class="btn btn-sm btn-outline-secondary" @click="showFixed = !showFixed">
+    {{ showFixed ? '숨기기' : '보이기' }}
+  </button>
+</div>
+
+<!-- 실제 고정내역 리스트 -->
+<div v-if="showFixed && fixedRecords.length" class="mb-5">
   <div
     v-for="record in fixedRecords"
     :key="record.id"
     class="d-flex align-items-center justify-content-between py-3 px-3 border position-relative"
     style="background-color: ivory; border-radius: 12px; margin-bottom: 10px;"
   >
+   
     <span
       class="badge me-3 d-flex align-items-center gap-1"
       :class="getCategoryClass(record.category)"
@@ -180,7 +188,7 @@
   <div
     class="px-2 py-1 text-dark"
     style="cursor: pointer;"
-    @click.stop="editItem(event)"
+    @click.stop="editItem(record)"
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
@@ -277,6 +285,7 @@
 </template>
 
 <script setup>
+
 import AppLayout from '@/components/AppLayout.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
@@ -293,6 +302,7 @@ const goToCalender = () => {
   router.push(`/home`);
 };
 
+const showFixed = ref(true);
 const currentMonth = ref(new Date())
 const records = ref([])
 const fixedExpenses = ref([])
@@ -407,6 +417,9 @@ const monthlyRecords = computed(() => {
   });
 });
 
+const monthlyRecordsWithFixed = computed(() => {
+  return [...monthlyRecords.value, ...fixedRecords.value];
+});
 
 // 고정지출 내역
 const fixedRecords = computed(() => {
