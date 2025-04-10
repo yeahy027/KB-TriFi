@@ -17,16 +17,21 @@
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
-    },
-    {
-      "id": "675e",
-      "name": "김예영",
-      "nickname": "예영",
-      "email": "yeahy027@naver.com",
-      "password": "1234"
     }
   ],
-  "transactions": [],
+  "transactions": [
+    {
+      "id": "5e00",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 5000,
+      "category": "쇼핑",
+      "payment": "현금",
+      "description": "문구점",
+      "fixed": false
+    }
+  ],
   "fixedExpenses": [
     {
       "id": "c84d",
@@ -41,16 +46,52 @@
       "endDate": null
     },
     {
-      "id": "825d",
-      "userId": "aff4",
+      "id": "6a6b",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 1200000,
+      "payment": "카드",
+      "description": "용돈이지롱",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-05-08"
+    },
+    {
+      "id": "5c72",
+      "userId": "bd8d",
+      "type": "수입",
+      "category": "",
+      "amount": 213123,
+      "payment": "현금",
+      "description": "123",
+      "date": "2025-04-10",
+      "rotation": "매주",
+      "endDate": "2025-04-25"
+    },
+    {
+      "id": "853c",
+      "userId": "aff5",
       "type": "지출",
-      "category": "기타",
-      "amount": 5000,
-      "payment": "페이",
-      "description": "넷플릭스",
-      "date": "2025-04-14",
+      "category": "교통",
+      "amount": 15000,
+      "payment": "현금",
+      "description": "지하철",
+      "date": "2025-04-10",
       "rotation": "매월",
-      "endDate": "2025-06-18"
+      "endDate": "2025-04-17"
+    },
+    {
+      "id": "0940",
+      "userId": "aff5",
+      "type": "수입",
+      "category": "급여",
+      "amount": 3000000,
+      "payment": "현금",
+      "description": "월급",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-10"
     }
   ],
   "challengeAmount": [
