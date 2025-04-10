@@ -48,6 +48,17 @@
       "payment": "현금",
       "description": "문구점",
       "fixed": false
+    },
+    {
+      "id": "03d0",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -74,6 +85,30 @@
       "date": "2025-04-14",
       "rotation": "매월",
       "endDate": "2025-06-18"
+    },
+    {
+      "id": "853c",
+      "userId": "aff5",
+      "type": "지출",
+      "category": "교통",
+      "amount": 150000,
+      "payment": "현금",
+      "description": "지하철 정기권",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-23"
+    },
+    {
+      "id": "4dde",
+      "userId": "aff5",
+      "type": "수입",
+      "category": "",
+      "amount": 3000000,
+      "payment": "현금",
+      "description": "월급",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-10"
     }
   ]
 }

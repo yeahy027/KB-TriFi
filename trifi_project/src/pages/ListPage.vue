@@ -138,7 +138,7 @@
     v-for="record in fixedRecords"
     :key="record.id"
     class="d-flex align-items-center justify-content-between py-3 px-3 border position-relative"
-    style="background-color: #ffeef2; border-radius: 12px; margin-bottom: 10px;"
+    style="background-color: ivory; border-radius: 12px; margin-bottom: 10px;"
   >
     <span
       class="badge me-3 d-flex align-items-center gap-1"
@@ -153,8 +153,14 @@
         {{ formatDateWithDay(record.date) }} ~ {{ formatDateWithDay(record.endDate) }}
       </small>
     </div>
-    <div class="text-danger fw-bold">
-      {{ Number(record.amount).toLocaleString() }} 원
+    <div
+            :class="
+              record.type === '수입'
+                ? 'text-primary fw-bold'
+                : 'text-danger fw-bold'
+            "
+          >
+            {{ Number(record.amount).toLocaleString() }} 원
       <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
 
       <!-- 메뉴 영역 (⋯ 버튼 클릭 시 뜨는 팝업 메뉴) -->
