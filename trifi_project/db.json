@@ -1,69 +1,28 @@
 {
   "users": [
     {
-      "id": "2",
+      "id": "aff5",
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이",
+      "nickname": "홍순이12",
       "country": "Korea",
       "language": "Korean"
     },
     {
-      "id": "5da5",
+      "id": "aff4",
       "name": "김네비",
       "nickname": "네비게이션",
       "email": "test3@example.com",
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
-    },
-    {
-      "id": "aff3",
-      "name": "점다운",
-      "nickname": "다우니",
-      "email": "test4@example.com",
-      "password": "test4",
-      "country": "Korea",
-      "language": "Korean"
-    },
-    {
-      "id": "801d",
-      "name": "점다운",
-      "nickname": "다우니",
-      "email": "test4@example.com",
-      "password": "test4",
-      "country": "Korea",
-      "language": "Korean"
-    },
-    {
-      "id": "03b8",
-      "name": "송지호",
-      "nickname": "송송",
-      "email": "test5@example.com",
-      "password": "test5",
-      "country": "Korea",
-      "language": "Korean"
-    },
-    {
-      "id": "7a3b",
-      "name": "머머",
-      "nickname": "머니요hi",
-      "email": "money@example.com",
-      "password": "1234"
-    },
-    {
-      "id": "4174",
-      "name": "강",
-      "nickname": "서현",
-      "email": "seohyun0916@naver.com",
-      "password": "1234"
     }
   ],
   "transactions": [
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "수입",
       "date": "2025-04-03",
       "amount": 15000,
@@ -74,7 +33,7 @@
     },
     {
       "id": "2",
-      "userId": 1,
+      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
@@ -84,138 +43,29 @@
       "fixed": false
     },
     {
-      "id": "4",
-      "userId": 1,
+      "id": "3",
+      "userId": "aff5",
       "type": "지출",
-      "date": "2025-04-10",
+      "date": "2025-04-03",
       "amount": 15000,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "문구점",
-      "fixed": false
-    },
-    {
-      "id": "5",
-      "userId": 1,
-      "type": "지출",
-      "date": "2025-04-11",
-      "amount": 1000,
-      "category": "교통",
+      "category": "급여",
       "payment": "현금",
-      "description": "ㅁㅇㅁㅇ",
-      "fixed": false
-    },
-    {
-      "id": "6",
-      "userId": 1,
-      "type": "지출",
-      "date": "2025-04-12",
-      "amount": 100070,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "에이블리",
+      "description": "알바비",
       "fixed": false
     }
   ],
   "fixedExpenses": [
     {
-      "id": "1",
-      "userId": 1,
-      "category": "주거/통신",
-      "amount": 50000,
-      "payment": "계좌이체(은행)",
-      "description": "인터넷 요금",
-      "date": "2025-04-05",
-      "rotatiton": "day/week/month/year",
-      "endDate": "date/무기한(1년)"
-    },
-    {
-      "id": "a229",
-      "userId": "",
+      "id": "e318",
+      "userId": "aff4",
+      "type": "수입",
       "category": "",
-      "amount": 122222,
-      "payment": "카드",
-      "description": "캐시백",
-      "date": "2025-04-09",
-      "rotation": "매일",
-      "endDate": "2025-04-16"
-    },
-    {
-      "id": "2484",
-      "userId": "",
-      "category": "",
-      "amount": 100000,
-      "payment": "카드",
-      "description": "캐시백",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-04-09"
-    },
-    {
-      "id": "6053",
-      "userId": "",
-      "category": "",
-      "amount": 1200,
-      "payment": "현금",
-      "description": "캐시백",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-04-10"
-    },
-    {
-      "id": "e4ef",
-      "userId": "",
-      "category": "",
-      "amount": 0,
-      "payment": "현금",
-      "description": "12212",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-05-10"
-    },
-    {
-      "id": "6453",
-      "userId": "",
-      "category": "",
-      "amount": 12200,
-      "payment": "카드",
-      "description": "캐시백",
-      "date": "2025-04-10",
+      "amount": 55555,
+      "payment": "페이",
+      "description": "test",
+      "date": "2025-04-16",
       "rotation": "매주",
-      "endDate": "2025-04-30"
-    },
-    {
-      "id": "bf13",
-      "userId": "",
-      "category": "",
-      "amount": 12000,
-      "payment": "카드",
-      "description": "알바",
-      "date": "2025-04-09",
-      "rotation": "매주",
-      "endDate": "2025-04-30"
-    },
-    {
-      "id": "28f1",
-      "userId": "d6a3",
-      "category": "",
-      "amount": 1222,
-      "payment": "현금",
-      "description": "알바",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-06-09"
-    },
-    {
-      "id": "cfae",
-      "userId": "",
-      "category": "",
-      "amount": 12222,
-      "payment": "현금",
-      "description": "알바+용돈",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-05-09"
+      "endDate": null
     }
   ]
 }

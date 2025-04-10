@@ -61,7 +61,7 @@
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
               <option value="카드">💳 카드</option>
-              <option value="페이">💰페이(카카오,네이버 등)</option>
+              <option value="페이">💰 페이(카카오,네이버 등)</option>
             </select>
 
             <input type="text" v-model="form.description" placeholder="내용" />
@@ -74,7 +74,7 @@
 
             <div v-if="form.fixed">
               <select v-model="form.period" class="category-select">
-                <option disabled value="">주기를 선택하세요</option>
+                <option disabled value="" hidden>📌 주기를 선택하세요</option>
                 <option value="매일">📆 매일</option>
                 <option value="매주">🗓 매주</option>
                 <option value="매월">📅 매월</option>
@@ -130,18 +130,25 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
+import { useRoute } from 'vue-router';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'update']);
 const store = useCounterStore();
 /* entry.userId = useUserStore.user.id; */
 const userStore = useUserStore();
+userStore.checkLocalStorage();
 const activeTab = ref('수입');
 
 const today = new Date().toISOString().split('T')[0];
+
+const props = defineProps({
+  checked: Boolean,
+  onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
+});
 
 const initialForm = () => ({
   date: today,
@@ -151,16 +158,38 @@ const initialForm = () => ({
   description: '',
   fixed: false,
   from: '',
+  period: '',
   /*   to: '', */
   /* memo: '', */
 });
 
 const form = ref(initialForm());
+// 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
+const route = useRoute();
+
+// const props = defineProps({
+//   onSubmitted: Function, // ✅ 부모에서 받아온 fetchEvents 함수
+// });
 
 // 탭 변경 시 form 초기화
-watch(activeTab, () => {
-  Object.assign(form.value, initialForm());
+// watch(activeTab, () => {
+//   Object.assign(form.value, initialForm());
+
+//   // 고정 여부 쿼리 반영
+//   if (route.query.fixed === 'true') {
+//     form.value.fixed = true;
+//   }
+// });
+
+onMounted(() => {
+  form.value.fixed = props.checked;
+
+  // 탭도 URL 쿼리로 제어하고 싶다면
+  if (route.query.fixed === 'true') {
+    activeTab.value = '지출'; // watch가 작동하면서 체크됨
+  }
 });
+// 여기까지
 
 const formattedAmount = computed({
   get() {
@@ -203,7 +232,7 @@ const typeMap = {
 
 const submitForm = async () => {
   const entry = {
-    type: typeMap[activeTab.value],
+    type: activeTab.value,
     date: form.value.date,
   };
 
@@ -228,6 +257,7 @@ const submitForm = async () => {
       // ✅ fixedExpenses용 구조로 따로 구성
       const fixedEntry = {
         userId: entry.userId,
+        type: entry.type,
         category: entry.category,
         amount: entry.amount,
         payment: entry.payment,
@@ -243,10 +273,12 @@ const submitForm = async () => {
           fixedEntry
         );
         console.log('✅ 고정 항목 등록 완료:', res.data);
+        props.onSubmitted?.();
       } catch (err) {
         console.error('❌ 고정 항목 전송 실패:', err);
       }
 
+      emit('update');
       emit('close');
       return;
     }
@@ -257,6 +289,7 @@ const submitForm = async () => {
   try {
     const res = await axios.post('http://localhost:3000/transactions', entry);
     console.log('서버 응답:', res.data);
+    props.onSubmitted?.();
   } catch (err) {
     console.error('전송 실패:', err);
   }
@@ -406,6 +439,9 @@ const submitForm = async () => {
 
   /* ✅ 글꼴 크기 조정도 가능 */
   font-size: 0.95rem;
+}
+.category-select option[disabled] {
+  color: #999;
 }
 </style>
 

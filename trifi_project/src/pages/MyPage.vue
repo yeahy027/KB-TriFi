@@ -38,6 +38,9 @@
           <div class="section-title">
             <h3>Cards</h3>
           </div>
+          <div class="comment">
+            <p>가계부와 연동할 카드 연결</p>
+          </div>
           <div class="card-box">
             <button class="slide-btn left" @click="prevCard"><</button>
 
@@ -45,8 +48,11 @@
             <div class="create-card">
               <!-- 캡처처럼 가운데 + 원형 영역과 안내문구 -->
               <div class="card-add-circle">
-                <div class="plus-sign" @click="isModalOpen = true">+</div>
-                <RegisterCard v-if="isModalOpen" @close="isModalOpen = false" />
+                <div class="plus-sign" @click="isCardFormOpen = true">+</div>
+                <RegisterCard
+                  v-if="isCardFormOpen"
+                  @close="isCardFormOpen = false"
+                />
               </div>
               <p class="instruction">위의 + 버튼을 눌러 카드를 등록해 주세요</p>
             </div>
@@ -56,33 +62,36 @@
           </div>
         </div>
 
+        <!-- 고정지출 내역 -->
         <div class="expenses">
           <div class="section-title">
-            <h3>고정지출 내역</h3>
+            <h3>고정 거래 내역</h3>
           </div>
-          <ul class="expense-list">
-            <RouterLink to="/registeredit">
-              <input
-                class="plus-fixlist"
-                placeholder="고정지출 추가하기"
-              />
-            </RouterLink>
-          </ul>
-        </div>
-      </div>
-    </div>
 
-    <!-- 실제 카드 상세정보를 입력할 폼/모달(간단 예시) -->
-    <div v-if="isCardFormOpen" class="card-detail-modal">
-      <div class="card-detail-content">
-        <h2>카드 정보 입력</h2>
-        <!-- 여기에 세부내용 폼(카드 이름, 번호 등) 넣으시면 됩니다. -->
-        <form @submit.prevent="submitCardInfo">
-          <!-- 예: <input type="text" placeholder="카드명" v-model="newCardName" /> -->
-          <!-- 필요한 내용은 직접 채우시면 됩니다 -->
-          <button type="submit">저장</button>
-        </form>
-        <button class="close-btn" @click="closeCardForm">닫기</button>
+          <div class="expense-buttons">
+            <button
+              class="expense-btn"
+              v-for="item in fixedExpenses"
+              :key="item.id"
+            >
+              {{ item.description }} &nbsp;&nbsp;
+              <!-- 수입일 경우 +, 지출일 경우 - 표시 -->
+              {{ item.type === '수입' ? '+' : '-' }}
+              {{ item.amount }}
+            </button>
+          </div>
+
+          <!-- 모달로 고정지출 추가 -->
+          <button class="plus-fixlist" @click="isModalOpen = true">
+            고정 거래 내역 추가하기
+          </button>
+          <RegisterEdit
+            v-if="isModalOpen"
+            @close="isModalOpen = false"
+            @update="fetchFixedExpenses"
+            :checked="true"
+          />
+        </div>
       </div>
     </div>
   </AppLayout>
@@ -90,25 +99,37 @@
 
 <script setup>
 import AppLayout from '@/components/AppLayout.vue';
+import RegisterEdit from '@/pages/Register_edit.vue';
+import RegisterCard from './RegisterCard.vue';
 import { useUserStore } from '@/stores/userStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import Swal from 'sweetalert2';
-import RegisterCard from './RegisterCard.vue';
+import axios from 'axios';
 
 const userStore = useUserStore(); // Pinia store 가져오기
 const user = computed(() => userStore.user); // 최신 user 데이터
 const router = useRouter();
 const isModalOpen = ref(false);
-
-// 모달 열림/닫힘 상태
 const isCardFormOpen = ref(false);
 
 // 카드 상세정보 입력 예시 데이터
 const newCardName = ref(''); // 필요하다면 v-model로 사용
+const fixedExpenses = ref([]);
+
+onMounted(async () => {
+  try {
+    const res = await axios.get('/api/fixedExpenses'); // db.json에서 고정지출 가져오기
+    fixedExpenses.value = res.data.filter(
+      (item) => item.userId === user.value.id
+    );
+  } catch (err) {
+    console.error('고정지출 불러오기 실패:', err);
+  }
+});
 
 onMounted(() => {
+  fetchFixedExpenses();
   userStore.checkLocalStorage();
 });
 
@@ -116,6 +137,36 @@ const handleLogout = () => {
   userStore.logoutUser();
   router.push('/');
 };
+
+// const handleDeleteAccount = async () => {
+//   const result = await Swal.fire({
+//     title: '회원 탈퇴 여부 확인',
+//     text: '정말로 탈퇴하시겠습니까?',
+//     icon: 'warning',
+//     showCancelButton: true,
+//     confirmButtonColor: '#d33',
+//     cancelButtonColor: '#3085d6',
+//     confirmButtonText: '예',
+//     cancelButtonText: '아니오',
+//   });
+
+//   if (result.isConfirmed) {
+
+//     userStore.deleteUser(() => {
+//       Swal.fire({
+//         title: '회원 탈퇴',
+//         text: '회원 탈퇴가 완료되었습니다.',
+//         icon: 'success',
+//         confirmButtonText: '확인',
+//         customClass: {
+//           title: 'fw-bold',
+//           confirmButton: 'btn btn-success',
+//         },
+//       });
+//       router.push('/');
+//     });
+//   }
+// };
 
 const handleDeleteAccount = async () => {
   const result = await Swal.fire({
@@ -130,19 +181,49 @@ const handleDeleteAccount = async () => {
   });
 
   if (result.isConfirmed) {
-    userStore.deleteUser(() => {
-      Swal.fire({
-        title: '회원 탈퇴',
-        text: '회원 탈퇴가 완료되었습니다.',
-        icon: 'success',
-        confirmButtonText: '확인',
-        customClass: {
-          title: 'fw-bold',
-          confirmButton: 'btn btn-success',
-        },
+    try {
+      // 1. userId를 변수로 저장
+      const userIdToDelete = user.value.id;
+
+      // 2. 먼저 fixedExpenses에서 해당 유저의 데이터 모두 가져오기
+      const res = await axios.get(
+        `/api/fixedExpenses?userId=${userIdToDelete}`
+      );
+
+      // 3. 해당 항목들을 하나씩 삭제 요청 보내기
+      await Promise.all(
+        res.data.map((item) => axios.delete(`/api/fixedExpenses/${item.id}`))
+      );
+
+      // 4. userStore에서 유저 삭제 처리
+      userStore.deleteUser(() => {
+        Swal.fire({
+          title: '회원 탈퇴',
+          text: '회원 탈퇴가 완료되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+          customClass: {
+            title: 'fw-bold',
+            confirmButton: 'btn btn-success',
+          },
+        });
+        router.push('/');
       });
-      router.push('/');
-    });
+    } catch (err) {
+      console.error('회원 탈퇴 중 에러 발생:', err);
+      Swal.fire('오류', '회원 탈퇴 중 문제가 발생했습니다.', 'error');
+    }
+  }
+};
+
+const fetchFixedExpenses = async () => {
+  try {
+    const res = await axios.get('/api/fixedExpenses');
+    fixedExpenses.value = res.data.filter(
+      (item) => item.userId === user.value.id
+    );
+  } catch (err) {
+    console.error('고정지출 다시 불러오기 실패:', err);
   }
 };
 
@@ -172,6 +253,8 @@ const prevCard = () => {
 const nextCard = () => {
   console.log('다음 카드');
 };
+
+// gotoRegisterCard는 어디에서 필요한건가요?
 const goToRegisterCard = () => {
   router.push('/registercard'); // RegisterCard.vue 경로로 이동
 };
@@ -240,6 +323,7 @@ const goToRegisterCard = () => {
 .content {
   display: flex;
   gap: 32px;
+  padding-top: 50px;
 }
 
 .cards,
@@ -262,12 +346,17 @@ const goToRegisterCard = () => {
   margin: 0;
 }
 
+.comment p {
+  margin-left: 10px;
+  opacity: 0.6;
+}
+
 .plus-fixlist {
   border: none;
-  border-radius: 10%;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
-  width: 300px;
+  width: 500px;
   height: 50px;
   padding-left: 20px;
 }
@@ -315,7 +404,7 @@ const goToRegisterCard = () => {
   border-radius: 16px;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
@@ -327,7 +416,7 @@ const goToRegisterCard = () => {
   border: 1px solid #ccc;
   background-color: #fff;
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   margin-bottom: 10px;
   cursor: pointer;
@@ -335,11 +424,11 @@ const goToRegisterCard = () => {
 
 .plus-sign {
   display: flex;
-  align-content: center;
-  justify-items: center;
+  align-items: center;
+  justify-content: center;
   font-size: 50px;
   color: #999;
-  margin-right: 4px;
+  margin: 0;
 }
 
 .add-text {
@@ -381,5 +470,32 @@ const goToRegisterCard = () => {
   border-radius: 6px;
   padding: 8px 12px;
   cursor: pointer;
+}
+
+/* 수정 */
+.expense-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+}
+
+.expense-btn {
+  /* background-color: rgba(244, 197, 66, 0.5); */
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  padding-left: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  width: 500px;
+}
+
+.expense-btn:hover {
+  background-color: #f4c542;
 }
 </style>
