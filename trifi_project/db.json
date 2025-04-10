@@ -19,45 +19,11 @@
       "language": "Korean"
     },
     {
-<<<<<<< HEAD
-      "id": "2",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "3",
-      "userId": "aff5",
-      "type": "지출",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "급여",
-      "payment": "현금",
-      "description": "알바비",
-      "fixed": false
-    },
-    {
-      "id": "f021",
-      "type": "지출",
-      "date": "2025-04-10",
-      "userId": "675e",
-      "amount": 15000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "맥도날드",
-      "fixed": false
-=======
       "id": "675e",
       "name": "김예영",
       "nickname": "예영",
       "email": "yeahy027@naver.com",
       "password": "yeahy*027"
->>>>>>> 7d841813b6fc44f1de2650afeda14dfa0f0195c0
     }
   ],
   "transactions": [],
@@ -143,33 +109,6 @@
       "description": "1",
       "date": "2025-04-10",
       "rotation": "매주",
-<<<<<<< HEAD
-      "endDate": null
-    },
-    {
-      "id": "d336",
-      "userId": "675e",
-      "type": "지출",
-      "category": "식비",
-      "amount": 11111111,
-      "payment": "현금",
-      "description": "마시쩡",
-      "date": "2025-04-10",
-      "rotation": "매일",
-      "endDate": "2025-04-23"
-    },
-    {
-      "id": "f28b",
-      "userId": "aff5",
-      "type": "지출",
-      "category": "교통",
-      "amount": 150000,
-      "payment": "현금",
-      "description": "지하철",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-04-22"
-=======
       "endDate": "2025-05-09"
     },
     {
@@ -195,7 +134,6 @@
       "date": "2025-04-10",
       "rotation": "매주",
       "endDate": "2025-04-17"
->>>>>>> 7d841813b6fc44f1de2650afeda14dfa0f0195c0
     }
   ]
 }

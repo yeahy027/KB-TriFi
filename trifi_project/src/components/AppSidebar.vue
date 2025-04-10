@@ -11,10 +11,6 @@
         <span style="color: #e44027">Keeper</span>
       </h5>
     </div>
-<<<<<<< HEAD
-    
-=======
->>>>>>> 7d841813b6fc44f1de2650afeda14dfa0f0195c0
     <ul class="nav flex-column gap-2">
       <li v-for="item in menuItems" :key="item.to">
         <router-link
