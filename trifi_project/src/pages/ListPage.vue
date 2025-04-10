@@ -50,9 +50,9 @@
             class="btn btn-sm"
             :class="[
               'btn-outline-danger',
-              filterType === 'expense' ? 'active-btn' : '',
+              filterType === '지출' ? 'active-btn' : '',
             ]"
-            @click="filterType = 'expense'"
+            @click="filterType = '지출'"
           >
             💸 지출 {{ totalExpense.toLocaleString() }}원
           </button>
@@ -60,9 +60,9 @@
             class="btn btn-sm"
             :class="[
               'btn-outline-primary',
-              filterType === 'income' ? 'active-btn' : '',
+              filterType === '수입' ? 'active-btn' : '',
             ]"
-            @click="filterType = 'income'"
+            @click="filterType = '수입'"
           >
             💰 수입 {{ totalIncome.toLocaleString() }}원
           </button>
@@ -70,9 +70,9 @@
             class="btn btn-sm"
             :class="[
               'btn-outline-success',
-              filterType === 'transfer' ? 'active-btn' : '',
+              filterType === '이체' ? 'active-btn' : '',
             ]"
-            @click="filterType = 'transfer'"
+            @click="filterType = '이체'"
           >
             💰 이체 {{ totalTransfer.toLocaleString() }}원
           </button>
@@ -115,7 +115,7 @@
           </div>
           <div
             :class="
-              record.type === 'income'
+              record.type === '수입'
                 ? 'text-primary fw-bold'
                 : 'text-danger fw-bold'
             "
@@ -136,7 +136,15 @@
         </div>
       </div>
       <button class="add-button" @click="isModalOpen = true">+</button>
-      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+    <button class="calc-button" @click="showCalculator = true">
+      <i class="bi bi-calculator"></i>
+    </button>
+
+    <!-- 계산기 컴포넌트 -->
+    <Calculator 
+      :visible="showCalculator"
+      @close="showCalculator = false"></Calculator>
+    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
   </AppLayout>
 </template>
@@ -149,6 +157,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useRouter } from 'vue-router';
 import RegisterEdit from '@/pages/Register_edit.vue';
+import Calculator from './Calculator.vue';
 
 const router = useRouter();
 const isModalOpen = ref(false);
@@ -161,6 +170,7 @@ const records = ref([])
 const filterType = ref('')
 const selectedDate = ref('')
 const dateInput = ref(null);
+const showCalculator = ref(false);
 
 const focusDateInput = () => {
   dateInput.value?.focus()
@@ -294,17 +304,17 @@ const categoryIcons = {
 // 총 수입, 지출, 이체 내역 계산산
 const totalIncome = computed(() =>
   monthlyRecords.value
-    .filter((r) => r.type === 'income')
+    .filter((r) => r.type === '수입')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
 const totalExpense = computed(() =>
   monthlyRecords.value
-    .filter((r) => r.type === 'expense')
+    .filter((r) => r.type === '지출')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
 const totalTransfer = computed(() =>
   monthlyRecords.value
-    .filter((r) => r.type === 'transfer')
+    .filter((r) => r.type === '이체')
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
 
@@ -487,5 +497,22 @@ const formattedYearMonth = computed(() => {
 
 .dropdown-item:hover {
   background-color: #f1f3f5;
+}
+.calc-button {
+  position: fixed;
+  right: 30px;
+  bottom: 100px; /* +버튼 위쪽으로 배치해봤습니다. 원하는 대로 조절 */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px; /* 아이콘 크기 */
+  color: black;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+.calc-button:hover {
+  background-color: #fdb3b3;
 }
 </style>
