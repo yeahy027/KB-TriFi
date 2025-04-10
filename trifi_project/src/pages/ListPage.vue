@@ -251,7 +251,7 @@ const resetToThisMonth = () => {
   selectedDate.value = ''
 }
 
-// 요일 변환환
+// 요일 변환
 const formatDateWithDay = (dateStr) => {
   const date = new Date(dateStr);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -263,10 +263,25 @@ const formatDateWithDay = (dateStr) => {
 // fetch
 let fetchInterval = null
 
+
+// 유저정보 가져오기
+const user = JSON.parse(localStorage.getItem("user"));
+
+
+
 const fetchRecords = async () => {
-  const res = await axios.get('http://localhost:3000/transactions');
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+  if (!userId) return;
+
+  const res = await axios.get('http://localhost:3000/transactions', {
+    params: { userId }
+  });
   records.value = res.data;
 };
+
+
+
 
 onMounted(() => {
   fetchRecords();
