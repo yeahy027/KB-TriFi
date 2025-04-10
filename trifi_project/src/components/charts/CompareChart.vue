@@ -1,6 +1,9 @@
 <template>
-    <div v-if="hasValidData">
+    <div v-if="hasValidData && !isEmptyData">
       <canvas ref="chartRef"></canvas>
+    </div>
+    <div v-else class="empty-box">
+      <p class="text-muted">아직 등록된 내역이 없습니다 😢</p>
     </div>
   </template>
   
@@ -9,10 +12,8 @@
   import { Chart, registerables } from 'chart.js'
   import { registerChart, unregisterChart } from '@/utils/chartManager'
   
-  // Chart.js 전역 등록
   Chart.register(...registerables)
   
-  // props 정의
   const props = defineProps({
     data: {
       type: Object,
@@ -20,11 +21,9 @@
     }
   })
   
-  // chart ref 및 인스턴스
   const chartRef = ref(null)
   let chartInstance = null
   
-  // 데이터가 유효한지 검사
   const hasValidData = computed(() => {
     return (
       props.data &&
@@ -33,7 +32,13 @@
     )
   })
   
-  // chart 생성 함수
+  // ✅ 모든 data 값이 0인지 체크
+  const isEmptyData = computed(() => {
+    return props.data.datasets.every(ds =>
+      Array.isArray(ds.data) && ds.data.every(value => value === 0)
+    )
+  })
+  
   const renderChart = () => {
     if (!hasValidData.value || !chartRef.value) return
   
@@ -68,15 +73,13 @@
     registerChart(chartInstance)
   }
   
-  // ❗️ 데이터가 변할 때마다 차트를 다시 그리는 반응형 watchEffect
   watchEffect(async () => {
-    if (hasValidData.value) {
-      await nextTick()  // DOM이 준비된 후 실행 보장
+    if (hasValidData.value && !isEmptyData.value) {
+      await nextTick()
       renderChart()
     }
   })
   
-  // 컴포넌트가 사라질 때 정리
   onBeforeUnmount(() => {
     if (chartInstance) {
       unregisterChart(chartInstance)
@@ -88,6 +91,18 @@
   <style scoped>
   canvas {
     max-width: 95%;
+  }
+  
+  .empty-box {
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ccc;
+    border-radius: 0.5rem;
+    background-color: #f9f9f9;
+    color: #888;
+    font-weight: 500;
   }
   </style>
   
