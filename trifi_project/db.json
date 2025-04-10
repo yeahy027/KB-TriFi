@@ -5,7 +5,7 @@
       "email": "test2@example.com",
       "password": "12345678",
       "name": "홍길순",
-      "nickname": "홍순이",
+      "nickname": "홍순이12",
       "country": "Korea",
       "language": "Korean"
     },
@@ -17,13 +17,6 @@
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
-    },
-    {
-      "id": "675e",
-      "name": "김예영",
-      "nickname": "예영",
-      "email": "yeahy027@naver.com",
-      "password": "yeahy*027"
     }
   ],
   "transactions": [
@@ -74,8 +67,9 @@
   ],
   "fixedExpenses": [
     {
-      "id": "53c2",
-      "userId": "675e",
+      "id": "e318",
+      "userId": "aff4",
+      "type": "수입",
       "category": "",
       "amount": 55555,
       "payment": "페이",
