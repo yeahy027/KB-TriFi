@@ -247,6 +247,7 @@ const submitForm = async () => {
       // ✅ fixedExpenses용 구조로 따로 구성
       const fixedEntry = {
         userId: entry.userId,
+        type: entry.type,
         category: entry.category,
         amount: entry.amount,
         payment: entry.payment,

@@ -128,6 +128,41 @@
       "date": "2025-04-10",
       "rotation": "매월",
       "endDate": "2025-06-11"
+    },
+    {
+      "id": "6a82",
+      "userId": "4174",
+      "category": "",
+      "amount": 1150000,
+      "payment": "카드",
+      "description": "어쩌라고",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-06-10"
+    },
+    {
+      "id": "12b8",
+      "userId": "4174",
+      "type": "수입",
+      "category": "",
+      "amount": 15000000,
+      "payment": "카드",
+      "description": "월급 ",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-07-10"
+    },
+    {
+      "id": "acdd",
+      "userId": "4174",
+      "type": "수입",
+      "category": "",
+      "amount": 1500000,
+      "payment": "카드",
+      "description": "월급 알바",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-07-10"
     }
   ]
 }
