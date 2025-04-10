@@ -80,7 +80,6 @@
             고정지출 추가하기
           </button>
           <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
-
         </div>
       </div>
     </div>
@@ -347,11 +346,11 @@ const goToRegisterCard = () => {
 
 .plus-sign {
   display: flex;
-  align-content: center;
-  justify-items: center;
+  align-items: center;
+  justify-content: center;
   font-size: 50px;
   color: #999;
-  margin-right: 4px;
+  margin: 0;
 }
 
 .add-text {
