@@ -71,7 +71,7 @@
               v-for="item in fixedExpenses"
               :key="item.id"
             >
-              {{ item.description }} &nbsp; - &nbsp; {{ item.date }}
+              {{ item.description }} &nbsp; - &nbsp; {{ item.amount }}
             </button>
           </div>
 
