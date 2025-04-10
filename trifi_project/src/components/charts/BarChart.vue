@@ -2,7 +2,7 @@
   <div class="chart-wrapper">
     <div v-if="data.length === 0" class="empty-chart">
       <div class="empty-box">
-        등록 내역이 아직 없어요! 지금 등록해보세요 ✨🥸
+        아직 등록된 내역이 없습니다 😢
       </div>
     </div>
     <canvas v-else ref="chartRef"></canvas>
