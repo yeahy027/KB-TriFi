@@ -26,7 +26,30 @@
       "password": "yeahy*027"
     }
   ],
-  "transactions": [],
+  "transactions": [
+    {
+      "id": "ce8b",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 5000000,
+      "category": "",
+      "payment": "현금",
+      "description": "국민은행",
+      "fixed": false
+    },
+    {
+      "id": "5e00",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 5000,
+      "category": "쇼핑",
+      "payment": "현금",
+      "description": "문구점",
+      "fixed": false
+    }
+  ],
   "fixedExpenses": [
     {
       "id": "2484",
@@ -134,6 +157,18 @@
       "date": "2025-04-10",
       "rotation": "매주",
       "endDate": "2025-04-17"
+    },
+    {
+      "id": "3101",
+      "userId": "aff5",
+      "type": "지출",
+      "category": "기타",
+      "amount": 50000,
+      "payment": "카드",
+      "description": "영화",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-10"
     }
   ]
 }
