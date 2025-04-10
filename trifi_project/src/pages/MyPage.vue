@@ -64,6 +64,7 @@
           <div class="section-title">
             <h3>고정지출 내역</h3>
           </div>
+
           <div class="expense-buttons">
             <button
               class="expense-btn"
@@ -79,6 +80,7 @@
             고정지출 추가하기
           </button>
           <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+
         </div>
       </div>
     </div>
