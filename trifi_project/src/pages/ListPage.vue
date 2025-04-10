@@ -215,6 +215,7 @@ const goToCalender = () => {
 
 const currentMonth = ref(new Date())
 const records = ref([])
+const fixedExpenses = ref([])
 const filterType = ref('')
 const selectedDate = ref('')
 const dateInput = ref(null);
@@ -251,7 +252,7 @@ const resetToThisMonth = () => {
   selectedDate.value = ''
 }
 
-// 요일 변환환
+// 요일 변환
 const formatDateWithDay = (dateStr) => {
   const date = new Date(dateStr);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -263,16 +264,45 @@ const formatDateWithDay = (dateStr) => {
 // fetch
 let fetchInterval = null
 
+
+// 유저정보 가져오기
+
 const fetchRecords = async () => {
-  const res = await axios.get('http://localhost:3000/transactions');
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+  if (!userId) return;
+
+  const res = await axios.get('http://localhost:3000/transactions', {
+    params: { userId }
+  });
   records.value = res.data;
 };
 
+
+const fetchFixedExpenses = async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+  if (!userId) return;
+
+  const res = await axios.get('http://localhost:3000/fixedExpenses', {
+    params: { userId }
+  });
+  fixedExpenses.value = res.data; // fixedExpenses는 ref로 선언해줘야 함
+};
+
+
+
+
+
 onMounted(() => {
   fetchRecords();
-  fetchInterval = setInterval(fetchRecords, 5000);
+  fetchFixedExpenses();
+  fetchInterval = setInterval(() => {
+    fetchRecords();
+    fetchFixedExpenses();
+  }, 5000);
 
-  document.addEventListener('click',handleClickOutside)
+  document.addEventListener('click', handleClickOutside);
 });
 
 onUnmounted(() => {

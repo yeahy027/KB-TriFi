@@ -74,7 +74,7 @@
 
             <div v-if="form.fixed">
               <select v-model="form.period" class="category-select">
-                <option disabled value="">주기를 선택하세요</option>
+                <option disabled value="" hidden>📌 주기를 선택하세요</option>
                 <option value="매일">📆 매일</option>
                 <option value="매주">🗓 매주</option>
                 <option value="매월">📅 매월</option>
@@ -153,6 +153,7 @@ const initialForm = () => ({
   description: '',
   fixed: false,
   from: '',
+  period: '',
   /*   to: '', */
   /* memo: '', */
 });
@@ -246,6 +247,7 @@ const submitForm = async () => {
       // ✅ fixedExpenses용 구조로 따로 구성
       const fixedEntry = {
         userId: entry.userId,
+        type: entry.type,
         category: entry.category,
         amount: entry.amount,
         payment: entry.payment,
@@ -424,6 +426,9 @@ const submitForm = async () => {
 
   /* ✅ 글꼴 크기 조정도 가능 */
   font-size: 0.95rem;
+}
+.category-select option[disabled] {
+  color: #999;
 }
 </style>
 
