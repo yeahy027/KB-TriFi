@@ -60,7 +60,6 @@ export function getPieChartData(transactions, fixedExpenses = []) {
 
   const nowMonth = dayjs().format('YYYY-MM')
 
-  // 고정 지출 데이터만 반영
   getFixedExpensesOnlySpending(fixedExpenses).forEach(exp => {
     const monthlyAmount = calculateMonthlyFixedAmount(exp, nowMonth)
     if (monthlyAmount > 0) {
@@ -114,7 +113,8 @@ export function getCompareChartData(transactions, fixedExpenses = [], userId) {
 
         if (isValid) {
           const week = Math.floor((start.date() - 1) / 7)
-          weekSums[week] += calculateMonthlyFixedAmount(exp, month) / 5
+          const amount = calculateMonthlyFixedAmount(exp, month)
+          weekSums[week] += amount
         }
       })
 

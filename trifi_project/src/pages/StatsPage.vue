@@ -73,6 +73,7 @@ onMounted(async () => {
   try {
     const response = await axios.get(`/api/transactions?userId=${userId}`)
     transactions.value = response.data
+    console.log("transactions.value : ", transactions.value)
 
     const response2 = await axios.get(`/api/fixedExpenses?userId=${userId}`)
     fixedExpenses.value = response2.data
