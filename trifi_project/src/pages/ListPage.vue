@@ -294,7 +294,7 @@ import { saveAs } from 'file-saver';
 import { useRouter } from 'vue-router';
 import RegisterEdit from '@/pages/Register_edit.vue';
 import Calculator from './Calculator.vue';
-import RegisterReEdit from './RegisterReEdit.vue';
+import RegisterReEdit from './RegisterReedit.vue';
 
 const router = useRouter();
 const isModalOpen = ref(false);

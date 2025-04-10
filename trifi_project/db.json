@@ -47,7 +47,7 @@
       "type": "이체",
       "date": "2025-04-10",
       "userId": "aff5",
-      "amount": 0,
+      "amount": 10000,
       "category": "기타",
       "payment": "",
       "description": "생일선물",
@@ -63,6 +63,18 @@
       "payment": "",
       "description": "미용..",
       "fixed": false
+    },
+    {
+      "id": "213a",
+      "type": "이체",
+      "date": "2025-04-10",
+      "userId": "aff4",
+      "amount": 10000,
+      "category": "식비",
+      "payment": "",
+      "description": "햄버거",
+      "fixed": false,
+      "from": 100000
     }
   ],
   "fixedExpenses": [
@@ -103,19 +115,7 @@
       "endDate": "2025-04-25"
     },
     {
-      "id": "825d",
-      "userId": "aff4",
-      "type": "지출",
-      "category": "기타",
-      "amount": 5000,
-      "payment": "페이",
-      "description": "넷플릭스",
-      "date": "2025-04-14",
-      "rotation": "매월",
-      "endDate": "2025-06-18"
-    },
-    {
-      "id": "4dab",
+      "id": "853c",
       "userId": "aff5",
       "type": "지출",
       "category": "교통",
