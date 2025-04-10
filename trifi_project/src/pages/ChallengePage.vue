@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <h1>Challenge</h1>
+    <!-- <h1>Challenge</h1> -->
     <!-- 그리드 레이아웃 감싸는 컨테이너 -->
     <div class="challenge-grid">
       <!-- (1) 이번달 지출 목표 카드 -->

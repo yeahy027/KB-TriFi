@@ -31,7 +31,7 @@ const pageTitleMap = {
   '/home': '캘린더',
   '/list': '내역',
   '/stat': '통계 분석 페이지',
-  '/goal': '챌린지',
+  '/challenge': '챌린지 페이지',
   '/mypage': '마이페이지',
 };
 const pageTitle = ref(pageTitleMap[route.path] || '페이지');
