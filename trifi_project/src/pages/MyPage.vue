@@ -159,13 +159,23 @@ const handleDeleteAccount = async () => {
       const userIdToDelete = user.value.id;
 
       // 2. 먼저 fixedExpenses에서 해당 유저의 데이터 모두 가져오기
-      const res = await axios.get(
+      const res_f = await axios.get(
         `/api/fixedExpenses?userId=${userIdToDelete}`
       );
 
       // 3. 해당 항목들을 하나씩 삭제 요청 보내기
       await Promise.all(
-        res.data.map((item) => axios.delete(`/api/fixedExpenses/${item.id}`))
+        res_f.data.map((item) => axios.delete(`/api/fixedExpenses/${item.id}`))
+      );
+
+      // 2. 먼저 transcation에서 해당 유저의 데이터 모두 가져오기
+      const res_t = await axios.get(
+        `/api/transactions?userId=${userIdToDelete}`
+      );
+
+      // 3. 해당 항목들을 하나씩 삭제 요청 보내기
+      await Promise.all(
+        res_t.data.map((item) => axios.delete(`/api/transactions/${item.id}`))
       );
 
       // 4. userStore에서 유저 삭제 처리

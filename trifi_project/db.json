@@ -21,65 +21,18 @@
   ],
   "transactions": [
     {
-      "id": "7dae",
-      "type": "수입",
+      "id": "91ae",
+      "type": "지출",
       "date": "2025-04-10",
-      "userId": "bd8d",
-      "amount": 43242,
-      "category": "용돈",
+      "userId": "aff4",
+      "amount": 12000,
+      "category": "기타",
       "payment": "현금",
-      "description": "ㄳㅈㅅㅈㅅ",
-      "fixed": false
-    },
-    {
-      "id": "a074",
-      "type": "수입",
-      "date": "2025-04-10",
-      "userId": "bd8d",
-      "amount": 4324234,
-      "category": "용돈",
-      "payment": "카드",
-      "description": "ㅅㄱ",
+      "description": "네일",
       "fixed": false
     }
   ],
   "fixedExpenses": [
-    {
-      "id": "c84d",
-      "userId": "aff4",
-      "type": "수입",
-      "category": "",
-      "amount": 11,
-      "payment": "카드",
-      "description": "33333",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": null
-    },
-    {
-      "id": "6a6b",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "용돈이지롱",
-      "date": "2025-04-11",
-      "rotation": "매주",
-      "endDate": "2025-05-08"
-    },
-    {
-      "id": "5c72",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 213123,
-      "payment": "현금",
-      "description": "123",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": "2025-04-25"
-    },
     {
       "id": "825d",
       "userId": "aff4",
@@ -91,6 +44,18 @@
       "date": "2025-04-14",
       "rotation": "매월",
       "endDate": "2025-06-18"
+    },
+    {
+      "id": "9f92",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "용돈",
+      "amount": 300000,
+      "payment": "현금",
+      "description": "용돈",
+      "date": "2025-04-15",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
     }
   ]
 }
