@@ -38,24 +38,24 @@
           <!-- 수입 -->
           <div
             class="summary-item income"
-            :class="{ active: eventFilter === 'income' }"
-            @click="setFilter('income')"
+            :class="{ active: eventFilter === '수입' }"
+            @click="setFilter('수입')"
           >
             💰 수입 ({{ incomeCount }}건)<br />{{ formatCurrency(incomeSum) }}
           </div>
           <!-- 지출 -->
           <div
             class="summary-item expense"
-            :class="{ active: eventFilter === 'expense' }"
-            @click="setFilter('expense')"
+            :class="{ active: eventFilter === '지출' }"
+            @click="setFilter('지출')"
           >
             💸 지출 ({{ expenseCount }}건)<br />{{ formatCurrency(expenseSum) }}
           </div>
           <!-- 이체 -->
           <div
             class="summary-item transfer"
-            :class="{ active: eventFilter === 'transfer' }"
-            @click="setFilter('transfer')"
+            :class="{ active: eventFilter === '이체' }"
+            @click="setFilter('이체')"
           >
             🏦 이체 ({{ transferCount }}건)<br />{{
               formatCurrency(transferSum)
@@ -147,7 +147,16 @@
       <!-- 모달로 등록 폼 열기 -->
     </div>
     <button class="add-button" @click="isModalOpen = true">+</button>
+    <button class="calc-button" @click="showCalculator = true">
+      <i class="bi bi-calculator"></i>
+    </button>
+
+    <!-- 계산기 컴포넌트 -->
+    <Calculator 
+      :visible="showCalculator"
+      @close="showCalculator = false"></Calculator>
     <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+    
   </AppLayout>
 </template>
 
@@ -156,6 +165,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
 import axios from 'axios';
+import Calculator from './Calculator.vue';
 
 defineOptions({ name: 'CalendarExample' });
 
@@ -166,6 +176,7 @@ function formatDateStr(dateObj) {
   const dd = String(dateObj.getDate()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd}`;
 }
+
 // 가장 상단 setup 내에 선언
 const selectedEventId = ref(null);
 
@@ -179,8 +190,9 @@ const events = ref([]);
 // hover 중인 날짜(미리보기 팝업을 띄울 날짜)
 const previewDateStr = ref(null);
 
-// 필터 상태 ('all', 'income', 'expense', 'transfer')
+// 필터 상태 ('all', '수입', '지출', '이체')
 const eventFilter = ref('all');
+const showCalculator = ref(false);
 
 // 모달 열림 여부
 const isModalOpen = ref(false);
@@ -289,13 +301,12 @@ const monthlyEvents = computed(() => {
 /** --- 월별 통계 --- **/
 // 전체 건수
 const totalCount = computed(() => monthlyEvents.value.length);
-// income => +, expense/transfer => - 로 합산
+// 수입이면 +, 지출/이체면 - 처리하여 합산
 const totalAmount = computed(() => {
   return monthlyEvents.value.reduce((acc, ev) => {
-    if (ev.type === 'income') {
+    if (ev.type === '수입') {
       return acc + ev.amount;
     } else {
-      // expense, transfer 등은 -처리
       return acc - ev.amount;
     }
   }, 0);
@@ -303,29 +314,29 @@ const totalAmount = computed(() => {
 // 수입
 const incomeSum = computed(() => {
   return monthlyEvents.value
-    .filter((ev) => ev.type === 'income')
+    .filter((ev) => ev.type === '수입')
     .reduce((acc, ev) => acc + ev.amount, 0);
 });
 const incomeCount = computed(
-  () => monthlyEvents.value.filter((ev) => ev.type === 'income').length
+  () => monthlyEvents.value.filter((ev) => ev.type === '수입').length
 );
 // 지출
 const expenseSum = computed(() => {
   return monthlyEvents.value
-    .filter((ev) => ev.type === 'expense')
+    .filter((ev) => ev.type === '지출')
     .reduce((acc, ev) => acc + ev.amount, 0);
 });
 const expenseCount = computed(
-  () => monthlyEvents.value.filter((ev) => ev.type === 'expense').length
+  () => monthlyEvents.value.filter((ev) => ev.type === '지출').length
 );
 // 이체
 const transferSum = computed(() => {
   return monthlyEvents.value
-    .filter((ev) => ev.type === 'transfer')
+    .filter((ev) => ev.type === '이체')
     .reduce((acc, ev) => acc + ev.amount, 0);
 });
 const transferCount = computed(
-  () => monthlyEvents.value.filter((ev) => ev.type === 'transfer').length
+  () => monthlyEvents.value.filter((ev) => ev.type === '이체').length
 );
 
 /** --- methods --- **/
@@ -361,18 +372,22 @@ function isToday(dateObj) {
   );
 }
 
-// +, - 표시
+/**
+ *  (중요) 캘린더에 표시될 이벤트 금액 포맷팅
+ *   - 수입: + 붙여주기
+ *   - 지출/이체: - 붙여주기
+ *   - 3자리 콤마 처리(toLocaleString())
+ */
 function formattedAmount(evt) {
-  if (evt.type === 'income') {
+  if (evt.type === '수입') {
     return `+ ${evt.amount.toLocaleString()}`;
-  } else if (evt.type === 'expense' || evt.type === 'transfer') {
+  } else if (evt.type === '지출' || evt.type === '이체') {
     return `- ${evt.amount.toLocaleString()}`;
   }
-
-  return evt.amount;
+  return evt.amount.toLocaleString();
 }
 
-// 통화 포맷 (통계 부분에 사용)
+// 통화 포맷 (통계 부분에 사용) -> 3자리 콤마 + "원"
 function formatCurrency(value) {
   if (typeof value === 'number') {
     return value.toLocaleString() + '원';
@@ -400,42 +415,24 @@ function nextMonth() {
   }
 }
 
-// + 버튼 클릭 시 -> 새 이벤트 POST (예시)
-async function addNewEvent() {
-  const newEvent = {
-    date: '2025-04-10',
-    type: 'income',
-    category: '사이드잡',
-    description: '사이드잡 수입 예시',
-    amount: 50000,
-  };
-  try {
-    const res = await axios.post(
-      'http://localhost:3000/transactions',
-      newEvent
-    );
-    events.value.push(res.data);
-    alert('새 이벤트가 등록되었습니다!');
-  } catch (error) {
-    console.error('새 이벤트 등록 오류:', error);
-    alert('등록 실패');
-  }
-}
 function resetToThisMonth() {
   const today = new Date();
   currentYear.value = today.getFullYear();
   currentMonth.value = today.getMonth() + 1; // JS에서 month는 0부터 시작하므로 +1
 }
+
+// 이벤트 클릭 시 선택/해제
 function onEventClick(event) {
-  // 같은 이벤트를 두 번 클릭하면 닫히도록 토글 형태(원하시는 방식으로 변경 가능)
+  // 같은 이벤트를 두 번 클릭하면 닫히도록 (토글)
   selectedEventId.value = selectedEventId.value === event.id ? null : event.id;
 }
-async function deleteEvent(eventId) {
+
+// 이벤트 삭제
+async function deleteEvent(id) {
   if (confirm('정말 삭제하시겠습니까?')) {
     try {
-      // 실제 삭제 요청
       await axios.delete(`http://localhost:3000/transactions/${id}`);
-      // events 배열에서도 제거
+      // 삭제 후 local events 배열에서 제외
       events.value = events.value.filter((ev) => ev.id !== id);
       alert('삭제되었습니다.');
     } catch (error) {
@@ -444,11 +441,14 @@ async function deleteEvent(eventId) {
     }
   }
 }
+
+// 이벤트 수정
 function editEvent(event) {
-  // 원하는 로직: 예를 들어 수정 모달 열기
+  // 원하는 로직
   alert(`"${event.description}" 수정하기 버튼 클릭됨!`);
 }
 </script>
+
 
 <style scoped>
 .calendar-container {
@@ -550,15 +550,15 @@ function editEvent(event) {
   border-radius: 4px;
   padding: 0 2px;
 }
-.event.income {
+.event.수입 {
   background-color: #9cc0cb7c;
   color: blue;
 }
-.event.expense {
+.event.지출 {
   background-color: rgba(255, 192, 225, 0.494);
   color: red;
 }
-.event.transfer {
+.event.이체 {
   background-color: greenyellow;
   color: green;
 }
@@ -616,6 +616,23 @@ function editEvent(event) {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .add-button:hover {
+  background-color: #fdb3b3;
+}
+.calc-button {
+  position: fixed;
+  right: 30px;
+  bottom: 100px; /* +버튼 위쪽으로 배치해봤습니다. 원하는 대로 조절 */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px; /* 아이콘 크기 */
+  color: black;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+.calc-button:hover {
   background-color: #fdb3b3;
 }
 </style>

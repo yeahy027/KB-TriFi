@@ -51,24 +51,20 @@
       "nickname": "머니요hi",
       "email": "money@example.com",
       "password": "1234"
+    },
+    {
+      "id": "4174",
+      "name": "강",
+      "nickname": "서현",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
     {
-      "id": "1",
-      "userId": 1,
-      "type": "income",
-      "date": "2025-04-01",
-      "amount": 3000000,
-      "category": "급여",
-      "payment": "계좌이체(은행)",
-      "description": "4월 월급",
-      "fixed": true
-    },
-    {
       "id": "2",
       "userId": 1,
-      "type": "expense",
+      "type": "수입",
       "date": "2025-04-03",
       "amount": 15000,
       "category": "식비",
@@ -77,20 +73,20 @@
       "fixed": false
     },
     {
-      "id": "3",
+      "id": "2",
       "userId": 1,
-      "type": "expense",
-      "date": "2025-04-07",
-      "amount": 18000,
-      "category": "교통",
-      "payment": "카드",
-      "description": "지하철 정기권",
+      "type": "지출",
+      "date": "2025-04-03",
+      "amount": 15000,
+      "category": "급여",
+      "payment": "현금",
+      "description": "점심",
       "fixed": false
     },
     {
       "id": "4",
       "userId": 1,
-      "type": "expense",
+      "type": "지출",
       "date": "2025-04-10",
       "amount": 15000,
       "category": "쇼핑",
@@ -99,40 +95,27 @@
       "fixed": false
     },
     {
+      "id": "5",
+      "userId": 1,
+      "type": "지출",
+      "date": "2025-04-11",
+      "amount": 1000,
+      "category": "교통",
+      "payment": "현금",
+      "description": "ㅁㅇㅁㅇ",
+      "fixed": false
+    },
+    {
       "id": "6",
       "userId": 1,
-      "type": "income",
+      "type": "지출",
       "date": "2025-04-12",
-      "amount": 10077770,
+      "amount": 100070,
       "category": "쇼핑",
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
-    },
-    {
-      "id": "7",
-      "type": "수입",
-      "date": "2025-04-09",
-      "userId": 1,
-      "amount": 120000,
-      "category": "식비",
-      "payment": "현금",
-      "description": "맥도날드",
-      "fixed": true,
-      "period": "매일"
-    }, {
-      "id": "8",
-      "type": "수입",
-      "date": "2025-03-09",
-      "userId": 1,
-      "amount": 120000,
-      "category": "식비",
-      "payment": "현금",
-      "description": "맥도날드",
-      "fixed": true,
-      "period": "매일"
     }
-   
   ],
   "fixedExpenses": [
     {
@@ -222,6 +205,17 @@
       "date": "2025-04-09",
       "rotation": "매월",
       "endDate": "2025-06-09"
+    },
+    {
+      "id": "cfae",
+      "userId": "",
+      "category": "",
+      "amount": 12222,
+      "payment": "현금",
+      "description": "알바+용돈",
+      "date": "2025-04-09",
+      "rotation": "매월",
+      "endDate": "2025-05-09"
     }
   ]
 }
