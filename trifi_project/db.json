@@ -64,34 +64,12 @@
     {
       "id": "2",
       "userId": "aff4",
-      "type": "수입",
-      "date": "2025-04-03",
-      "amount": 15000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "2",
-      "userId": "aff4",
       "type": "지출",
       "date": "2025-04-03",
       "amount": 15000,
       "category": "급여",
       "payment": "현금",
       "description": "점심",
-      "fixed": false
-    },
-    {
-      "id": "4",
-      "userId": "aff4",
-      "type": "지출",
-      "date": "2025-04-10",
-      "amount": 15000,
-      "category": "쇼핑",
-      "payment": "카드",
-      "description": "문구점",
       "fixed": false
     },
     {
@@ -115,28 +93,6 @@
       "payment": "카드",
       "description": "에이블리",
       "fixed": false
-    },
-    {
-      "id": "cf7f",
-      "type": "지출",
-      "date": "2025-04-09",
-      "userId": "aff4",
-      "amount": 30000,
-      "category": "교통",
-      "payment": "계좌이체(은행)",
-      "description": "교통비",
-      "fixed": true
-    },
-    {
-      "id": "e17c",
-      "type": "지출",
-      "date": "2025-04-10",
-      "userId": "4174",
-      "amount": 1230000,
-      "category": "식비",
-      "payment": "카드",
-      "description": "먹방",
-      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -152,59 +108,15 @@
       "endDate": "2025-05-09"
     },
     {
-      "id": "d302",
-      "userId": "aff4",
+      "id": "d8d3",
+      "userId": "4174",
       "category": "",
-      "amount": 13,
-      "payment": "페이",
-      "description": "13",
-      "date": "2025-04-09",
-      "rotation": "매월",
-      "endDate": "2025-04-30"
-    },
-    {
-      "id": "25c0",
-      "userId": "aff4",
-      "category": "",
-      "amount": 123,
-      "payment": "카드",
-      "description": "대중교통",
+      "amount": 129088,
+      "payment": "",
+      "description": "12221",
       "date": "2025-04-10",
       "rotation": "매주",
-      "endDate": "2025-05-08"
-    },
-    {
-      "id": "6651",
-      "userId": "aff4",
-      "category": "교통",
-      "amount": 123,
-      "payment": "페이",
-      "description": "테스트",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-05-28"
-    },
-    {
-      "id": "d9dd",
-      "userId": "4174",
-      "category": "",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "용돈",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-06-10"
-    },
-    {
-      "id": "5a52",
-      "userId": "4174",
-      "category": "식비",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "회식",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-06-10"
+      "endDate": null
     }
   ]
 }
