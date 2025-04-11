@@ -243,6 +243,7 @@ async function submitGoal() {
       // 최초 참여 시 challengeHistory 생성
       await axios.post(`/api/challengeHistory`, {
         userId,
+        nickname,
         successCount: 0,
         maxStreak: 0,
         participationCount: 1
