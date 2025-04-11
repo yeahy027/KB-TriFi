@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000", // ✅ 너의 백엔드 주소
+        target: "https://moneykeeper.glitch.me", // ✅ 너의 백엔드 주소
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // "/api" 제거
       },
