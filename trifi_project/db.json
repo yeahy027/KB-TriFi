@@ -30,6 +30,17 @@
       "payment": "현금",
       "description": "문구점",
       "fixed": false
+    },
+    {
+      "id": "c089",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 10000000,
+      "category": "교통",
+      "payment": "카드",
+      "description": "1111",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -92,6 +103,18 @@
       "date": "2025-04-10",
       "rotation": "매월",
       "endDate": "2025-04-10"
+    },
+    {
+      "id": "f2b6",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "식비",
+      "amount": 100000,
+      "payment": "카드",
+      "description": "밥",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-04-24"
     }
   ],
   "challengeAmount": [
