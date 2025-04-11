@@ -17,6 +17,13 @@
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
+    },
+    {
+      "id": "d1b4",
+      "name": "서현",
+      "nickname": "머니키퍼",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
@@ -31,7 +38,7 @@
       "description": "문구점",
       "fixed": false
     },
- 
+
     {
       "id": "cab2",
       "type": "수입",
@@ -41,6 +48,28 @@
       "category": "급여",
       "payment": "현금",
       "description": "1122",
+      "fixed": false
+    },
+    {
+      "id": "75ad",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 0,
+      "category": "주거",
+      "payment": "",
+      "description": "ㄹㄴㅇㄹㄴㄹ",
+      "fixed": false
+    },
+    {
+      "id": "453e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 19999,
+      "category": "교통",
+      "payment": "",
+      "description": "ㄹㄴㅇㄹㅇ",
       "fixed": false
     }
   ],

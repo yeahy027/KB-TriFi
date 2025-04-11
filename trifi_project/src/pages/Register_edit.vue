@@ -153,7 +153,11 @@
               출금 금액을 입력하세요
             </p>
 
-            <select v-model="form.category" class="category-select">
+            <select
+              v-if="activeTab === '이체'"
+              v-model="form.category"
+              class="category-select"
+            >
               <option disabled value="">카테고리를 선택하세요</option>
               <option value="식비">🍔 식비</option>
               <option value="교통">🚗 교통</option>
@@ -233,6 +237,10 @@ const initialForm = () => ({
   /* memo: '', */
 });
 
+//입력 시 isTouched를 true로 만드는 함수
+const markTouched = () => {
+  if (!isTouched.value) isTouched.value = true;
+};
 const form = ref(initialForm());
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
@@ -245,18 +253,18 @@ const route = useRoute();
 const isFormValid = computed(() => {
   if (activeTab.value === '이체') {
     return (
-      form.value.date !== '' &&
-      form.value.amount !== '' &&
-      form.value.category !== '' &&
-      form.value.description !== ''
+      form.value.date &&
+      form.value.from &&
+      form.value.category &&
+      form.value.description
     );
   }
 
   const baseValid =
-    form.value.date !== '' &&
-    form.value.amount !== '' &&
-    form.value.paymentMethod !== '' &&
-    form.value.description !== '';
+    form.value.date &&
+    form.value.amount &&
+    form.value.paymentMethod &&
+    form.value.description;
 
   if (activeTab.value === '지출' || activeTab.value === '수입') {
     if (!form.value.category) return false;
@@ -341,8 +349,9 @@ const typeMap = {
 
 const submitForm = async () => {
   isTouched.value = true;
-  if (!isFormValid.value) return;
-
+  if (!isFormValid.value) {
+    return;
+  }
   const entry = {
     type: activeTab.value,
     date: form.value.date,
@@ -356,7 +365,7 @@ const submitForm = async () => {
   } else {
     /* 현재 로그인한 사람의 정보*/
     entry.userId = userStore.user.id;
-    entry.amount = Number(form.value.amount);
+    entry.amount = Number(form.value.from);
     entry.category = form.value.category;
     entry.payment = form.value.paymentMethod;
     entry.description = form.value.description;
