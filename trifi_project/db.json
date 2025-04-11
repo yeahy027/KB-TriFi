@@ -155,6 +155,58 @@
       "payment": "",
       "description": "집",
       "fixed": false
+    },
+    {
+      "id": "16f6",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 100000,
+      "category": "주거",
+      "payment": "",
+      "description": "맘",
+      "fixed": false
+    },
+    {
+      "id": "691a",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 10000,
+      "category": "주거",
+      "payment": "",
+      "description": "웅",
+      "fixed": false
+    },
+    {
+      "id": "e577",
+      "type": "이체",
+      "date": "2025-04-11",
+      "amount": 100000,
+      "payment": "이체",
+      "description": "ㅋㅋㅋ"
+    },
+    {
+      "id": "423a",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 1000000,
+      "category": "교통",
+      "payment": "",
+      "description": "dddd",
+      "fixed": false
+    },
+    {
+      "id": "d391",
+      "type": "transfer",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 10000,
+      "category": "쇼핑",
+      "payment": "",
+      "description": "만",
+      "fixed": false
     }
   ],
   "fixedExpenses": [

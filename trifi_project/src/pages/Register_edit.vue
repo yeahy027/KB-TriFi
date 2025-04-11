@@ -353,14 +353,13 @@ const submitForm = async () => {
     return;
   }
   const entry = {
-    type: activeTab.value,
+    type: typeMap[activeTab.value],
     date: form.value.date,
   };
 
   if (activeTab.value === 'transfer') {
     entry.amount = Number(form.value.amount);
-    /* entry.to = Number(form.value.to); */
-    /*  entry.memo = form.value.memo; */
+    entry.payment='이체';
     entry.description = form.value.description;
   } else {
     /* 현재 로그인한 사람의 정보*/
