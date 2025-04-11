@@ -68,16 +68,46 @@
           </div>
 
           <div class="expense-buttons">
-            <button
-              class="expense-btn"
+            <div
               v-for="item in fixedExpenses"
               :key="item.id"
+              class="position-relative"
+              style="width: 500px"
             >
-              {{ item.description }} &nbsp;&nbsp;
-              <!-- 수입일 경우 +, 지출일 경우 - 표시 -->
-              {{ item.type === '수입' ? '+' : '-' }}
-              {{ item.amount }}
-            </button>
+              <!-- 드롭다운 메뉴 -->
+              <div
+                v-if="openMenuId === item.id"
+                class="position-absolute end-0 mt-2 p-2 bg-white border rounded shadow-sm"
+                style="z-index: 100; min-width: 100px"
+              >
+                <div
+                  class="px-2 py-1 text-dark"
+                  style="cursor: pointer"
+                  @click.stop="editItem(item)"
+                  @mouseover="hover = true"
+                  @mouseleave="hover = false"
+                >
+                  수정
+                </div>
+                <div
+                  class="px-2 py-1 text-dark"
+                  style="cursor: pointer"
+                  @click="deleteFixedExpense(item.id)"
+                >
+                  삭제
+                </div>
+              </div>
+              <button class="expense-btn" @click="toggleMenu(item.id)">
+                {{ item.description }} &nbsp;&nbsp;
+                {{ item.type === '수입' ? '+' : '-' }}{{ item.amount }}
+                <RegisterReEdit
+                  v-if="editModalOpen"
+                  :existingData="itemToEdit"
+                  @close="editModalOpen = false"
+                  :checked="true"
+                />
+              </button>
+            </div>
           </div>
 
           <!-- 모달로 고정지출 추가 -->
@@ -105,6 +135,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import RegisterReEdit from './RegisterReEdit.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
@@ -155,20 +186,22 @@ const handleDeleteAccount = async () => {
 
   if (result.isConfirmed) {
     try {
-      // 1. userId를 변수로 저장
       const userIdToDelete = user.value.id;
 
-      // 2. 먼저 fixedExpenses에서 해당 유저의 데이터 모두 가져오기
-      const res = await axios.get(
+      const res_f = await axios.get(
         `/api/fixedExpenses?userId=${userIdToDelete}`
       );
-
-      // 3. 해당 항목들을 하나씩 삭제 요청 보내기
-      await Promise.all(
-        res.data.map((item) => axios.delete(`/api/fixedExpenses/${item.id}`))
+      const res_t = await axios.get(
+        `/api/transactions?userId=${userIdToDelete}`
       );
 
-      // 4. userStore에서 유저 삭제 처리
+      await Promise.all(
+        res_f.data.map((item) => axios.delete(`/api/fixedExpenses/${item.id}`))
+      );
+      await Promise.all(
+        res_t.data.map((item) => axios.delete(`/api/transactions/${item.id}`))
+      );
+
       userStore.deleteUser(() => {
         Swal.fire({
           title: '회원 탈퇴',
@@ -197,6 +230,42 @@ const prevCard = () => {
 const nextCard = () => {
   console.log('다음 카드');
 };
+
+// test
+const records = ref([]);
+const itemToEdit = ref(null);
+const editModalOpen = ref(false); // RegisterReedit 모달 열림 여부
+const openMenuId = ref(null);
+
+// function editItem(event) {
+//   itemToEdit.value = event;
+//   editModalOpen.value = true;
+// }
+function editItem(item) {
+  itemToEdit.value = item;
+  editModalOpen.value = true;
+}
+const toggleMenu = (id) => {
+  openMenuId.value = openMenuId.value === id ? null : id;
+};
+
+const fetchFixedExpensesPlus = async () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user?.id;
+  if (!userId) return;
+
+  const res = await axios.get('http://localhost:3000/fixedExpenses', {
+    params: { userId },
+  });
+  fixedExpenses.value = res.data; // fixedExpenses는 ref로 선언해줘야 함
+};
+const deleteFixedExpense = async (id) => {
+  if (confirm('정말 삭제하시겠습니까?')) {
+    await axios.delete(`http://localhost:3000/fixedExpenses/${id}`);
+    fetchFixedExpensesPlus();
+    openMenuId.value = null;
+  }
+};
 </script>
 
 <style scoped>
@@ -224,7 +293,12 @@ const nextCard = () => {
 .account-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 30px;
+  padding: 20px;
+  /* width: 550px; */
+  height: 150px;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .basic-img {
@@ -250,7 +324,7 @@ const nextCard = () => {
 }
 
 .yellow-btn {
-  background-color: #f4c542;
+  background-color: rgba(255, 182, 193, 0.886);
   border: none;
   border-radius: 8px;
   padding: 8px 12px;
@@ -337,7 +411,9 @@ const nextCard = () => {
 
 /* 카드 추가 버튼 스타일 */
 .create-card {
-  background-color: #f9f9ec;
+  /* background-color: #f9f9ec; */
+  background-color: rgba(255, 182, 193, 0.5);
+
   width: 330px;
   height: 200px;
   border-radius: 16px;
@@ -416,7 +492,7 @@ const nextCard = () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 5px;
+  padding-top: 55px;
   padding-bottom: 15px;
 }
 
@@ -434,7 +510,8 @@ const nextCard = () => {
   width: 500px;
 }
 
-.expense-btn:hover {
-  background-color: #f4c542;
+.expense-btn:hover,
+.plus-fixlist:hover {
+  background-color: rgba(255, 182, 193, 0.5);
 }
 </style>

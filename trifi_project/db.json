@@ -31,54 +31,55 @@
       "description": "문구점",
       "fixed": false
     },
+ 
     {
-      "id": "30dd",
+      "id": "cab2",
       "type": "수입",
-      "date": "2025-04-11",
-      "userId": "aff5",
-      "amount": 111111,
+      "date": "2025-04-10",
+      "userId": "aff4",
+      "amount": 11113,
       "category": "급여",
       "payment": "현금",
-      "description": "1111",
+      "description": "1122",
       "fixed": false
     }
   ],
   "fixedExpenses": [
     {
-      "id": "c84d",
+      "id": "825d",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "기타",
+      "amount": 5000,
+      "payment": "페이",
+      "description": "넷플릭스",
+      "date": "2025-04-14",
+      "rotation": "매월",
+      "endDate": "2025-06-18"
+    },
+    {
+      "id": "9f92",
       "userId": "aff4",
       "type": "수입",
-      "category": "",
-      "amount": 11,
-      "payment": "카드",
-      "description": "33333",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": null
-    },
-    {
-      "id": "6a6b",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "용돈이지롱",
-      "date": "2025-04-11",
-      "rotation": "매주",
-      "endDate": "2025-05-08"
-    },
-    {
-      "id": "5c72",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 213123,
+      "category": "용돈",
+      "amount": 300000,
       "payment": "현금",
-      "description": "123",
-      "date": "2025-04-10",
+      "description": "용돈",
+      "date": "2025-04-15",
       "rotation": "매주",
-      "endDate": "2025-04-25"
+      "endDate": "2025-04-30"
+    },
+    {
+      "id": "853c",
+      "userId": "aff5",
+      "type": "지출",
+      "category": "교통",
+      "amount": 15000,
+      "payment": "현금",
+      "description": "지하철",
+      "date": "2025-04-10",
+      "rotation": "매월",
+      "endDate": "2025-04-17"
     },
     {
       "id": "0940",
@@ -134,6 +135,13 @@
     {
       "id": "8be4",
       "userId": "aff5",
+      "year": 2025,
+      "month": 4,
+      "success": true
+    },
+    {
+      "id": "2c79",
+      "userId": null,
       "year": 2025,
       "month": 4,
       "success": true
