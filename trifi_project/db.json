@@ -198,16 +198,6 @@
       "userId": "d1b4"
     },
     {
-      "id": "9e2e",
-      "type": "이체",
-      "date": "2025-04-11",
-      "amount": 10000,
-      "payment": "이체",
-      "description": "머릿결 정리",
-      "category": "미용",
-      "userId": "aff5"
-    },
-    {
       "id": "0957",
       "type": "지출",
       "date": "2025-04-11",
@@ -239,16 +229,6 @@
       "payment": "현금",
       "description": "차량 수리비",
       "fixed": false
-    },
-    {
-      "id": "2b41",
-      "type": "이체",
-      "date": "2025-04-11",
-      "amount": 100000,
-      "payment": "이체",
-      "description": "서브웨이 쿠폰",
-      "category": "식비",
-      "userId": "aff5"
     },
     {
       "id": "8b9f",
@@ -300,18 +280,6 @@
       "date": "2025-01-13",
       "rotation": "매월",
       "endDate": "2025-06-13"
-    },
-    {
-      "id": "5a5c",
-      "userId": "aff5",
-      "type": "수입",
-      "category": "급여",
-      "amount": 3000000,
-      "payment": "카드",
-      "description": "월급",
-      "date": "2025-04-11",
-      "rotation": "매월",
-      "endDate": "2025-05-02"
     }
   ],
   "challengeAmount": [

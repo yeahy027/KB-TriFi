@@ -246,12 +246,12 @@ const submitForm = async () => {
     try {
       if (isEditMode.value && props.existingData) {
         await axios.patch(
-          `http://localhost:3000/transactions/${props.existingData.id}`,
+          `/api/transactions/${props.existingData.id}`,
           entry
         );
         alert('이체 내역 수정되었습니다.');
       } else {
-        await axios.post('http://localhost:3000/transactions', entry);
+        await axios.post('/api/transactions', entry);
         alert('이체 등록 완료');
       }
     } catch (error) {
@@ -290,12 +290,12 @@ const submitForm = async () => {
     try {
       if (wasFixed) {
         await axios.patch(
-          `http://localhost:3000/fixedExpenses/${props.existingData.id}`,
+          `/api/fixedExpenses/${props.existingData.id}`,
           entry
         );
       } else {
         await axios.patch(
-          `http://localhost:3000/transactions/${props.existingData.id}`,
+          `/api/transactions/${props.existingData.id}`,
           entry
         );
       }
@@ -323,7 +323,7 @@ const submitForm = async () => {
       endDate: entry.endDate,
     };
     try {
-      await axios.post('http://localhost:3000/fixedExpenses', fixedEntry);
+      await axios.post('/api/fixedExpenses', fixedEntry);
       alert('고정 항목 등록 완료');
     } catch (err) {
       console.error('고정 항목 등록 실패:', err);
@@ -332,7 +332,7 @@ const submitForm = async () => {
   } else {
     // 일반 항목 등록 (transactions 엔드포인트)
     try {
-      await axios.post('http://localhost:3000/transactions', entry);
+      await axios.post('/api/transactions', entry);
       alert('등록 완료');
     } catch (err) {
       console.error('등록 실패:', err);
