@@ -803,6 +803,49 @@
       "payment": "",
       "description": "영화",
       "fixed": false
+    },
+    {
+      "id": "f1da",
+      "type": "transfer",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 306000,
+      "category": "미용",
+      "payment": "",
+      "description": "염색 및 파마",
+      "fixed": false
+    },
+    {
+      "id": "3788",
+      "type": "transfer",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 47000,
+      "category": "선물",
+      "payment": "",
+      "description": "필름카메라",
+      "fixed": false
+    },
+    {
+      "id": "62eb",
+      "type": "transfer",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 100000,
+      "category": "식비",
+      "payment": "",
+      "description": "ddd",
+      "fixed": false
+    },
+    {
+      "id": "f1f1",
+      "type": "이체",
+      "date": "2025-04-11",
+      "amount": 1000000,
+      "payment": "이체",
+      "description": "관리비",
+      "category": "주거",
+      "userId": "aff5"
     }
   ],
   "fixedExpenses": [

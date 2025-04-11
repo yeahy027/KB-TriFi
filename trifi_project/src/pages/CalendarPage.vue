@@ -632,6 +632,7 @@ function editItem(event) {
   height: 120px;
   padding: 4px;
   position: relative;
+  cursor: pointer;
 }
 .not-current-month {
   color: #ccc;

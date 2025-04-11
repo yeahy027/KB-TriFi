@@ -7,7 +7,7 @@
           <i class="bi bi-chevron-left"></i>
         </button>
         <strong class="month-text mx-auto" style="cursor:pointer; font-size: xx-large;"
-        @click="showDatePicker">
+        @click="resetFilters">
           {{ formattedMonth }}
         </strong>
        
@@ -647,6 +647,12 @@ const overallFilteredRecords = computed(() => {
   return [...filteredRecords.value, ...fixedRecords.value];
 });
 
+const resetFilters = () => {
+  filterType.value = '';
+  selectedCategory.value = '';
+  filterCategory.value = '';
+  isCategoryDropdownOpen.value = false;
+};
 </script>
 
 <style scoped>
