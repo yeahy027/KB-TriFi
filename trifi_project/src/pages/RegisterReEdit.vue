@@ -3,38 +3,31 @@
     <div class="modal-content">
       <button class="modal-close-btn" @click="emit('close')">×</button>
       <div class="register-container">
-        <!-- props.existingData가 있으면 "수정", 없으면 "등록" -->
+        <!-- 수정 모드이면 "수정", 아니면 "등록" -->
         <h2 class="title">{{ isEditMode ? '수정' : '등록' }}</h2>
         <p class="subtitle">
-          {{
-            isEditMode
-              ? '수정하고싶은 내역을 적어주세요'
-              : '추가적으로 등록하고 싶으신 내역을 등록하세요'
-          }}
+          {{ isEditMode ? '수정하고 싶은 내역을 적어주세요' : '추가적으로 등록하실 내역을 입력하세요' }}
         </p>
 
-        <!-- 탭: 이체도 포함 (기존 코드 그대로) -->
+        <!-- 탭: 지출, 수입, 이체 -->
         <div class="section-title">
           <span
             :class="{ selected: activeTab === '지출' }"
             @click="activeTab = '지출'"
-            >지출</span
-          >
+          >지출</span>
           <span
             :class="{ selected: activeTab === '수입' }"
             @click="activeTab = '수입'"
-            >수입</span
-          >
+          >수입</span>
           <span
             :class="{ selected: activeTab === '이체' }"
             @click="activeTab = '이체'"
-            >이체</span
-          >
+          >이체</span>
         </div>
 
         <!-- 입력 폼 -->
         <div class="form-box">
-          <!-- 지출/수입 -->
+          <!-- 수입/지출 폼 (이체가 아닐 경우) -->
           <div class="form" v-if="activeTab !== '이체'">
             <input type="date" v-model="form.date" placeholder="날짜" />
 
@@ -45,7 +38,7 @@
               placeholder="금액"
             />
 
-            <!-- 지출 탭일 때만 카테고리 -->
+            <!-- 지출 탭일 때만 카테고리 선택 -->
             <select
               v-if="activeTab === '지출'"
               v-model="form.category"
@@ -69,19 +62,20 @@
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
               <option value="카드">💳 카드</option>
-              <option value="페이">💰 페이(카카오,네이버 등)</option>
+              <option value="페이">💰 페이(카카오, 네이버 등)</option>
             </select>
 
             <input type="text" v-model="form.description" placeholder="내용" />
 
-            <!-- 고정 여부 체크 -->
+            <!-- 고정 여부 체크 (수정 모드에서 고정 항목이면 자동 체크) -->
             <label class="fixed-checkbox">
               <input type="checkbox" v-model="form.fixed" />
               고정 수입/지출입니다
             </label>
 
+            <!-- 고정 항목일 경우 추가 항목: 주기 및 종료 날짜 -->
             <div v-if="form.fixed">
-              <select v-model="form.period" class="category-select">
+              <select v-model="form.rotation" class="category-select">
                 <option disabled value="" hidden>📌 주기를 선택하세요</option>
                 <option value="매일">📆 매일</option>
                 <option value="매주">🗓 매주</option>
@@ -99,7 +93,7 @@
             </div>
           </div>
 
-          <!-- 이체 탭 -->
+          <!-- 이체 폼 -->
           <div class="form" v-else>
             <input type="date" v-model="form.date" placeholder="날짜" />
             <input
@@ -137,91 +131,77 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import { useCounterStore } from '@/stores/counter';
 import { useUserStore } from '@/stores/userStore';
 import { useRoute } from 'vue-router';
 
 const emit = defineEmits(['close']);
 
-// ❗ 수정 모드를 위해 기존 데이터 전체를 넘겨받는 props 추가
+// 수정 모드를 위한 기존 데이터 props (없으면 등록 모드)
 const props = defineProps({
   existingData: {
     type: Object,
     default: null,
   },
-  checked: Boolean,
 });
 
-const store = useCounterStore();
 const userStore = useUserStore();
 userStore.checkLocalStorage();
-
 const route = useRoute();
 
-// “등록 모드” vs “수정 모드” 판별
+// 수정 모드 여부: 기존 데이터가 있으면 수정 모드
 const isEditMode = computed(() => !!props.existingData);
 
-// 현재 탭
+// 현재 탭 (기본 '수입'; 수정 모드면 onMounted에서 재설정)
 const activeTab = ref('수입');
 
-// 오늘 날짜 기본값
+// 오늘 날짜 (YYYY-MM-DD)
 const today = new Date().toISOString().split('T')[0];
 
-// 폼 초기 상태 함수
+// 폼 초기 상태
 const initialForm = () => ({
   date: today,
   amount: '',
   category: '',
   paymentMethod: '',
   description: '',
-  fixed: false, // 고정 체크박스
-  period: '',
+  fixed: false,
+  rotation: '',
   endDate: '',
-  from: '', // 이체 때 출금
+  from: '',
 });
 
 // 실제 폼 데이터
 const form = ref(initialForm());
 
-/** 1) 수정 모드라면, 넘어온 existingData로 form을 채워 넣기 */
+// onMounted: 수정 모드일 경우 기존 데이터로 폼 채우기  
+// 고정 항목의 경우 fixed 값이 없더라도 rotation(주기) 값이 있으면 고정으로 판단
 onMounted(() => {
   if (isEditMode.value && props.existingData) {
-    // type에 따라 탭 설정
     activeTab.value = props.existingData.type || '수입';
-
-    // 공통 폼
     form.value.date = props.existingData.date || today;
     form.value.description = props.existingData.description || '';
     form.value.category = props.existingData.category || '';
     form.value.paymentMethod = props.existingData.payment || '';
 
-    // 수입/지출/이체별
-    if (props.existingData.type === '이체') {
-      // 이체면 'from' 값을 채워줌
-      form.value.from = props.existingData.from
-        ? String(props.existingData.from)
-        : '';
+    // 만약 고정 항목이면 (props.existingData.fixed 가 true이거나 rotation 속성이 존재하면)
+    if (props.existingData.fixed === true || props.existingData.rotation !== undefined) {
+      form.value.fixed = true; // 체크박스가 기본 체크되도록 설정
+      form.value.rotation = props.existingData.rotation || '';
+      form.value.endDate = props.existingData.endDate || '';
     } else {
-      // 수입/지출이면 'amount'
-      form.value.amount = props.existingData.amount
-        ? String(props.existingData.amount)
-        : '';
-      // 'fixed' 여부
-      // form.value.fixed = !!props.existingData.fixed;
-      form.value.fixed = props.checked;
+      form.value.fixed = false;
+    }
 
-      // period, endDate
-      if (props.existingData.period) {
-        form.value.period = props.existingData.period;
-      }
-      if (props.existingData.endDate) {
-        form.value.endDate = props.existingData.endDate;
-      }
+    // 이체인 경우
+    if (props.existingData.type === '이체') {
+      form.value.from = String(props.existingData.from || '');
+    } else {
+      form.value.amount = String(props.existingData.amount || '');
     }
   } else {
-    // 등록 모드 + URL 쿼리에 fixed=true가 들어온 경우만 체크
+    // 등록 모드: URL 쿼리 ?fixed=true인 경우 처리
     if (route.query.fixed === 'true') {
       activeTab.value = '지출';
       form.value.fixed = true;
@@ -229,34 +209,32 @@ onMounted(() => {
   }
 });
 
-/** 통화 포맷(수입/지출) */
+// 통화 포맷 (수입/지출용)
 const formattedAmount = computed({
   get() {
     if (!form.value.amount) return '';
     return Number(form.value.amount).toLocaleString() + '원';
   },
   set(value) {
-    const numeric = value.replace(/[^\d]/g, '');
-    form.value.amount = numeric;
+    form.value.amount = value.replace(/[^\d]/g, '');
   },
 });
 
-/** 이체 탭에서 사용: 'from' 금액 */
+// 이체 탭용 금액 포맷
 const formattedFrom = computed({
   get() {
     if (!form.value.from) return '';
     return Number(form.value.from).toLocaleString() + '원';
   },
   set(value) {
-    const numeric = value.replace(/[^\d]/g, '');
-    form.value.from = numeric;
+    form.value.from = value.replace(/[^\d]/g, '');
   },
 });
 
-/** 폼 전송 함수: 등록 / 수정 */
+/** 폼 전송 함수 (등록 / 수정) */
 const submitForm = async () => {
+  // ① 이체 탭 처리
   if (activeTab.value === '이체') {
-    // 이체 폼 구성
     const entry = {
       type: '이체',
       date: form.value.date,
@@ -266,34 +244,28 @@ const submitForm = async () => {
       userId: userStore.user.id,
     };
 
-    // 수정 vs 등록
-    if (isEditMode.value && props.existingData) {
-      // 기존 “이체” 데이터 수정
-      try {
+    try {
+      if (isEditMode.value && props.existingData) {
         await axios.patch(
           `http://localhost:3000/transactions/${props.existingData.id}`,
           entry
         );
         alert('이체 내역 수정되었습니다.');
-      } catch (error) {
-        console.error('이체 수정 오류:', error);
-      }
-    } else {
-      // 새로 등록
-      try {
+      } else {
         await axios.post('http://localhost:3000/transactions', entry);
         alert('이체 등록 완료');
-      } catch (error) {
-        console.error('이체 등록 오류:', error);
       }
+    } catch (error) {
+      console.error('이체 처리 오류:', error);
+      alert('이체 처리 실패');
     }
     emit('close');
     return;
   }
 
-  /** 수입/지출 공통 구조 */
+  // ② 수입/지출 탭 처리
   const entry = {
-    type: activeTab.value,
+    type: activeTab.value, // "수입" 또는 "지출"
     date: form.value.date,
     amount: Number(form.value.amount),
     category: form.value.category,
@@ -303,27 +275,26 @@ const submitForm = async () => {
     userId: userStore.user.id,
   };
 
-  // 고정 항목인 경우에만 필요한 데이터
+  // 고정 항목이면 추가 데이터
   if (form.value.fixed) {
-    entry.period = form.value.period;
+    entry.rotation = form.value.rotation;
     entry.endDate = form.value.endDate || null;
   }
 
-  /** 수정 모드 && 원래 fixed냐 아니냐를 판별 */
+  // 수정 모드: 기존 데이터가 고정 항목이면 fixedExpenses, 아니면 transactions로 PATCH 요청
   if (isEditMode.value && props.existingData) {
-    // 원래 고정 항목이었으면 => /fixedExpenses
-    // 원래 일반 항목이면 => /transactions
-    const wasFixed = !!props.existingData.fixed;
+    // 기존 데이터가 고정 항목인지 여부: fixed 값 true이거나 rotation(주기) 속성이 있다면 고정 항목으로 판단
+    const wasFixed =
+      props.existingData.fixed === true ||
+      props.existingData.rotation !== undefined;
 
     try {
       if (wasFixed) {
-        // 기존 고정항목 수정
         await axios.patch(
           `http://localhost:3000/fixedExpenses/${props.existingData.id}`,
           entry
         );
       } else {
-        // 기존 일반항목 수정
         await axios.patch(
           `http://localhost:3000/transactions/${props.existingData.id}`,
           entry
@@ -338,29 +309,29 @@ const submitForm = async () => {
     return;
   }
 
-  /** 등록 모드 */
+  // 등록 모드
   if (form.value.fixed) {
-    // 고정 항목 등록
+    // 고정 항목 등록 (fixedExpenses 엔드포인트)
     const fixedEntry = {
       userId: entry.userId,
-      type: entry.type, // "지출" or "수입"
+      type: entry.type,
       category: entry.category,
       amount: entry.amount,
       payment: entry.payment,
       description: entry.description,
       date: entry.date,
-      rotation: form.value.period, // "매일" / "매주" / "매월"
+      rotation: form.value.rotation,
       endDate: entry.endDate,
     };
     try {
       await axios.post('http://localhost:3000/fixedExpenses', fixedEntry);
       alert('고정 항목 등록 완료');
     } catch (err) {
-      console.error('고정 항목 전송 실패:', err);
+      console.error('고정 항목 등록 실패:', err);
       alert('고정 항목 등록 실패');
     }
   } else {
-    // 일반 항목 등록
+    // 일반 항목 등록 (transactions 엔드포인트)
     try {
       await axios.post('http://localhost:3000/transactions', entry);
       alert('등록 완료');
@@ -482,12 +453,10 @@ const submitForm = async () => {
   box-sizing: border-box;
   text-align: center;
 }
-
 .fixed-checkbox input {
   margin-right: 150px;
   accent-color: #666;
 }
-
 .submit-btn {
   margin-top: 20px;
   background-color: #ccc;
@@ -496,38 +465,20 @@ const submitForm = async () => {
   border-radius: 20px;
   cursor: pointer;
 }
-/* 고정 지출 + 수입 -> 종료 날짜 */
 .recurring-date-wrapper {
   width: 100%;
-  max-width: 250px; /* ✅ 박스 너비를 줄입니다 */
+  max-width: 250px;
   margin: 10px auto;
 }
-
 .recurring-date {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid #000;
   border-radius: 5px;
-
-  /* ✅ 텍스트 왼쪽 정렬 */
   text-align: left;
-
-  /* ✅ 글꼴 크기 조정도 가능 */
   font-size: 0.95rem;
 }
 .category-select option[disabled] {
   color: #999;
 }
 </style>
-
-<!-- 사용할 부분에 추가해야 할 코드 <template>
-    <div>
-      <button @click="isModalOpen = true">+ 등록</button>
-      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
-    </div>
-  </template>
-  <script setup>
-  import { ref } from 'vue'
-  import RegisterEdit from '@/pages/Register_edit.vue'
-  const isModalOpen = ref(false)
-  </script> -->

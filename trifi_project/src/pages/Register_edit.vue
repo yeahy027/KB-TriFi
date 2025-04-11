@@ -55,14 +55,14 @@
               <option value="교통">🚗 교통</option>
               <option value="쇼핑">🛍 쇼핑</option>
               <option value="주거">🏠 주거</option>
-              <option value="기타">💅 미용</option>
-              <option value="기타">🎬 문화</option>
-              <option value="기타">🏦 저축</option>
-              <option value="기타">💰 급여</option>
-              <option value="기타">💰 용돈</option>
-              <option value="기타">🎁 선물</option>
-              <option value="기타">💊 의료</option>
-              <option value="기타">💡 공과금</option>
+              <option value="미용">💅 미용</option>
+              <option value="문화">🎬 문화</option>
+              <option value="저축">🏦 저축</option>
+              <option value="급여">💰 급여</option>
+              <option value="용돈">💰 용돈</option>
+              <option value="선물">🎁 선물</option>
+              <option value="의료">💊 의료</option>
+              <option value="공과금">💡 공과금</option>
             </select>
             <p
               class="error-message"
@@ -153,20 +153,24 @@
               출금 금액을 입력하세요
             </p>
 
-            <select v-model="form.category" class="category-select">
+            <select
+              v-if="activeTab === '이체'"
+              v-model="form.category"
+              class="category-select"
+            >
               <option disabled value="">카테고리를 선택하세요</option>
               <option value="식비">🍔 식비</option>
               <option value="교통">🚗 교통</option>
               <option value="쇼핑">🛍 쇼핑</option>
               <option value="주거">🏠 주거</option>
-              <option value="기타">💅 미용</option>
-              <option value="기타">🎬 문화</option>
-              <option value="기타">🏦 저축</option>
-              <option value="기타">💰 급여</option>
-              <option value="기타">💰 용돈</option>
-              <option value="기타">🎁 선물</option>
-              <option value="기타">💊 의료</option>
-              <option value="기타">💡 공과금</option>
+              <option value="미용">💅 미용</option>
+              <option value="문화">🎬 문화</option>
+              <option value="저축">🏦 저축</option>
+              <option value="급여">💰 급여</option>
+              <option value="용돈">💰 용돈</option>
+              <option value="선물">🎁 선물</option>
+              <option value="의료">💊 의료</option>
+              <option value="공과금">💡 공과금</option>
             </select>
             <p class="error-message" v-if="isTouched && !form.category">
               카테고리를 선택하세요
@@ -233,6 +237,10 @@ const initialForm = () => ({
   /* memo: '', */
 });
 
+//입력 시 isTouched를 true로 만드는 함수
+const markTouched = () => {
+  if (!isTouched.value) isTouched.value = true;
+};
 const form = ref(initialForm());
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
@@ -245,18 +253,18 @@ const route = useRoute();
 const isFormValid = computed(() => {
   if (activeTab.value === '이체') {
     return (
-      form.value.date !== '' &&
-      form.value.amount !== '' &&
-      form.value.category !== '' &&
-      form.value.description !== ''
+      form.value.date &&
+      form.value.from &&
+      form.value.category &&
+      form.value.description
     );
   }
 
   const baseValid =
-    form.value.date !== '' &&
-    form.value.amount !== '' &&
-    form.value.paymentMethod !== '' &&
-    form.value.description !== '';
+    form.value.date &&
+    form.value.amount &&
+    form.value.paymentMethod &&
+    form.value.description;
 
   if (activeTab.value === '지출' || activeTab.value === '수입') {
     if (!form.value.category) return false;
@@ -341,8 +349,9 @@ const typeMap = {
 
 const submitForm = async () => {
   isTouched.value = true;
-  if (!isFormValid.value) return;
-
+  if (!isFormValid.value) {
+    return;
+  }
   const entry = {
     type: activeTab.value,
     date: form.value.date,
@@ -356,7 +365,7 @@ const submitForm = async () => {
   } else {
     /* 현재 로그인한 사람의 정보*/
     entry.userId = userStore.user.id;
-    entry.amount = Number(form.value.amount);
+    entry.amount = Number(form.value.from);
     entry.category = form.value.category;
     entry.payment = form.value.paymentMethod;
     entry.description = form.value.description;
