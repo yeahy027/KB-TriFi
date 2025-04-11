@@ -777,13 +777,13 @@ function editItem(event) {
   background: url('/src/assets/winter.jpg') center/cover no-repeat;
 }
 .header.spring-bg {
-  background: url('src/assets/spring.png') center/cover no-repeat;
+  background: url('src/assets/spring2.jpg') center/cover no-repeat;
 }
 .header.summer-bg {
-  background: url('src/assets/summer.jpg') center/cover no-repeat;
+  background: url('src/assets/summer2.png') center/cover no-repeat;
 }
 .header.autumn-bg {
-  background: url('src/assets/fall.jpg') center/cover no-repeat;
+  background: url('src/assets/fall2.jpg') center/cover no-repeat;
 }
 
 /* ========== 새로 추가: 이벤트 액션 팝업(오버레이) ========== */

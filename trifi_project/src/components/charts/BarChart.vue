@@ -5,7 +5,7 @@
       v-if="!hasData"
       class="empty-box"
     >
-      <p class="text-muted">아직 등록된 내역이 없습니다 😢</p>
+      <p class="text-muted">아직 등록된 일반 지출 내역이 없습니다 😢</p>
     </div>
 
 
