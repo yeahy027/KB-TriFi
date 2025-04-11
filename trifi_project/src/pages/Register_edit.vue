@@ -342,8 +342,8 @@ const formattedAmount = computed({
  */
 // 한글 → 서버용 영문 매핑
 const typeMap = {
-  수입: 'income',
-  지출: 'expense',
+  수입: '수입',
+  지출: '지출',
   이체: 'transfer',
 };
 

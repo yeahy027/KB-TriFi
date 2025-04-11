@@ -41,7 +41,7 @@
           <!-- 수입 -->
           <div
             class="summary-item income"
-            :class="{ active: eventFilter === '수입' }"
+            :class="{ active: eventFilter === 'income' }"
             @click="setFilter('수입')"
           >
             💰 수입 ({{ incomeCount }}건)
@@ -50,7 +50,7 @@
           <!-- 지출 -->
           <div
             class="summary-item expense"
-            :class="{ active: eventFilter === '지출' }"
+            :class="{ active: eventFilter === 'expense' }"
             @click="setFilter('지출')"
           >
             💸 지출 ({{ expenseCount }}건)

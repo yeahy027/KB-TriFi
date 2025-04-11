@@ -37,7 +37,7 @@
     {
       "id": "5e00",
       "type": "지출",
-      "date": "2025-04-10",
+      "date": "2025-02-10",
       "userId": "aff5",
       "amount": 50000,
       "category": "쇼핑",
@@ -46,20 +46,9 @@
       "fixed": false
     },
     {
-      "id": "cab2",
-      "type": "수입",
-      "date": "2025-04-10",
-      "userId": "aff4",
-      "amount": 111130,
-      "category": "급여",
-      "payment": "현금",
-      "description": "일급",
-      "fixed": false
-    },
-    {
       "id": "75ad",
       "type": "이체",
-      "date": "2025-04-11",
+      "date": "2025-03-11",
       "userId": "d1b4",
       "amount": 0,
       "category": "선물",
@@ -126,7 +115,7 @@
     {
       "id": "db0e",
       "type": "이체",
-      "date": "2025-04-11",
+      "date": "2025-03-20",
       "userId": "aff4",
       "amount": 100000,
       "category": "주거",
@@ -137,7 +126,7 @@
     {
       "id": "a8b7",
       "type": "이체",
-      "date": "2025-04-11",
+      "date": "2025-04-08",
       "userId": "aff5",
       "amount": 150000,
       "category": "선물",
@@ -148,7 +137,7 @@
     {
       "id": "d4c6",
       "type": "지출",
-      "date": "2025-04-11",
+      "date": "2025-04-03",
       "userId": "aff5",
       "amount": 10000,
       "category": "문화",
@@ -161,8 +150,8 @@
       "type": "이체",
       "date": "2025-04-11",
       "userId": "aff5",
-      "amount": 100000,
-      "category": "저축",
+      "amount": 110000,
+      "category": "기타",
       "payment": "이체",
       "description": "정기적금",
       "fixed": false
@@ -170,7 +159,7 @@
     {
       "id": "8487",
       "type": "수입",
-      "date": "2025-04-11",
+      "date": "2025-03-29",
       "userId": "aff5",
       "amount": 500000,
       "category": "급여",
@@ -201,12 +190,76 @@
     {
       "id": "0d92",
       "type": "이체",
-      "date": "2025-04-11",
+      "date": "2025-04-01",
       "amount": 40000000,
       "payment": "이체",
       "description": "응급실+병원",
       "category": "의료",
       "userId": "d1b4"
+    },
+    {
+      "id": "9e2e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "amount": 10000,
+      "payment": "이체",
+      "description": "머릿결 정리",
+      "category": "미용",
+      "userId": "aff5"
+    },
+    {
+      "id": "0957",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 100000,
+      "category": "쇼핑",
+      "payment": "현금",
+      "description": "반팔 티 구매",
+      "fixed": false
+    },
+    {
+      "id": "7655",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 100000,
+      "category": "용돈",
+      "payment": "현금",
+      "description": "일급",
+      "fixed": false
+    },
+    {
+      "id": "da34",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 1000000,
+      "category": "교통",
+      "payment": "현금",
+      "description": "차량 수리비",
+      "fixed": false
+    },
+    {
+      "id": "2b41",
+      "type": "이체",
+      "date": "2025-04-11",
+      "amount": 100000,
+      "payment": "이체",
+      "description": "서브웨이 쿠폰",
+      "category": "식비",
+      "userId": "aff5"
+    },
+    {
+      "id": "8b9f",
+      "type": "수입",
+      "date": "2025-04-05",
+      "userId": "aff5",
+      "amount": 30000,
+      "category": "용돈",
+      "payment": "현금",
+      "description": "일급",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -237,19 +290,6 @@
       "fixed": true
     },
     {
-      "id": "853c",
-      "userId": "aff5",
-      "type": "지출",
-      "category": "교통",
-      "amount": 150000,
-      "payment": "현금",
-      "description": "지하철",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-04-17",
-      "fixed": true
-    },
-    {
       "id": "0940",
       "userId": "aff5",
       "type": "수입",
@@ -257,9 +297,21 @@
       "amount": 3000000,
       "payment": "현금",
       "description": "월급",
-      "date": "2025-04-10",
+      "date": "2025-01-13",
       "rotation": "매월",
-      "endDate": "2025-04-10"
+      "endDate": "2025-06-13"
+    },
+    {
+      "id": "5a5c",
+      "userId": "aff5",
+      "type": "수입",
+      "category": "급여",
+      "amount": 3000000,
+      "payment": "카드",
+      "description": "월급",
+      "date": "2025-04-11",
+      "rotation": "매월",
+      "endDate": "2025-05-02"
     }
   ],
   "challengeAmount": [
