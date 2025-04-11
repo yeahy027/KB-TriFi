@@ -35,7 +35,8 @@
             :class="{ active: eventFilter === 'all' }"
             @click="setFilter('all')"
           >
-            전체 ({{ totalCount }}건)<br />{{ formatCurrency(totalAmount) }}
+            전체 ({{ totalCount }}건)
+            <br />{{ formatCurrency(totalAmount) }}
           </div>
           <!-- 수입 -->
           <div
@@ -43,7 +44,8 @@
             :class="{ active: eventFilter === '수입' }"
             @click="setFilter('수입')"
           >
-            💰 수입 ({{ incomeCount }}건)<br />{{ formatCurrency(incomeSum) }}
+            💰 수입 ({{ incomeCount }}건)
+            <br />{{ formatCurrency(incomeSum) }}
           </div>
           <!-- 지출 -->
           <div
@@ -51,7 +53,8 @@
             :class="{ active: eventFilter === '지출' }"
             @click="setFilter('지출')"
           >
-            💸 지출 ({{ expenseCount }}건)<br />{{ formatCurrency(expenseSum) }}
+            💸 지출 ({{ expenseCount }}건)
+            <br />{{ formatCurrency(expenseSum) }}
           </div>
           <!-- 이체 -->
           <div
@@ -130,40 +133,18 @@
                 </div>
               </div>
 
-              <!-- 해당 날짜의 이벤트들을 표시 -->
+              <!-- 해당 날짜의 이벤트들을 표시 (클릭 시 오버레이) -->
               <div
                 v-for="(event, eIndex) in dayEvents(day.dateStr)"
                 :key="eIndex"
                 :class="['event', event.type]"
                 style="display: block"
-                @click.stop="onEventClick(event)"
+                @click.stop="openEventAction(event)"
               >
                 <span :class="event.type">
                   {{ formattedAmount(event) }}원
                 </span>
-                <div
-                  v-if="selectedEventId === event.id"
-                  class="edit-delete-buttons"
-                  style="background-color: #f2f2f2"
-                >
-                  <!-- 삭제 버튼 -->
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger btn-sm"
-                    style="margin-right: 10px"
-                    @click.stop="deleteEvent(event.id)"
-                  >
-                    삭제
-                  </button>
-                  <!-- 수정 버튼: 모달 열기 -->
-                  <button
-                    type="button"
-                    class="btn btn-outline-warning btn-sm"
-                    @click.stop="editItem(event)"
-                  >
-                    수정
-                  </button>
-                </div>
+                <!-- 기존 inline 수정/삭제 버튼은 제거 -->
               </div>
             </td>
           </tr>
@@ -190,17 +171,31 @@
       :existingData="itemToEdit"
       @close="editModalOpen = false"
     />
+
+    <!-- (새로운) 이벤트 액션 팝업: 수정/삭제 -->
+    <transition name="fade">
+      <div v-if="showActionMenu" class="action-overlay" @click.self="closeEventAction">
+        <div class="action-popup">
+          <!-- 선택된 이벤트 정보 표시 (원하시면 UI 변경 가능) -->
+          <h5>{{ currentEvent?.description || '이벤트' }} 항목을 수정 및 삭제 할까요?</h5>
+          <div class="action-buttons">
+            <button class="edit-btn" @click="confirmEdit">수정</button>
+            <button class="delete-btn" @click="confirmDelete">삭제</button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </AppLayout>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import axios from 'axios';
+
 import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
-import RegisterReEdit from './RegisterReEdit.vue';
+import RegisterReEdit from './RegisterReedit.vue';
 import Calculator from './Calculator.vue';
-
-import axios from 'axios';
 
 defineOptions({ name: 'CalendarExample' });
 
@@ -223,7 +218,7 @@ function addMonths(dateObj, months) {
 }
 
 /**
- * 주기(roation)에 따라 startDate ~ endDate 사이의 모든 날짜(YYYY-MM-DD) 배열 생성
+ * 주기(rotation)에 따라 startDate ~ endDate 사이의 모든 날짜(YYYY-MM-DD) 배열 생성
  */
 function generateDatesBetween(startDateStr, endDateStr, rotation) {
   const result = [];
@@ -267,10 +262,15 @@ const isModalOpen = ref(false); // RegisterEdit(등록용) 모달
 
 let fetchInterval = null; // 폴링 interval
 
+/** (새로 추가) 이벤트 액션 팝업 관련 */
+const showActionMenu = ref(false);
+const currentEvent = ref(null); // 클릭한 이벤트(수정/삭제 대상)
+
 /** --- onMounted에서 데이터 fetch + interval 설정 --- **/
 onMounted(() => {
   fetchAll();
-  fetchInterval = setInterval(fetchAll, 5000);
+  // 폴링 주기가 필요하면 원하는 ms로 지정
+  fetchInterval = setInterval(fetchAll);
 });
 
 onUnmounted(() => {
@@ -302,6 +302,7 @@ async function fetchFixedExpenses() {
   try {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
+    if(!userId) return;
     const res = await axios.get('http://localhost:3000/fixedExpenses', {
       params: { userId },
     });
@@ -345,12 +346,11 @@ const allEvents = computed(() => {
   return [...events.value, ...expandedFixedExpenses.value];
 });
 
-/** --- 달력 계산 --- **/
+/** --- 달력 계산 --- */
 const formattedMonth = computed(() => {
   const m = String(currentMonth.value).padStart(2, '0');
   return `${currentYear.value}년 ${m}월`;
 });
-
 const dayNames = computed(() => ['일', '월', '화', '수', '목', '금', '토']);
 
 const weeks = computed(() => {
@@ -522,18 +522,40 @@ function resetToThisMonth() {
   currentMonth.value = today.getMonth() + 1;
 }
 
-// 이벤트 클릭 -> 펼침/닫힘
-function onEventClick(event) {
-  selectedEventId.value = selectedEventId.value === event.id ? null : event.id;
+/** (새) 이벤트 클릭 -> 오버레이에서 수정/삭제 보여주기 */
+function openEventAction(ev) {
+  currentEvent.value = ev;
+  showActionMenu.value = true;
+}
+function closeEventAction() {
+  showActionMenu.value = false;
+  currentEvent.value = null;
+}
+function confirmEdit() {
+  if (!currentEvent.value) return;
+  editItem(currentEvent.value); // 아래 editItem 함수 재활용
+  closeEventAction();
+}
+function confirmDelete() {
+  if (!currentEvent.value) return;
+  deleteEvent(currentEvent.value.id); // 아래 deleteEvent 함수 재활용
+  closeEventAction();
 }
 
-/** 삭제 (일반 transaction만 대상으로 예시) */
+/** 삭제 로직 (기존) */
 async function deleteEvent(id) {
   if (confirm('정말 삭제하시겠습니까?')) {
     try {
-      await axios.delete(`http://localhost:3000/transactions/${id}`);
-      // events에서 제거
-      events.value = events.value.filter((ev) => ev.id !== id);
+      if (typeof id === 'string' && id.startsWith('fixed-')) {
+        // 고정 항목
+        const realId = id.split('-')[1];
+        await axios.delete(`http://localhost:3000/fixedExpenses/${realId}`);
+        fetchFixedExpenses(); // 다시 불러오기
+      } else {
+        // 일반 트랜잭션
+        await axios.delete(`http://localhost:3000/transactions/${id}`);
+        events.value = events.value.filter((ev) => ev.id !== id);
+      }
       alert('삭제되었습니다.');
     } catch (error) {
       console.error('삭제 오류:', error);
@@ -542,7 +564,7 @@ async function deleteEvent(id) {
   }
 }
 
-/** 수정 버튼 -> 모달 오픈 */
+/** 수정 버튼 -> RegisterReEdit 모달 오픈 */
 function editItem(event) {
   itemToEdit.value = event;
   editModalOpen.value = true;
@@ -550,6 +572,7 @@ function editItem(event) {
 </script>
 
 <style scoped>
+/* 달력 컨테이너 */
 .calendar-container {
   width: 100%;
   margin: 0 auto;
@@ -665,10 +688,7 @@ function editItem(event) {
   color: green;
 }
 
-/* 수정/삭제 버튼 박스 */
-.edit-delete-buttons {
-  margin-top: 4px;
-}
+/* (기존) 수정/삭제 버튼 박스는 제거했음 */
 
 /* 말풍선 팝업 */
 .popup-bubble {
@@ -720,7 +740,8 @@ function editItem(event) {
   color: black;
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background-color: white;
+  border: 1px black solid;
 }
 .add-button:hover {
   background-color: #fdb3b3;
@@ -736,9 +757,8 @@ function editItem(event) {
   border-radius: 50%;
   font-size: 24px; /* 아이콘 크기 */
   color: black;
-  border: none;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  border: 1px black solid;
   background-color: white;
 }
 .calc-button:hover {
@@ -757,12 +777,70 @@ function editItem(event) {
   background: url('/src/assets/winter.jpg') center/cover no-repeat;
 }
 .header.spring-bg {
-  background: url('src/assets/spring.png') center/cover no-repeat;
+  background: url('src/assets/spring2.jpg') center/cover no-repeat;
 }
 .header.summer-bg {
-  background: url('src/assets/summer.jpeg') center/cover no-repeat;
+  background: url('src/assets/summer2.png') center/cover no-repeat;
 }
 .header.autumn-bg {
-  background: url('src/assets/fall.jpeg') center/cover no-repeat;
+  background: url('src/assets/fall2.jpg') center/cover no-repeat;
+}
+
+/* ========== 새로 추가: 이벤트 액션 팝업(오버레이) ========== */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.action-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 9999; /* 맨 위 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.action-popup {
+  background-color: #fff;
+  padding: 24px 50px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+/* 팝업 안의 버튼 */
+.action-buttons {
+  margin: 16px 0;
+  display: flex;
+  justify-content: space-around;
+}
+.edit-btn {
+  background-color: #ffc107;
+  border: none;
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.edit-btn:hover {
+  background-color: #e0a800;
+}
+.delete-btn {
+  background-color: #dc3545;
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.delete-btn:hover {
+  background-color: #c82333;
 }
 </style>

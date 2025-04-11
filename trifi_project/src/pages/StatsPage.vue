@@ -28,7 +28,7 @@
           <!-- ✅ 오른쪽: 상위 지출 -->
           <div class="col-md-6 mb-4">
             <h5 class="mb-2">상위 3개 지출 항목</h5>
-            <p class="text-muted">가장 많은 금액이 지출된 항목 3가지를 보여줍니다.</p>
+            <p class="text-muted">가장 많은 금액이 지출된 항목 3가지를 보여줍니다. <b>=͟͟͞͞ ͟͟͞͞𖤐 고정 비용 제외</b></p>
             <BarChart :data="topSpendingData" />
           </div>
         </div>
@@ -73,9 +73,11 @@ onMounted(async () => {
   try {
     const response = await axios.get(`/api/transactions?userId=${userId}`)
     transactions.value = response.data
+    console.log("transactions.value : ", transactions.value)
 
     const response2 = await axios.get(`/api/fixedExpenses?userId=${userId}`)
     fixedExpenses.value = response2.data
+    console.log("fixedExpenses.value : ", fixedExpenses.value)
 
     pieData.value = getPieChartData(transactions.value, fixedExpenses.value)
     console.log("pieData.value : ", pieData.value)

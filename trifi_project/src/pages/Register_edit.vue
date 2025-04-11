@@ -28,7 +28,12 @@
         <!-- 입력 폼 -->
         <div class="form-box">
           <div class="form" v-if="activeTab !== '이체'">
-            <input type="date" v-model="form.date" placeholder="날짜" />
+            <input
+              type="date"
+              v-model="form.date"
+              @blur="markTouched"
+              placeholder="날짜"
+            />
             <p class="error-message" v-if="isTouched && !form.date">
               날짜를 입력하세요
             </p>
@@ -37,6 +42,7 @@
               type="text"
               :value="formattedAmount"
               @input="handleAmountInput($event.target.value)"
+              @blur="markTouched"
               placeholder="금액"
               :class="{ 'input-error': isTouched && form.amount === '' }"
             />
@@ -233,6 +239,10 @@ const initialForm = () => ({
   /* memo: '', */
 });
 
+//입력 시 isTouched를 true로 만드는 함수
+const markTouched = () => {
+  if (!isTouched.value) isTouched.value = true;
+};
 const form = ref(initialForm());
 // 고정내역 추가하기로 넘어왔을 때 체크박스 체크되어있도록 수정
 const route = useRoute();
@@ -246,7 +256,7 @@ const isFormValid = computed(() => {
   if (activeTab.value === '이체') {
     return (
       form.value.date !== '' &&
-      form.value.from !== '' &&
+      form.value.amount !== '' &&
       form.value.category !== '' &&
       form.value.description !== ''
     );
@@ -341,8 +351,9 @@ const typeMap = {
 
 const submitForm = async () => {
   isTouched.value = true;
-  if (!isFormValid.value) return;
-
+  if (!isFormValid.value) {
+    return;
+  }
   const entry = {
     type: activeTab.value,
     date: form.value.date,
