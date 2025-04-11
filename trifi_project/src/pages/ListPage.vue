@@ -386,7 +386,7 @@ onMounted(() => {
   fetchInterval = setInterval(() => {
     fetchRecords();
     fetchFixedExpenses();
-  }, 1000);
+  }, 100);
 
   document.addEventListener('click', handleClickOutside);
 });
@@ -490,6 +490,7 @@ const getCategoryClass = (category) => {
 };
 
 const categoryIcons = {
+  주거: '🏠',
   식비: '🍔',
   교통: '🚌',
   쇼핑: '👗',
@@ -506,7 +507,7 @@ const categoryIcons = {
 
 // 총 수입, 지출, 이체 내역 계산
 const totalIncome = computed(() => {
-  const normalIncome = monthlyRecords.value
+  const normalIncome = monthlyRecordsWithFixed.value
     .filter((r) => r.type === '수입')
     .reduce((sum, r) => sum + Number(r.amount), 0);
 
@@ -518,7 +519,7 @@ const totalIncome = computed(() => {
 });
 
 const totalExpense = computed(() => {
-  const normalExpense = monthlyRecords.value
+  const normalExpense = monthlyRecordsWithFixed.value
     .filter((r) => r.type === '지출')
     .reduce((sum, r) => sum + Number(r.amount), 0);
 
@@ -529,10 +530,18 @@ const totalExpense = computed(() => {
   return normalExpense + fixedExpense;
 });
 
-const totalTransfer = computed(() =>
-  monthlyRecords.value
+const totalTransfer = computed(() => {
+  const normalExpense = monthlyRecordsWithFixed.value
     .filter((r) => r.type === '이체')
-    .reduce((sum, r) => sum + Number(r.amount), 0)
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+  const fixedExpense = fixedRecords.value
+    .filter((r) => r.type === '이체')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+    return normalExpense + fixedExpense;
+}
+
 );
 
 
@@ -613,15 +622,14 @@ const expenseCategories = ['식비', '교통', '쇼핑', '미용', '문화', '�
 const filterByCategory = (category) => {
   if (category === '전체') {
     selectedCategory.value = '';
-    filterType.value = '';
   } else {
     selectedCategory.value = category;
-    filterType.value = incomeCategories.includes(category)
-      ? '수입'
-      : '지출';
   }
   isCategoryDropdownOpen.value = false;
 };
+
+
+
 function editItem(event) {
   itemToEdit.value = event;
   editModalOpen.value = true;
