@@ -79,7 +79,10 @@
             :class="{ 'my-rank': user.userId === userId }"
           >
             <span>{{ index + 1 }}등 - {{ user.nickname }}</span>
-            <span class="percent">{{ user.successCount }}회 성공 ( 최대 {{ user.maxStreak }}연속 )</span>
+            <span class="user-stat">
+              <strong>{{ user.successCount }}회 성공</strong>
+              <small class="streak">(최대 {{ user.maxStreak }}일 연속)</small>
+            </span>
           </li>
         </ul>
         <br>
@@ -691,6 +694,7 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: visible;
   padding-bottom: 2px; /* 아래쪽 공간 확보 */
+  text-align: center;
 }
 
 .ranking-list li {
@@ -699,6 +703,7 @@ onMounted(async () => {
   padding: 12px 20px;
   border-bottom: 1px solid #f0f0f0;
   font-size: 16px;
+  align-items: center;
 }
 
 .ranking-list li:last-child {
@@ -722,10 +727,28 @@ onMounted(async () => {
   color: #444;
 }
 
-.ranking-list li .percent {
+/* .ranking-list li .percent {
   color: #FF6B6B;
   font-weight: bold;
+} */
+
+.user-stat {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #666; /* 너무 진하지 않게 */
 }
+
+.user-stat strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.user-stat .streak {
+  font-size: 12px;
+  color: #999;
+}
+
 
 .my-rank {
   border: 2px solid rgb(255, 142, 142);
