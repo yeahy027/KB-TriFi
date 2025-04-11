@@ -310,7 +310,7 @@ const rankedChallengeRanking = computed(() => {
 // 챌린지 순위표 불러오기
 async function fetchChallengeRanking() {
   try {
-    const { data } = await axios.get('/api/users')
+    const { data } = await axios.get('/api/challengeHistory')
     challengeRanking.value = data
   } catch (err) {
     console.error('순위 불러오기 실패:', err)
