@@ -203,6 +203,7 @@
     {
       "id": "60fc",
       "type": "transfer",
+      "userId": "d1b4",
       "date": "2025-04-11",
       "amount": 15000,
       "payment": "이체",
@@ -212,6 +213,7 @@
     {
       "id": "beab",
       "type": "이체",
+      "userId": "d1b4",
       "date": "2025-04-11",
       "amount": 100000,
       "payment": "이체",
@@ -220,7 +222,7 @@
     },
     {
       "id": "f72e",
-      "type": "transfer",
+      "type": "이체",
       "date": "2025-04-11",
       "userId": "aff4",
       "amount": 100000,
@@ -228,6 +230,48 @@
       "payment": "",
       "description": "옷샀음",
       "fixed": false
+    },
+    {
+      "id": "525d",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 170000,
+      "category": "선물",
+      "payment": "",
+      "description": "친구 생일선물",
+      "fixed": false
+    },
+    {
+      "id": "bd20",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 2000000,
+      "category": "의료",
+      "payment": "",
+      "description": "병원비",
+      "fixed": false
+    },
+    {
+      "id": "eb43",
+      "type": "이체",
+      "userId": "d1b4",
+      "date": "2025-04-11",
+      "amount": 3000000,
+      "payment": "이체",
+      "description": "병원비2",
+      "category": "의료"
+    },
+    {
+      "id": "0d92",
+      "type": "이체",
+      "date": "2025-04-11",
+      "amount": 40000000,
+      "payment": "이체",
+      "description": "응급실+병원",
+      "category": "의료",
+      "userId": "d1b4"
     }
   ],
   "fixedExpenses": [

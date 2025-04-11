@@ -361,11 +361,13 @@ const submitForm = async () => {
   };
 
 
-  if (transactionType === '이체') {
+  if (transactionType === 'transfer') {
     entry.amount = Number(form.value.amount);
     entry.payment='이체';
+    entry.type='이체';
     entry.description = form.value.description;
     entry.category = form.value.category;
+    entry.userId = userStore.user.id;
   } else {
     /* 현재 로그인한 사람의 정보*/
     entry.userId = userStore.user.id;
