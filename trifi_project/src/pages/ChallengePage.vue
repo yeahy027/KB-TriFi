@@ -2,7 +2,7 @@
   <AppLayout>
     <!-- 상단 이미지 추가 -->
     <div class="challenge-header-image">
-      <img src="@/assets/002.png" alt="챌린지 상단 이미지" />
+      <img src="@/assets/003.png" alt="챌린지 상단 이미지" />
     </div>
 
     <div class="challenge-grid">
@@ -56,18 +56,6 @@
       </div>
 
       <!-- (2) 지출 비율 카드 -->
-      <!-- <div class="section-card left-card-2">
-        <label class="section-title">지출 비율</label>
-        <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다🪄</p>
-        <div class="pie-chart">
-          <svg width="100" height="100" viewBox="0 0 36 36">
-            <circle class="circle-bg" cx="18" cy="18" r="15.9155" fill="none" stroke="#eee" stroke-width="3" />
-            <circle class="circle" cx="18" cy="18" r="15.9155" fill="none" stroke="#FF6B6B" stroke-width="3" :stroke-dasharray="animatedPie + ', 100'" />
-          </svg>
-          <span class="pie-label">{{ spendingPercent }}%</span>
-        </div>
-      </div> -->
-      <!-- (2) 지출 비율 카드 -->
       <div class="section-card left-card-2 grid-2">
         <label class="section-title">지출 비율</label>
         <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다🪄</p>
@@ -80,33 +68,11 @@
         </div>
       </div>
 
-
-      <!-- (3) 비교 정보 카드 -->
-      <!-- <div class="section-card left-card-3 grid-2">
-        <div class="info-block">
-          <label class="section-title">비슷한 나이대의 지출</label>
-          <button class="compare-button">확인하기</button>
-        </div>
-        <div class="info-block">
-          <label class="section-title">비슷한 월급 대비 지출</label>
-          <div class="ranking-circle">
-            상위<br />
-            <strong>{{ spendingRank }}%</strong>
-          </div>
-        </div>
-      </div> -->
-
       <!-- 오른쪽: 누적 성과 + 랭킹 -->
       <div class="right-card">
         <!-- 별 아이콘 -->
         <div class="ranking-header">⭐ 챌린지 순위표 ⭐</div>
         <ul class="ranking-list">
-          <!-- <li v-for="user in challengeRanking" :key="user.id">
-            {{ user.name }} - {{ user.savedPercent }}%
-          </li> -->
-          <!-- <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
-            <span>{{ index + 1 }}위 - </span>{{ user.name }} - {{ user.savedPercent }}%
-          </li> -->
           <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
             <span>{{ user.name }}</span>
             <span class="percent">{{ user.savedPercent }}%</span>
@@ -143,6 +109,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import AppLayout from '@/components/AppLayout.vue'
 import { useUserStore } from '@/stores/userStore'
 
@@ -309,24 +276,6 @@ async function fetchUserStats() {
   }
 }
 
-// 챌린지 순위표 불러오기
-// async function fetchChallengeRanking() {
-//   try {
-//     const { data } = await axios.get('/api/users')
-//     const ranked = data
-//       .map(user => ({
-//         id: user.id,
-//         name: user.name,
-//         savedPercent: ((user.challengeSuccessCount || 0) / (user.challengeParticipation || 1) * 100).toFixed(1)
-//       }))
-//       .sort((a, b) => b.savedPercent - a.savedPercent)
-
-//     challengeRanking.value = ranked
-//   } catch (err) {
-//     console.error('순위 불러오기 실패:', err)
-//   }
-// }
-
 // 챌린지 순위표 계산
 const rankedChallengeRanking = computed(() => {
   return challengeRanking.value
@@ -401,12 +350,6 @@ onMounted(async () => {
   await fetchTotalSpending()
   await calculateDaysLeft()
   await fetchUserStats()
-  // const { data } = await axios.get(/api/challengeAmount?userId=${userId})
-  // if (data.length > 0) {
-  //   spendingGoal.value = data[0].amount
-  //   startDate.value = data[0].date
-  //   calculateDaysLeft()
-  // }
   await fetchChallengeRanking()
   await checkChallengeStatus()
   isGoalLoading.value = false
@@ -424,15 +367,6 @@ onMounted(async () => {
 }
 
 /* 그리드 구성 */
-/* .challenge-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: repeat(3, 220px);
-  gap: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-} */
 
 .challenge-grid {
   display: grid;
@@ -595,28 +529,6 @@ onMounted(async () => {
 }
 
 /* progress 컨테이너 부분 */
-/* .progress-container {
-  background: #eee;
-  height: 40px;
-  border-radius: 7px;
-  overflow: hidden;
-  margin-bottom: 8px;
-  position: relative;
-}
-.progress-bar {
-  height: 60px;
-  background-color: #FF6B6B;
-  width: 0%;
-  transition: width 0.5s ease;
-}
-.progress-text {
-  font-size: 16px;
-  color: #ffffff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-} */
 .progress-container {
   position: relative;
   margin-bottom: 10px;
@@ -634,10 +546,7 @@ onMounted(async () => {
   border-radius: 10px;
   transition: width 1s ease-in-out;
 }
-/* .progress-text {
-  margin-top: 5px;
-  font-size: 14px;
-} */
+
 .progress-text {
   font-size: 16px;
   color: #ffffff;
