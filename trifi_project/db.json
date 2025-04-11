@@ -25,10 +25,21 @@
       "type": "지출",
       "date": "2025-04-10",
       "userId": "aff5",
-      "amount": 5000,
+      "amount": 50000,
       "category": "쇼핑",
       "payment": "현금",
       "description": "문구점",
+      "fixed": false
+    },
+    {
+      "id": "30dd",
+      "type": "수입",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 111111,
+      "category": "급여",
+      "payment": "현금",
+      "description": "1111",
       "fixed": false
     }
   ],
@@ -70,18 +81,6 @@
       "endDate": "2025-04-25"
     },
     {
-      "id": "853c",
-      "userId": "aff5",
-      "type": "지출",
-      "category": "교통",
-      "amount": 15000,
-      "payment": "현금",
-      "description": "지하철",
-      "date": "2025-04-10",
-      "rotation": "매월",
-      "endDate": "2025-04-17"
-    },
-    {
       "id": "0940",
       "userId": "aff5",
       "type": "수입",
@@ -110,14 +109,14 @@
   ],
   "challengeHistory": [
     {
-      "id": 1,
+      "id": "1",
       "userId": "aff4",
       "successCount": 2,
       "participationCount": 3,
       "maxStreak": 2
     },
     {
-      "id": 2,
+      "id": "2",
       "userId": "aff5",
       "successCount": 1,
       "participationCount": 3,
@@ -126,7 +125,7 @@
   ],
   "challengeSuccess": [
     {
-      "id": 1,
+      "id": "1",
       "userId": "aff4",
       "year": 2025,
       "month": 4,
