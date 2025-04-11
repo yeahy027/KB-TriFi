@@ -278,13 +278,19 @@ async function fetchUserStats() {
 
 // 챌린지 순위표 계산
 const rankedChallengeRanking = computed(() => {
-  return challengeRanking.value
-    .map(user => ({
-      id: user.id,
-      name: user.name,
-      savedPercent: ((user.challengeSuccessCount || 0) / (user.challengeParticipation || 1) * 100).toFixed(1)
-    }))
-    .sort((a, b) => b.savedPercent - a.savedPercent)
+  const ranked = [...challengeRanking.value]
+    .sort((a, b) => {
+      if (b.successCount !== a.successCount) {
+        return b.successCount - a.successCount
+      }
+      if (b.maxStreak !== a.maxStreak) {
+        return b.maxStreak - a.maxStreak
+      }
+      return 0 // 같으면 동일한 순위
+    })
+    .slice(0, 3) // 상위 3명만
+
+  return ranked
 })
 
 
