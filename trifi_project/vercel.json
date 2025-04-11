@@ -2,7 +2,7 @@
     "rewrites": [
       {
         "source": "/api/:path*",
-        "destination": "https://moneykeeper.glitch.me/:path"
+        "destination": "https://moneykeeper.glitch.me/:path*"
       }
     ]
   }
