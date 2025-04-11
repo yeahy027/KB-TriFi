@@ -147,9 +147,9 @@
               :value="formattedFrom"
               @input="handleFromInput($event.target.value)"
               placeholder="출금 금액"
-              :class="{ 'input-error': isTouched && !form.from }"
+              :class="{ 'input-error': isTouched && !form.amount }"
             />
-            <p class="error-message" v-if="isTouched && !form.from">
+            <p class="error-message" v-if="isTouched && !form.amount">
               출금 금액을 입력하세요
             </p>
 
@@ -231,7 +231,7 @@ const initialForm = () => ({
   paymentMethod: '',
   description: '',
   fixed: false,
-  from: '',
+  // from: '',
   period: '',
   /*   to: '', */
   /* memo: '', */
@@ -254,7 +254,7 @@ const isFormValid = computed(() => {
   if (activeTab.value === '이체') {
     return (
       form.value.date &&
-      form.value.from &&
+      form.value.amount &&
       form.value.category &&
       form.value.description
     );
@@ -304,17 +304,17 @@ const handleAmountInput = (value) => {
 
 const handleFromInput = (value) => {
   const numeric = value.replace(/[^\d]/g, '');
-  form.value.from = numeric;
+  form.value.amount = numeric;
 };
 
 const formattedFrom = computed({
   get() {
-    if (!form.value.from) return '';
-    return Number(form.value.from).toLocaleString() + '원';
+    if (!form.value.amount) return '';
+    return Number(form.value.amount).toLocaleString() + '원';
   },
   set(value) {
     const numeric = value.replace(/[^\d]/g, '');
-    form.value.from = numeric;
+    form.value.amount = numeric;
   },
 });
 
@@ -358,14 +358,14 @@ const submitForm = async () => {
   };
 
   if (activeTab.value === 'transfer') {
-    entry.from = Number(form.value.from);
+    entry.amount = Number(form.value.amount);
     /* entry.to = Number(form.value.to); */
     /*  entry.memo = form.value.memo; */
     entry.description = form.value.description;
   } else {
     /* 현재 로그인한 사람의 정보*/
     entry.userId = userStore.user.id;
-    entry.amount = Number(form.value.from);
+    entry.amount = Number(form.value.amount);
     entry.category = form.value.category;
     entry.payment = form.value.paymentMethod;
     entry.description = form.value.description;

@@ -168,8 +168,7 @@ const initialForm = () => ({
   description: '',
   fixed: false,
   rotation: '',
-  endDate: '',
-  from: '',
+  endDate: ''
 });
 
 // 실제 폼 데이터
@@ -223,11 +222,11 @@ const formattedAmount = computed({
 // 이체 탭용 금액 포맷
 const formattedFrom = computed({
   get() {
-    if (!form.value.from) return '';
-    return Number(form.value.from).toLocaleString() + '원';
+    if (!form.value.amount) return '';
+    return Number(form.value.amount).toLocaleString() + '원';
   },
   set(value) {
-    form.value.from = value.replace(/[^\d]/g, '');
+    form.value.amount = value.replace(/[^\d]/g, '');
   },
 });
 
@@ -240,7 +239,7 @@ const submitForm = async () => {
       date: form.value.date,
       category: form.value.category,
       description: form.value.description,
-      from: Number(form.value.from),
+      amount: Number(form.value.amount),
       userId: userStore.user.id,
     };
 

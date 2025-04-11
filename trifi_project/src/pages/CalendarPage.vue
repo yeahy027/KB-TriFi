@@ -198,7 +198,7 @@ import axios from 'axios';
 
 import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
-import RegisterReEdit from './RegisterReedit.vue';
+import RegisterReEdit from './RegisterReEdit.vue';
 import Calculator from './Calculator.vue';
 
 /** --- 날짜 헬퍼 함수들 --- **/
@@ -269,19 +269,19 @@ let fetchInterval = null;
 
 /** --- onMounted에서 데이터 fetch + interval 설정 --- **/
 onMounted(() => {
-  fetchAll();
+  fetchEvents();
+  fetchFixedExpenses();
   // 필요하다면 폴링 주기를 원하시는 ms로
-  fetchInterval = setInterval(fetchAll); 
+  fetchInterval = setInterval(()=>{
+    fetchEvents();
+    fetchFixedExpenses();
+  },100); 
 });
 
 onUnmounted(() => {
   if (fetchInterval) clearInterval(fetchInterval);
+  fetchInterval=null;
 });
-
-function fetchAll() {
-  fetchEvents();
-  fetchFixedExpenses();
-}
 
 /** 일반 트랜잭션 불러오기 */
 async function fetchEvents() {
