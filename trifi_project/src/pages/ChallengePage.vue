@@ -76,10 +76,10 @@
           <li
             v-for="(user, index) in rankedChallengeRanking"
             :key="user.id"
-            :class="{ 'my-rank': user.id === userId }"
+            :class="{ 'my-rank': user.userId === userId }"
           >
-            <span>{{ index + 1 }}등 - {{ user.name }}</span>
-            <span class="percent">{{ user.successCount }}회 성공 / 최대 {{ user.maxStreak }}연속</span>
+            <span>{{ index + 1 }}등 - {{ user.nickname }}</span>
+            <span class="percent">{{ user.successCount }}회 성공 ( 최대 {{ user.maxStreak }}연속 )</span>
           </li>
         </ul>
         <br>
