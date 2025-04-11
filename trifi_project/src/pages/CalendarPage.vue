@@ -760,13 +760,13 @@ function editItem(event) {
   background: url('/src/assets/winter.jpg') center/cover no-repeat;
 }
 .header.spring-bg {
-  background: url('src/assets/spring2.jpg') center/cover no-repeat;
+  background: url('/src/assets/spring2.jpg') center/cover no-repeat;
 }
 .header.summer-bg {
-  background: url('src/assets/summer2.png') center/cover no-repeat;
+  background: url('/src/assets/summer2.png') center/cover no-repeat;
 }
 .header.autumn-bg {
-  background: url('src/assets/fall2.jpg') center/cover no-repeat;
+  background: url('/src/assets/fall2.jpg') center/cover no-repeat;
 }
 .fade-enter-active,
 .fade-leave-active {
