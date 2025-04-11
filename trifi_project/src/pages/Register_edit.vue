@@ -397,7 +397,7 @@ const submitForm = async () => {
 
       try {
         const res = await axios.post(
-          'http://localhost:3000/fixedExpenses',
+          '/api/fixedExpenses',
           fixedEntry
         );
         console.log('✅ 고정 항목 등록 완료:', res.data);
@@ -415,7 +415,7 @@ const submitForm = async () => {
   store.addTransaction(entry);
 
   try {
-    const res = await axios.post('http://localhost:3000/transactions', entry);
+    const res = await axios.post('/api/transactions', entry);
     console.log('서버 응답:', res.data);
     props.onSubmitted?.();
   } catch (err) {

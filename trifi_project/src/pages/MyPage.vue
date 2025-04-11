@@ -254,14 +254,14 @@ const fetchFixedExpensesPlus = async () => {
   const userId = user?.id;
   if (!userId) return;
 
-  const res = await axios.get('http://localhost:3000/fixedExpenses', {
+  const res = await axios.get('/api/fixedExpenses', {
     params: { userId },
   });
   fixedExpenses.value = res.data; // fixedExpenses는 ref로 선언해줘야 함
 };
 const deleteFixedExpense = async (id) => {
   if (confirm('정말 삭제하시겠습니까?')) {
-    await axios.delete(`http://localhost:3000/fixedExpenses/${id}`);
+    await axios.delete(`/api/fixedExpenses/${id}`);
     fetchFixedExpensesPlus();
     openMenuId.value = null;
   }

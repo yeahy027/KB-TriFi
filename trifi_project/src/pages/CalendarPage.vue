@@ -289,7 +289,7 @@ async function fetchEvents() {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
     if (!userId) return;
-    const res = await axios.get('http://localhost:3000/transactions', {
+    const res = await axios.get('/api/transactions', {
       params: { userId },
     });
     events.value = res.data;
@@ -304,7 +304,7 @@ async function fetchFixedExpenses() {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
     if (!userId) return;
-    const res = await axios.get('http://localhost:3000/fixedExpenses', {
+    const res = await axios.get('/api/fixedExpenses', {
       params: { userId },
     });
     fixedExpenses.value = res.data;
@@ -549,11 +549,11 @@ async function deleteEvent(id) {
       if (typeof id === 'string' && id.startsWith('fixed-')) {
         // 고정 항목
         const realId = id.split('-')[1];
-        await axios.delete(`http://localhost:3000/fixedExpenses/${realId}`);
+        await axios.delete(`/api/fixedExpenses/${realId}`);
         fetchFixedExpenses(); // 다시 불러오기
       } else {
         // 일반 트랜잭션
-        await axios.delete(`http://localhost:3000/transactions/${id}`);
+        await axios.delete(`/api/transactions/${id}`);
         events.value = events.value.filter((ev) => ev.id !== id);
       }
       alert('삭제되었습니다.');
