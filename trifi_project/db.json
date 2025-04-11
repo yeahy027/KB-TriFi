@@ -1,0 +1,372 @@
+{
+  "users": [
+    {
+      "id": "aff5",
+      "email": "test2@example.com",
+      "password": "12345678",
+      "name": "홍길순",
+      "nickname": "홍순이",
+      "country": "Korea",
+      "language": "Korean"
+    },
+    {
+      "id": "aff4",
+      "name": "김네비",
+      "nickname": "네비게이션",
+      "email": "test3@example.com",
+      "password": "1111",
+      "country": "Korea",
+      "language": "Korean"
+    },
+    {
+      "id": "d1b4",
+      "name": "서현",
+      "nickname": "머니키퍼",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
+    },
+    {
+      "id": "b3b0",
+      "name": "마마",
+      "nickname": "맘",
+      "email": "qwer@naver.com",
+      "password": "1234"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "5e00",
+      "type": "지출",
+      "date": "2025-02-10",
+      "userId": "aff5",
+      "amount": 50000,
+      "category": "쇼핑",
+      "payment": "현금",
+      "description": "문구점",
+      "fixed": false
+    },
+    {
+      "id": "75ad",
+      "type": "이체",
+      "date": "2025-03-11",
+      "userId": "d1b4",
+      "amount": 0,
+      "category": "선물",
+      "payment": "카드",
+      "description": "여자친구 100일 선물",
+      "fixed": false
+    },
+    {
+      "id": "453e",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 19999,
+      "category": "교통",
+      "payment": "카드",
+      "description": "지하철 이용",
+      "fixed": false
+    },
+    {
+      "id": "6cd6",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "b3b0",
+      "amount": 200000,
+      "category": "식비",
+      "payment": "이체",
+      "description": "밥",
+      "fixed": false,
+      "from": 20000
+    },
+    {
+      "id": "f626",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 100889,
+      "category": "공과금",
+      "payment": "카드",
+      "description": "공과금",
+      "fixed": false
+    },
+    {
+      "id": "ad4e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 10000,
+      "category": "쇼핑",
+      "payment": "이체",
+      "description": "지하상가 반팔티 구입",
+      "fixed": false
+    },
+    {
+      "id": "1c4d",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 1000000,
+      "category": "문화",
+      "payment": "카드",
+      "description": "게임 현질",
+      "fixed": false
+    },
+    {
+      "id": "db0e",
+      "type": "이체",
+      "date": "2025-03-20",
+      "userId": "aff4",
+      "amount": 100000,
+      "category": "주거",
+      "payment": "이체",
+      "description": "집 변기 수리",
+      "fixed": false
+    },
+    {
+      "id": "a8b7",
+      "type": "이체",
+      "date": "2025-04-08",
+      "userId": "aff5",
+      "amount": 150000,
+      "category": "선물",
+      "payment": "이체",
+      "description": "당근거래",
+      "fixed": false
+    },
+    {
+      "id": "d4c6",
+      "type": "지출",
+      "date": "2025-04-03",
+      "userId": "aff5",
+      "amount": 10000,
+      "category": "문화",
+      "payment": "현금",
+      "description": "cgv",
+      "fixed": false
+    },
+    {
+      "id": "0c13",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 110000,
+      "category": "기타",
+      "payment": "이체",
+      "description": "정기적금",
+      "fixed": false
+    },
+    {
+      "id": "8487",
+      "type": "수입",
+      "date": "2025-03-29",
+      "userId": "aff5",
+      "amount": 500000,
+      "category": "급여",
+      "payment": "현금",
+      "description": "훈련장려금",
+      "fixed": false
+    },
+    {
+      "id": "60fc",
+      "type": "이체",
+      "userId": "d1b4",
+      "date": "2025-04-11",
+      "amount": 15000,
+      "payment": "이체",
+      "description": "맥도날드",
+      "category": "식비"
+    },
+    {
+      "id": "eb43",
+      "type": "이체",
+      "userId": "d1b4",
+      "date": "2025-04-11",
+      "amount": 3000000,
+      "payment": "이체",
+      "description": "치과",
+      "category": "의료"
+    },
+    {
+      "id": "0d92",
+      "type": "이체",
+      "date": "2025-04-01",
+      "amount": 40000000,
+      "payment": "이체",
+      "description": "응급실+병원",
+      "category": "의료",
+      "userId": "d1b4"
+    },
+    {
+      "id": "9e2e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "amount": 10000,
+      "payment": "이체",
+      "description": "머릿결 정리",
+      "category": "미용",
+      "userId": "aff5"
+    },
+    {
+      "id": "0957",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 100000,
+      "category": "쇼핑",
+      "payment": "현금",
+      "description": "반팔 티 구매",
+      "fixed": false
+    },
+    {
+      "id": "7655",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 100000,
+      "category": "용돈",
+      "payment": "현금",
+      "description": "일급",
+      "fixed": false
+    },
+    {
+      "id": "da34",
+      "type": "지출",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 1000000,
+      "category": "교통",
+      "payment": "현금",
+      "description": "차량 수리비",
+      "fixed": false
+    },
+    {
+      "id": "2b41",
+      "type": "이체",
+      "date": "2025-04-11",
+      "amount": 100000,
+      "payment": "이체",
+      "description": "서브웨이 쿠폰",
+      "category": "식비",
+      "userId": "aff5"
+    },
+    {
+      "id": "8b9f",
+      "type": "수입",
+      "date": "2025-04-05",
+      "userId": "aff5",
+      "amount": 30000,
+      "category": "용돈",
+      "payment": "현금",
+      "description": "일급",
+      "fixed": false
+    }
+  ],
+  "fixedExpenses": [
+    {
+      "id": "825d",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "기타",
+      "amount": 5000000,
+      "payment": "페이",
+      "description": "넷플릭스",
+      "date": "2025-04-14",
+      "rotation": "매월",
+      "endDate": "2025-06-18",
+      "fixed": true
+    },
+    {
+      "id": "9f92",
+      "userId": "aff4",
+      "type": "수입",
+      "category": "용돈",
+      "amount": 300000,
+      "payment": "이체",
+      "description": "용돈",
+      "date": "2025-04-15",
+      "rotation": "매주",
+      "endDate": "2025-04-30",
+      "fixed": true
+    },
+    {
+      "id": "0940",
+      "userId": "aff5",
+      "type": "수입",
+      "category": "급여",
+      "amount": 3000000,
+      "payment": "현금",
+      "description": "월급",
+      "date": "2025-01-13",
+      "rotation": "매월",
+      "endDate": "2025-06-13"
+    },
+    {
+      "id": "5a5c",
+      "userId": "aff5",
+      "type": "수입",
+      "category": "급여",
+      "amount": 3000000,
+      "payment": "카드",
+      "description": "월급",
+      "date": "2025-04-11",
+      "rotation": "매월",
+      "endDate": "2025-05-02"
+    }
+  ],
+  "challengeAmount": [
+    {
+      "id": "1",
+      "userId": "aff5",
+      "amount": 50000,
+      "date": "2025-04-10"
+    },
+    {
+      "id": "2",
+      "userId": "aff4",
+      "amount": 30000,
+      "date": "2025-04-09"
+    }
+  ],
+  "challengeHistory": [
+    {
+      "id": "1",
+      "userId": "aff4",
+      "nickname": "네비게이션",
+      "successCount": 2,
+      "participationCount": 3,
+      "maxStreak": 2
+    },
+    {
+      "id": "2",
+      "userId": "aff5",
+      "nickname": "홍순이",
+      "successCount": 1,
+      "participationCount": 3,
+      "maxStreak": 1
+    }
+  ],
+  "challengeSuccess": [
+    {
+      "id": "1",
+      "userId": "aff4",
+      "year": 2025,
+      "month": 4,
+      "success": true
+    },
+    {
+      "id": "8be4",
+      "userId": "aff5",
+      "year": 2025,
+      "month": 4,
+      "success": true
+    },
+    {
+      "id": "2c79",
+      "userId": null,
+      "year": 2025,
+      "month": 4,
+      "success": true
+    }
+  ]
+}
