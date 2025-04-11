@@ -73,9 +73,13 @@
         <!-- 별 아이콘 -->
         <div class="ranking-header">⭐ 챌린지 순위표 ⭐</div>
         <ul class="ranking-list">
-          <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
-            <span>{{ user.name }}</span>
-            <span class="percent">{{ user.savedPercent }}%</span>
+          <li
+            v-for="(user, index) in rankedChallengeRanking"
+            :key="user.id"
+            :class="{ 'my-rank': user.id === userId }"
+          >
+            <span>{{ index + 1 }}등 - {{ user.name }}</span>
+            <span class="percent">{{ user.successCount }}회 성공 / 최대 {{ user.maxStreak }}연속</span>
           </li>
         </ul>
         <br>
@@ -177,12 +181,21 @@ const checkChallengeStatus = async () => {
   const history = historyRes[0]
 
   if (currentSpending.value > spendingGoal.value) {
-    alert('💸 이번달 지출이 목표를 초과했어요! 챌린지 실패 😢')
+    Swal.fire({
+      icon: 'error',
+      title: '챌린지 실패!',
+      text: '💸 이번달 지출이 목표를 초과했어요! 챌린지 실패 😢'
+    })
 
     // 실패 → streak 초기화
     currentStreak.value = 0
   } else {
-    alert('🎉 이번달 챌린지를 성공했어요! 축하합니다 🥳')
+    Swal.fire({
+      icon: 'success',
+      title: '챌린지 성공!',
+      text: '🎉 이번달 챌린지를 성공했어요! 축하합니다 🥳'
+    })
+
 
     // 성공 처리
     await axios.post('/api/challengeSuccess', {
@@ -289,7 +302,7 @@ const rankedChallengeRanking = computed(() => {
       return 0 // 같으면 동일한 순위
     })
     .slice(0, 3) // 상위 3명만
-
+  console.log("rankedChallengeRanking: ", rankedChallengeRanking)
   return ranked
 })
 
@@ -701,6 +714,18 @@ onMounted(async () => {
 .ranking-list li .percent {
   color: #FF6B6B;
   font-weight: bold;
+}
+
+.my-rank {
+  border: 2px solid rgb(255, 142, 142);
+  animation: blink 1s infinite;
+  border-radius: 10px;
+  padding: 5px;
+}
+@keyframes blink {
+  0% { box-shadow: 0 0 5px red; }
+  50% { box-shadow: 0 0 10px red; }
+  100% { box-shadow: 0 0 5px red; }
 }
 
 </style>
