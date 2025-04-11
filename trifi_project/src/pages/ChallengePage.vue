@@ -367,11 +367,20 @@ onMounted(async () => {
   isGoalLoading.value = true
   await fetchGoal()
   await fetchTotalSpending()
-  await calculateDaysLeft()
-  await fetchUserStats()
   await fetchChallengeRanking()
-  await checkChallengeStatus()
+  await fetchUserStats()
+  // await checkChallengeStatus()
+  calculateDaysLeft()
   isGoalLoading.value = false
+
+  // ✅ 목표 초과 시 알림
+  if (goalExists.value && currentSpending.value > spendingGoal.value) {
+    Swal.fire({
+      icon: 'warning',
+      title: '목표 초과!',
+      text: '목표 금액보다 플렉스 해버리셨네요.. 다음 챌린지에 다시 도전해봅시다! 💸'
+    })
+  }
 })
 </script>
 
