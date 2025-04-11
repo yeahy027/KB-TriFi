@@ -507,7 +507,7 @@ const categoryIcons = {
 
 // 총 수입, 지출, 이체 내역 계산
 const totalIncome = computed(() => {
-  const normalIncome = monthlyRecords.value
+  const normalIncome = monthlyRecordsWithFixed.value
     .filter((r) => r.type === '수입')
     .reduce((sum, r) => sum + Number(r.amount), 0);
 
@@ -519,7 +519,7 @@ const totalIncome = computed(() => {
 });
 
 const totalExpense = computed(() => {
-  const normalExpense = monthlyRecords.value
+  const normalExpense = monthlyRecordsWithFixed.value
     .filter((r) => r.type === '지출')
     .reduce((sum, r) => sum + Number(r.amount), 0);
 
@@ -530,10 +530,18 @@ const totalExpense = computed(() => {
   return normalExpense + fixedExpense;
 });
 
-const totalTransfer = computed(() =>
-  monthlyRecords.value
+const totalTransfer = computed(() => {
+  const normalExpense = monthlyRecordsWithFixed.value
     .filter((r) => r.type === '이체')
-    .reduce((sum, r) => sum + Number(r.amount), 0)
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+  const fixedExpense = fixedRecords.value
+    .filter((r) => r.type === '이체')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+
+    return normalExpense + fixedExpense;
+}
+
 );
 
 
