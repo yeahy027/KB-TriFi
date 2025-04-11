@@ -6,11 +6,14 @@
         <button class="btn btn-outline-secondary btn-sm" @click="prevMonth">
           <i class="bi bi-chevron-left"></i>
         </button>
-        <strong class="month-text mx-auto" style="cursor:pointer; font-size: xx-large;"
-        @click="showDatePicker">
+        <strong
+          class="month-text mx-auto"
+          style="cursor: pointer; font-size: xx-large"
+          @click="showDatePicker"
+        >
           {{ formattedMonth }}
         </strong>
-       
+
         <button class="btn btn-outline-secondary btn-sm" @click="nextMonth">
           <i class="bi bi-chevron-right"></i>
         </button>
@@ -21,68 +24,59 @@
           📅이번 달
         </button>
       </div>
-<!-- 상단 필터 바 -->
-<div class="mb-3 d-flex justify-content-end align-items-center gap-2 flex-wrap">
-  <div class="d-flex align-items-center gap-2">
-  
-  <input
-  type="text"
-  v-model="searchText"
-  placeholder="🔍 내역을 검색해보세요"
-  class="form-control form-control-sm rounded-pill px-2"
-  style="width: 200px; font-size: 14px; color: #333;"
-/>
-</div>
+      <!-- 상단 필터 바 -->
+      <div
+        class="mb-3 d-flex justify-content-end align-items-center gap-2 flex-wrap"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <input
+            type="text"
+            v-model="searchText"
+            placeholder="🔍 내역을 검색해보세요"
+            class="form-control form-control-sm rounded-pill px-2"
+            style="width: 200px; font-size: 14px; color: #333"
+          />
+        </div>
 
+        <!-- 카테고리별 내역 드롭다운 -->
+        <div class="dropdown position-relative" ref="categoryDropdownRef">
+          <button
+            class="btn btn-outline-dark btn-sm rounded-pill"
+            @click="toggleCategoryDropdown"
+          >
+            📊 카테고리별 내역
+          </button>
+          <div v-if="isCategoryDropdownOpen" class="category-dropdown">
+            <!-- 전체보기 항목 추가 -->
+            <div class="dropdown-item" @click="filterByCategory('전체')">
+              전체보기
+            </div>
+            <!-- 기존 카테고리들 -->
+            <div
+              class="dropdown-item"
+              v-for="(icon, category) in categoryIcons"
+              :key="category"
+              @click="filterByCategory(category)"
+            >
+              {{ icon }} {{ category }}
+            </div>
+          </div>
+        </div>
 
+        <!-- 날짜 선택 -->
+        <input
+          type="date"
+          v-model="selectedDate"
+          ref="dateInput"
+          class="form-control form-control-sm"
+          style="width: auto"
+        />
 
- <!-- 카테고리별 내역 드롭다운 -->
-<div class="dropdown position-relative" ref="categoryDropdownRef">
-  <button
-  class="btn btn-outline-dark btn-sm rounded-pill"
-  @click="toggleCategoryDropdown"
->
-  📊 카테고리별 내역
-</button>
-  <div
-    v-if="isCategoryDropdownOpen"
-    class="category-dropdown"
-  >
-    <!-- 전체보기 항목 추가 -->
-    <div
-      class="dropdown-item"
-      @click="filterByCategory('전체')"
-    >
-      전체보기
-    </div>
-    <!-- 기존 카테고리들 -->
-    <div
-      class="dropdown-item"
-      v-for="(icon, category) in categoryIcons"
-      :key="category"
-      @click="filterByCategory(category)"
-    >
-      {{ icon }} {{ category }}
-    </div>
-  </div>
-</div>
-
-
-  <!-- 날짜 선택 -->
-  <input
-    type="date"
-    v-model="selectedDate"
-    ref="dateInput"
-    class="form-control form-control-sm"
-    style="width: auto"
-  />
-
-  <!-- 엑셀 다운로드 -->
-  <button class="btn btn-success btn-sm" @click="downloadExcel">
-    📂 엑셀 변환
-  </button>
-</div>
-
+        <!-- 엑셀 다운로드 -->
+        <button class="btn btn-success btn-sm" @click="downloadExcel">
+          📂 엑셀 변환
+        </button>
+      </div>
 
       <!-- 수입/지출 요약 -->
       <div
@@ -135,39 +129,43 @@
         </div>
       </div>
 
-     
-      
-<!-- 고정지출 내역 -->
-<div class="mb-2 d-flex justify-content-between align-items-center">
-  <div class="fw-bold">📌 고정 수입/지출 내역</div>
-  <button class="btn btn-sm btn-outline-secondary" @click="showFixed = !showFixed">
-    {{ showFixed ? '숨기기' : '보이기' }}
-  </button>
-</div>
+      <!-- 고정지출 내역 -->
+      <div class="mb-2 d-flex justify-content-between align-items-center">
+        <div class="fw-bold">📌 고정 수입/지출 내역</div>
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          @click="showFixed = !showFixed"
+        >
+          {{ showFixed ? '숨기기' : '보이기' }}
+        </button>
+      </div>
 
-<!-- 실제 고정내역 리스트 -->
-<div v-if="showFixed && fixedRecords.length" class="mb-5">
-  <div
-    v-for="record in fixedRecords"
-    :key="record.id"
-    class="d-flex align-items-center justify-content-between py-3 px-3 border position-relative"
-    style="background-color: ivory; border-radius: 12px; margin-bottom: 10px;"
-  >
-   
-    <span
-      class="badge me-3 d-flex align-items-center gap-1"
-      :class="getCategoryClass(record.category)"
-    >
-      {{ categoryIcons[record.category] || '❓' }} {{ record.category }}
-    </span>
-    <div class="flex-grow-1">
-      <div>{{ record.description }}</div>
-      <small class="text-muted">
-        {{ record.payment }} |
-        {{ formatDateWithDay(record.date) }} ~ {{ formatDateWithDay(record.endDate) }}
-      </small>
-    </div>
-    <div
+      <!-- 실제 고정내역 리스트 -->
+      <div v-if="showFixed && fixedRecords.length" class="mb-5">
+        <div
+          v-for="record in fixedRecords"
+          :key="record.id"
+          class="d-flex align-items-center justify-content-between py-3 px-3 border position-relative"
+          style="
+            background-color: ivory;
+            border-radius: 12px;
+            margin-bottom: 10px;
+          "
+        >
+          <span
+            class="badge me-3 d-flex align-items-center gap-1"
+            :class="getCategoryClass(record.category)"
+          >
+            {{ categoryIcons[record.category] || '❓' }} {{ record.category }}
+          </span>
+          <div class="flex-grow-1">
+            <div>{{ record.description }}</div>
+            <small class="text-muted">
+              {{ record.payment }} | {{ formatDateWithDay(record.date) }} ~
+              {{ formatDateWithDay(record.endDate) }}
+            </small>
+          </div>
+          <div
             :class="
               record.type === '수입'
                 ? 'text-primary fw-bold'
@@ -175,43 +173,42 @@
             "
           >
             {{ Number(record.amount).toLocaleString() }} 원
-      <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
+            <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
 
+            <!-- 메뉴 영역 (⋯ 버튼 클릭 시 뜨는 팝업 메뉴) -->
+            <div
+              v-if="openMenuId === record.id"
+              class="position-absolute end-0 mt-2 p-2 bg-white border rounded shadow-sm"
+              style="z-index: 100; min-width: 100px"
+            >
+              <div
+                class="px-2 py-1 text-dark"
+                style="cursor: pointer"
+                @click.stop="editItem(record)"
+                @mouseover="hover = true"
+                @mouseleave="hover = false"
+              >
+                수정
+              </div>
+              <div
+                class="px-2 py-1 text-dark"
+                style="cursor: pointer"
+                @click="deleteFixedExpense(record.id)"
+              >
+                삭제
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-
-      <!-- 메뉴 영역 (⋯ 버튼 클릭 시 뜨는 팝업 메뉴) -->
-<div
-  v-if="openMenuId === record.id"
-  class="position-absolute end-0 mt-2 p-2 bg-white border rounded shadow-sm"
-  style="z-index: 100; min-width: 100px;"
->
-  <div
-    class="px-2 py-1 text-dark"
-    style="cursor: pointer;"
-    @click.stop="editItem(record)"
-    @mouseover="hover = true"
-    @mouseleave="hover = false"
-  >
-    수정
-  </div>
-  <div
-    class="px-2 py-1 text-dark"
-    style="cursor: pointer;"
-    @click="deleteFixedExpense(record.id)"
-  >
-    삭제
-  </div>
-</div>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- 내역이 없을 때 보여줄 메시지 -->
-<div v-if="Object.keys(groupedRecords).length === 0" class="text-center text-muted py-4">
-  🫥 해당하는 내역이 없습니다
-</div>
+      <!-- 내역이 없을 때 보여줄 메시지 -->
+      <div
+        v-if="Object.keys(groupedRecords).length === 0"
+        class="text-center text-muted py-4"
+      >
+        🫥 해당하는 내역이 없습니다
+      </div>
 
       <!-- 날짜별 내역 -->
       <div
@@ -248,8 +245,6 @@
             <span class="menu-toggle" @click="toggleMenu(record.id)">⋯</span>
           </div>
 
-
-          
           <!-- 수정,삭제 드롭다운 메뉴 -->
           <div v-if="openMenuId === record.id" class="dropdown-menu-custom">
             <button class="dropdown-item" @click.stop="editItem(record)">
@@ -262,30 +257,27 @@
         </div>
       </div>
       <button class="add-button" @click="isModalOpen = true">+</button>
-    <button class="calc-button" @click="showCalculator = true">
-      <i class="bi bi-calculator"></i>
-    </button>
+      <button class="calc-button" @click="showCalculator = true">
+        <i class="bi bi-calculator"></i>
+      </button>
 
+      <RegisterReEdit
+        v-if="editModalOpen"
+        :existingData="itemToEdit"
+        @close="editModalOpen = false"
+      />
 
-
-    <RegisterReEdit
-      v-if="editModalOpen"
-      :existingData="itemToEdit"
-      @close="editModalOpen = false"
-    />
-    
-
-    <!-- 계산기 컴포넌트 -->
-    <Calculator 
-      :visible="showCalculator"
-      @close="showCalculator = false"></Calculator>
-    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+      <!-- 계산기 컴포넌트 -->
+      <Calculator
+        :visible="showCalculator"
+        @close="showCalculator = false"
+      ></Calculator>
+      <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
   </AppLayout>
 </template>
 
 <script setup>
-
 import AppLayout from '@/components/AppLayout.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
@@ -303,19 +295,15 @@ const goToCalender = () => {
 };
 
 const showFixed = ref(true);
-const currentMonth = ref(new Date())
-const records = ref([])
-const fixedExpenses = ref([])
-const filterType = ref('')
-const selectedDate = ref('')
+const currentMonth = ref(new Date());
+const records = ref([]);
+const fixedExpenses = ref([]);
+const filterType = ref('');
+const selectedDate = ref('');
 const dateInput = ref(null);
 const showCalculator = ref(false);
-const editModalOpen = ref(false);    // RegisterReedit 모달 열림 여부
-const itemToEdit = ref(null); 
-
-
-
-
+const editModalOpen = ref(false); // RegisterReedit 모달 열림 여부
+const itemToEdit = ref(null);
 
 const formattedMonth = computed(() => {
   const year = currentMonth.value.getFullYear();
@@ -336,9 +324,9 @@ const nextMonth = () => {
 };
 
 const resetToThisMonth = () => {
-  currentMonth.value = new Date()
-  selectedDate.value = ''
-}
+  currentMonth.value = new Date();
+  selectedDate.value = '';
+};
 
 // 요일 변환
 const formatDateWithDay = (dateStr) => {
@@ -348,37 +336,31 @@ const formatDateWithDay = (dateStr) => {
   return `${dateStr} (${dayName})`;
 };
 
-
 // fetch
-let fetchInterval = null
-
+let fetchInterval = null;
 
 // 유저정보 가져오기
 const fetchRecords = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem('user'));
   const userId = user?.id;
   if (!userId) return;
 
   const res = await axios.get('http://localhost:3000/transactions', {
-    params: { userId }
+    params: { userId },
   });
   records.value = res.data;
 };
 
-
 const fetchFixedExpenses = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem('user'));
   const userId = user?.id;
   if (!userId) return;
 
   const res = await axios.get('http://localhost:3000/fixedExpenses', {
-    params: { userId }
+    params: { userId },
   });
   fixedExpenses.value = res.data; // fixedExpenses는 ref로 선언해줘야 함
 };
-
-
-
 
 onMounted(() => {
   fetchRecords();
@@ -396,7 +378,7 @@ onUnmounted(() => {
     clearInterval(fetchInterval);
     fetchInterval = null;
   }
-  document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('click', handleClickOutside);
 });
 
 const monthlyRecords = computed(() => {
@@ -432,14 +414,26 @@ const fixedRecords = computed(() => {
     const isInMonth =
       selectedYear >= start.getFullYear() &&
       selectedMonth >= start.getMonth() + 1 &&
-      start <= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth() + 1, 0) &&
-      end >= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth(), 1);
+      start <=
+        new Date(
+          currentMonth.value.getFullYear(),
+          currentMonth.value.getMonth() + 1,
+          0
+        ) &&
+      end >=
+        new Date(
+          currentMonth.value.getFullYear(),
+          currentMonth.value.getMonth(),
+          1
+        );
 
     const matchesType = !filterType.value || record.type === filterType.value;
 
     // ✅ 카테고리 필터도 추가
     const matchesCategory =
-      !selectedCategory.value || selectedCategory.value === '전체' || record.category === selectedCategory.value;
+      !selectedCategory.value ||
+      selectedCategory.value === '전체' ||
+      record.category === selectedCategory.value;
 
     return isInMonth && matchesType && matchesCategory;
   });
@@ -447,14 +441,21 @@ const fixedRecords = computed(() => {
 const categoryDropdownRef = ref(null);
 
 const handleClickOutside = (event) => {
-  if (categoryDropdownRef.value && !categoryDropdownRef.value.contains(event.target))
-{isCategoryDropdownOpen.value = false;}
-}
+  if (
+    categoryDropdownRef.value &&
+    !categoryDropdownRef.value.contains(event.target)
+  ) {
+    isCategoryDropdownOpen.value = false;
+  }
+};
 const filteredRecords = computed(() => {
   return monthlyRecords.value.filter((record) => {
     const matchesType = !filterType.value || record.type === filterType.value;
-    const matchesCategory = !selectedCategory.value || record.category === selectedCategory.value;
-    const matchesSearch = !searchText.value || record.description.toLowerCase().includes(searchText.value.toLowerCase());
+    const matchesCategory =
+      !selectedCategory.value || record.category === selectedCategory.value;
+    const matchesSearch =
+      !searchText.value ||
+      record.description.toLowerCase().includes(searchText.value.toLowerCase());
     return matchesType && matchesCategory && matchesSearch;
   });
 });
@@ -535,7 +536,6 @@ const totalTransfer = computed(() =>
     .reduce((sum, r) => sum + Number(r.amount), 0)
 );
 
-
 // 엑셀 데이터 변환
 const downloadExcel = () => {
   const excelData = monthlyRecords.value.map((record) => ({
@@ -547,13 +547,11 @@ const downloadExcel = () => {
     유형: record.type,
   }));
 
-   // 총합 정보 추가
+  // 총합 정보 추가
   excelData.push({});
   excelData.push({ 내용: ' *총 지출', 금액: totalExpense.value });
   excelData.push({ 내용: ' *총 수입', 금액: totalIncome.value });
   excelData.push({ 내용: ' *총 이체', 금액: totalTransfer.value });
-
-
 
   const worksheet = XLSX.utils.json_to_sheet(excelData);
   const workbook = XLSX.utils.book_new();
@@ -568,28 +566,24 @@ const downloadExcel = () => {
 
 // 내역 수정, 삭제
 
-
 const toggleMenu = (id) => {
   openMenuId.value = openMenuId.value === id ? null : id;
 };
 
 const openMenuId = ref(null);
-const editTarget = ref(null)
+const editTarget = ref(null);
 
 const editRecord = (record) => {
   editTarget.value = record;
   isModalOpen.value = true;
 };
 
-
-
-
 const deleteRecord = async (id) => {
   if (confirm('정말 삭제하시겠습니까?')) {
     await axios.delete(`http://localhost:3000/transactions/${id}`);
     fetchRecords();
   }
-}
+};
 
 const deleteFixedExpense = async (id) => {
   if (confirm('정말 삭제하시겠습니까?')) {
@@ -606,9 +600,19 @@ const toggleCategoryDropdown = () => {
   isCategoryDropdownOpen.value = !isCategoryDropdownOpen.value;
 };
 
-
-const incomeCategories = ['급여','용돈'];
-const expenseCategories = ['식비', '교통', '쇼핑', '미용', '문화', '저축', '기타', '의료', '공과금','선물'];
+const incomeCategories = ['급여', '용돈'];
+const expenseCategories = [
+  '식비',
+  '교통',
+  '쇼핑',
+  '미용',
+  '문화',
+  '저축',
+  '기타',
+  '의료',
+  '공과금',
+  '선물',
+];
 
 const filterByCategory = (category) => {
   if (category === '전체') {
@@ -616,9 +620,7 @@ const filterByCategory = (category) => {
     filterType.value = '';
   } else {
     selectedCategory.value = category;
-    filterType.value = incomeCategories.includes(category)
-      ? '수입'
-      : '지출';
+    filterType.value = incomeCategories.includes(category) ? '수입' : '지출';
   }
   isCategoryDropdownOpen.value = false;
 };
@@ -627,10 +629,7 @@ function editItem(event) {
   editModalOpen.value = true;
 }
 
-
 const searchText = ref('');
-
-
 </script>
 
 <style scoped>
@@ -798,5 +797,4 @@ const searchText = ref('');
 .category-dropdown .dropdown-item:hover {
   background-color: #f8f9fa;
 }
-
 </style>

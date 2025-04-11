@@ -17,6 +17,13 @@
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
+    },
+    {
+      "id": "20bc",
+      "name": "머니키퍼",
+      "nickname": "머머",
+      "email": "m@example.com",
+      "password": "1111"
     }
   ],
   "transactions": [
@@ -51,6 +58,17 @@
       "category": "급여",
       "payment": "현금",
       "description": "1122",
+      "fixed": false
+    },
+    {
+      "id": "a8a7",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "20bc",
+      "amount": 100000,
+      "category": "쇼핑",
+      "payment": "페이",
+      "description": "test",
       "fixed": false
     }
   ],
@@ -102,6 +120,30 @@
       "date": "2025-04-10",
       "rotation": "매월",
       "endDate": "2025-04-10"
+    },
+    {
+      "id": "8ac1",
+      "userId": "20bc",
+      "type": "수입",
+      "category": "용돈",
+      "amount": 1000000,
+      "payment": "현금",
+      "description": "test2",
+      "date": "2025-04-16",
+      "rotation": "매주",
+      "endDate": "2025-04-30"
+    },
+    {
+      "id": "c024",
+      "userId": "20bc",
+      "type": "지출",
+      "category": "쇼핑",
+      "amount": 200000,
+      "payment": "카드",
+      "description": "test3",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-05-31"
     }
   ],
   "challengeAmount": [
