@@ -566,10 +566,14 @@ async function deleteEvent(id) {
 
 /** 수정 버튼 -> RegisterReEdit 모달 오픈 */
 function editItem(event) {
-  // RegisterReEdit에 넘겨줄 데이터를 구성
-  // 고정항목이면 isFixed = true, 'fixed-123-2025-04-10'처럼 되어 있으니 ID 분리 없이 그대로 넘겨주면 됩니다.
-  // RegisterReEdit 내부에서 isFixed 여부를 보고, 고정항목 API를 호출하도록 처리
-  itemToEdit.value = { ...event }; // 이벤트 객체 자체를 전달
+  if (event.isFixed) {
+    // 고정지출이면 복합 id("fixed-123-2025-04-10")에서 실제 id(여기서는 123)를 추출
+    const realId = event.id.split('-')[1];
+    // 실제 고정지출 API에서 요구하는 형태로 object를 구성합니다.
+    itemToEdit.value = { ...event, id: realId };
+  } else {
+    itemToEdit.value = { ...event };
+  }
   editModalOpen.value = true;
 }
 </script>
