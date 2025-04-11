@@ -267,27 +267,29 @@
     </button>
 
 
+    <RegisterEdit v-if="isModalOpen" @close="handleModalClose" />
 
-    <RegisterReEdit
-      v-if="editModalOpen"
-      :existingData="itemToEdit"
-      @close="editModalOpen = false"
-    />
+<RegisterReEdit
+  v-if="editModalOpen"
+  :existingData="itemToEdit"
+  @close="handleModalClose"
+/>
+
     
 
     <!-- 계산기 컴포넌트 -->
     <Calculator 
       :visible="showCalculator"
       @close="showCalculator = false"></Calculator>
-    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
     </div>
   </AppLayout>
 </template>
 
-<script setup>
 
+
+<script setup>
 import AppLayout from '@/components/AppLayout.vue';
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -298,25 +300,24 @@ import RegisterReEdit from './RegisterReEdit.vue';
 
 const router = useRouter();
 const isModalOpen = ref(false);
-const goToCalender = () => {
-  router.push(`/home`);
-};
+const showCalculator = ref(false);
+const editModalOpen = ref(false);
+const itemToEdit = ref(null);
 
 const showFixed = ref(true);
-const currentMonth = ref(new Date())
-const records = ref([])
-const fixedExpenses = ref([])
-const filterType = ref('')
-const selectedDate = ref('')
+const currentMonth = ref(new Date());
+const records = ref([]);
+const fixedExpenses = ref([]);
+const filterType = ref('');
+const selectedDate = ref('');
 const dateInput = ref(null);
-const showCalculator = ref(false);
-const editModalOpen = ref(false);    // RegisterReedit 모달 열림 여부
-const itemToEdit = ref(null); 
+const searchText = ref('');
+const selectedCategory = ref('');
+const isLoading = ref(false);
 
+const categoryDropdownRef = ref(null);
 
-
-
-
+// 날짜 관련
 const formattedMonth = computed(() => {
   const year = currentMonth.value.getFullYear();
   const month = String(currentMonth.value.getMonth() + 1).padStart(2, '0');
@@ -336,69 +337,92 @@ const nextMonth = () => {
 };
 
 const resetToThisMonth = () => {
-  currentMonth.value = new Date()
-  selectedDate.value = ''
-}
+  currentMonth.value = new Date();
+  selectedDate.value = '';
+};
 
-// 요일 변환
 const formatDateWithDay = (dateStr) => {
   const date = new Date(dateStr);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
-  const dayName = days[date.getDay()];
-  return `${dateStr} (${dayName})`;
+  return `${dateStr} (${days[date.getDay()]})`;
 };
 
-
-// fetch
-let fetchInterval = null
-
-
-// 유저정보 가져오기
+// 📦 데이터 fetch
 const fetchRecords = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
-  if (!userId) return;
+  isLoading.value = true;
+  try {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?.id;
+    if (!userId) return;
 
-  const res = await axios.get('/api/transactions', {
-    params: { userId }
-  });
-  records.value = res.data;
+    const res = await axios.get('/api/transactions', {
+      params: { userId }
+    });
+    records.value = res.data;
+  } finally {
+    isLoading.value = false;
+  }
 };
-
 
 const fetchFixedExpenses = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
-  if (!userId) return;
+  isLoading.value = true;
+  try {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?.id;
+    if (!userId) return;
 
-  const res = await axios.get('/api/fixedExpenses', {
-    params: { userId }
-  });
-  fixedExpenses.value = res.data; // fixedExpenses는 ref로 선언해줘야 함
+    const res = await axios.get('/api/fixedExpenses', {
+      params: { userId }
+    });
+    fixedExpenses.value = res.data;
+  } finally {
+    isLoading.value = false;
+  }
 };
 
+// ✅ 새로운 거래 추가 함수
+const addRecord = async (newRecord) => {
+  try {
+    await axios.post('/api/transactions', newRecord);
+    await fetchRecords(); // 🔁 추가 후 다시 불러오기
+  } catch (err) {
+    console.error('내역 추가 실패:', err);
+  }
+};
 
+// ✅ 고정 지출 추가 함수
+const addFixedExpense = async (expense) => {
+  try {
+    await axios.post('/api/fixedExpenses', expense);
+    await fetchFixedExpenses(); // 🔁 고정 지출도 반영
+  } catch (err) {
+    console.error('고정 지출 추가 실패:', err);
+  }
+};
 
-
+// ✅ 마운트 및 이벤트
 onMounted(() => {
   fetchRecords();
   fetchFixedExpenses();
-  fetchInterval = setInterval(() => {
-    fetchRecords();
-    fetchFixedExpenses();
-  }, 100);
-
-  document.addEventListener('click', handleClickOutside);
+  // document.addEventListener('click', handleClickOutside);
 });
-
 onUnmounted(() => {
-  if (fetchInterval) {
-    clearInterval(fetchInterval);
-    fetchInterval = null;
-  }
-  document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('click', handleClickOutside);
+});
+watch(currentMonth, () => {
+  fetchRecords();
+  fetchFixedExpenses();
 });
 
+// 클릭 외부 감지
+
+const handleClickOutside = (event) => {
+  if (categoryDropdownRef.value && !categoryDropdownRef.value.contains(event.target)) {
+    isCategoryDropdownOpen.value = false;
+  }
+};
+
+// computed 정리
 const monthlyRecords = computed(() => {
   return records.value.filter((record) => {
     const recordDate = new Date(record.date);
@@ -417,11 +441,6 @@ const monthlyRecords = computed(() => {
   });
 });
 
-const monthlyRecordsWithFixed = computed(() => {
-  return [...monthlyRecords.value, ...fixedRecords.value];
-});
-
-// 고정지출 내역
 const fixedRecords = computed(() => {
   const selectedYear = currentMonth.value.getFullYear();
   const selectedMonth = currentMonth.value.getMonth() + 1;
@@ -436,20 +455,17 @@ const fixedRecords = computed(() => {
       end >= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth(), 1);
 
     const matchesType = !filterType.value || record.type === filterType.value;
-
-    // ✅ 카테고리 필터도 추가
     const matchesCategory =
       !selectedCategory.value || selectedCategory.value === '전체' || record.category === selectedCategory.value;
 
     return isInMonth && matchesType && matchesCategory;
   });
 });
-const categoryDropdownRef = ref(null);
 
-const handleClickOutside = (event) => {
-  if (categoryDropdownRef.value && !categoryDropdownRef.value.contains(event.target))
-{isCategoryDropdownOpen.value = false;}
-}
+const monthlyRecordsWithFixed = computed(() => {
+  return [...monthlyRecords.value, ...fixedRecords.value];
+});
+
 const filteredRecords = computed(() => {
   return monthlyRecords.value.filter((record) => {
     const matchesType = !filterType.value || record.type === filterType.value;
@@ -470,7 +486,6 @@ const groupedRecords = computed(() => {
     Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0]))
   );
 });
-
 const getCategoryClass = (category) => {
   const categoryMap = {
     식비: 'bg-pastel-orange text-dark',
@@ -551,23 +566,28 @@ const editRecord = (record) => {
 
 
 
-const deleteRecord = async (id) => {
+async function deleteRecord(id) {
   if (confirm('정말 삭제하시겠습니까?')) {
-    await axios.delete(`/api/transactions/${id}`);
-    fetchRecords();
+    try {
+      if (typeof id === 'string' && id.startsWith('fixed-')) {
+        const realId = id.split('-')[1];
+        await axios.delete(`/api/fixedExpenses/${realId}`);
+        await fetchFixedExpenses(); // await 추가 (즉시 갱신)
+      } else {
+        await axios.delete(`/api/transactions/${id}`);
+        await fetchRecords(); // await fetchEvents()로 변경
+      }
+      alert('삭제되었습니다.');
+    } catch (error) {
+      alert('삭제 실패');
+    }
   }
 }
 
-const deleteFixedExpense = async (id) => {
-  if (confirm('정말 삭제하시겠습니까?')) {
-    await axios.delete(`/api/fixedExpenses/${id}`);
-    fetchFixedExpenses();
-    openMenuId.value = null;
-  }
-};
+
 
 const isCategoryDropdownOpen = ref(false);
-const selectedCategory = ref('');
+
 
 const toggleCategoryDropdown = () => {
   isCategoryDropdownOpen.value = !isCategoryDropdownOpen.value;
@@ -594,7 +614,6 @@ function editItem(event) {
 }
 
 
-const searchText = ref('');
 // 전체 월에 해당하는 고정 내역(필터 없이 날짜로만 제한)
 const allFixedRecords = computed(() => {
   const selectedYear = currentMonth.value.getFullYear();
@@ -653,6 +672,14 @@ const resetFilters = () => {
   filterCategory.value = '';
   isCategoryDropdownOpen.value = false;
 };
+async function handleModalClose() {
+  isModalOpen.value = false;
+  editModalOpen.value = false;
+
+  await fetchRecords();
+  await fetchFixedExpenses();
+}
+
 </script>
 
 <style scoped>
