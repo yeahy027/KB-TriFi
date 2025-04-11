@@ -17,6 +17,20 @@
       "password": "1111",
       "country": "Korea",
       "language": "Korean"
+    },
+    {
+      "id": "d1b4",
+      "name": "서현",
+      "nickname": "머니키퍼",
+      "email": "seohyun0916@naver.com",
+      "password": "1234"
+    },
+    {
+      "id": "b3b0",
+      "name": "마마",
+      "nickname": "맘",
+      "email": "qwer@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
@@ -36,21 +50,154 @@
       "type": "수입",
       "date": "2025-04-10",
       "userId": "aff4",
-      "amount": 11113,
+      "amount": 111130,
       "category": "급여",
       "payment": "현금",
       "description": "1122",
       "fixed": false
     },
     {
-      "id": "0345",
+      "id": "75ad",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 0,
+      "category": "주거",
+      "payment": "",
+      "description": "ㄹㄴㅇㄹㄴㄹ",
+      "fixed": false
+    },
+    {
+      "id": "453e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 19999,
+      "category": "교통",
+      "payment": "",
+      "description": "ㄹㄴㅇㄹㅇ",
+      "fixed": false
+    },
+    {
+      "id": "6cd6",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "b3b0",
+      "amount": 200000,
+      "category": "식비",
+      "payment": "",
+      "description": "밥",
+      "fixed": false,
+      "from": 20000
+    },
+    {
+      "id": "f626",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 100889,
+      "category": "주거",
+      "payment": "카드",
+      "description": "1111",
+      "fixed": false
+    },
+    {
+      "id": "ad4e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 10000,
+      "category": "쇼핑",
+      "payment": "",
+      "description": "aa",
+      "fixed": false
+    },
+    {
+      "id": "82bd",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 1000000,
+      "category": "기타",
+      "payment": "",
+      "description": "머리",
+      "fixed": false
+    },
+    {
+      "id": "bdb0",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 10000000,
+      "category": "급여",
+      "payment": "",
+      "description": "급여",
+      "fixed": false
+    },
+    {
+      "id": "1c4d",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 1000000,
+      "category": "문화",
+      "payment": "카드",
+      "description": "ㅁㅁㅁㅁ",
+      "fixed": false
+    },
+    {
+      "id": "db0e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff4",
+      "amount": 100000,
+      "category": "주거",
+      "payment": "",
+      "description": "집",
+      "fixed": false
+    },
+    {
+      "id": "a8b7",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 150000,
+      "category": "선물",
+      "payment": "",
+      "description": "당근거래",
+      "fixed": false
+    },
+    {
+      "id": "d4c6",
       "type": "지출",
       "date": "2025-04-11",
       "userId": "aff5",
-      "amount": 10000000,
-      "category": "주거",
+      "amount": 10000,
+      "category": "문화",
       "payment": "현금",
-      "description": "주택청약",
+      "description": "cgv",
+      "fixed": false
+    },
+    {
+      "id": "0c13",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 100000,
+      "category": "저축",
+      "payment": "",
+      "description": "정기적금",
+      "fixed": false
+    },
+    {
+      "id": "8487",
+      "type": "수입",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 500000,
+      "category": "급여",
+      "payment": "현금",
+      "description": "훈련장려금",
       "fixed": false
     }
   ],
@@ -60,36 +207,39 @@
       "userId": "aff4",
       "type": "지출",
       "category": "기타",
-      "amount": 5000,
+      "amount": 5000000,
       "payment": "페이",
       "description": "넷플릭스",
       "date": "2025-04-14",
       "rotation": "매월",
-      "endDate": "2025-06-18"
+      "endDate": "2025-06-18",
+      "fixed": true
     },
     {
       "id": "9f92",
       "userId": "aff4",
       "type": "수입",
       "category": "용돈",
-      "amount": 300000,
+      "amount": 30000000,
       "payment": "현금",
       "description": "용돈",
       "date": "2025-04-15",
       "rotation": "매주",
-      "endDate": "2025-04-30"
+      "endDate": "2025-04-30",
+      "fixed": true
     },
     {
       "id": "853c",
       "userId": "aff5",
       "type": "지출",
       "category": "교통",
-      "amount": 15000,
+      "amount": 150000,
       "payment": "현금",
       "description": "지하철",
       "date": "2025-04-10",
       "rotation": "매월",
-      "endDate": "2025-04-17"
+      "endDate": "2025-04-17",
+      "fixed": true
     },
     {
       "id": "0940",

@@ -614,15 +614,14 @@ const expenseCategories = ['식비', '교통', '쇼핑', '미용', '문화', '�
 const filterByCategory = (category) => {
   if (category === '전체') {
     selectedCategory.value = '';
-    filterType.value = '';
   } else {
     selectedCategory.value = category;
-    filterType.value = incomeCategories.includes(category)
-      ? '수입'
-      : '지출';
   }
   isCategoryDropdownOpen.value = false;
 };
+
+
+
 function editItem(event) {
   itemToEdit.value = event;
   editModalOpen.value = true;
