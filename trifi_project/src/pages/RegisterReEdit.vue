@@ -58,7 +58,6 @@
               <option value="기타">💊 의료</option>
               <option value="기타">💡 공과금</option>
             </select>
-
             <select v-model="form.paymentMethod" class="payment-select">
               <option disabled value="">방식을 선택하세요</option>
               <option value="현금">💵 현금</option>
@@ -345,7 +344,6 @@ const submitForm = async () => {
   emit('close');
 };
 </script>
-
 <style scoped>
 .modal-overlay {
   position: fixed;

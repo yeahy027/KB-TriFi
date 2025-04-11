@@ -25,60 +25,49 @@
       "type": "지출",
       "date": "2025-04-10",
       "userId": "aff5",
-      "amount": 5000,
+      "amount": 50000,
       "category": "쇼핑",
       "payment": "현금",
       "description": "문구점",
       "fixed": false
     },
+ 
     {
-      "id": "c089",
-      "type": "지출",
-      "date": "2025-04-11",
+      "id": "cab2",
+      "type": "수입",
+      "date": "2025-04-10",
       "userId": "aff4",
-      "amount": 10000000,
-      "category": "교통",
-      "payment": "카드",
-      "description": "1111",
+      "amount": 11113,
+      "category": "급여",
+      "payment": "현금",
+      "description": "1122",
       "fixed": false
     }
   ],
   "fixedExpenses": [
     {
-      "id": "c84d",
+      "id": "825d",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "기타",
+      "amount": 5000,
+      "payment": "페이",
+      "description": "넷플릭스",
+      "date": "2025-04-14",
+      "rotation": "매월",
+      "endDate": "2025-06-18"
+    },
+    {
+      "id": "9f92",
       "userId": "aff4",
       "type": "수입",
-      "category": "",
-      "amount": 11,
-      "payment": "카드",
-      "description": "33333",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": null
-    },
-    {
-      "id": "6a6b",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "용돈이지롱",
-      "date": "2025-04-11",
-      "rotation": "매주",
-      "endDate": "2025-05-08"
-    },
-    {
-      "id": "5c72",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 213123,
+      "category": "용돈",
+      "amount": 300000,
       "payment": "현금",
-      "description": "123",
-      "date": "2025-04-10",
+      "description": "용돈",
+      "date": "2025-04-15",
       "rotation": "매주",
-      "endDate": "2025-04-25"
+      "endDate": "2025-04-30"
     },
     {
       "id": "853c",
@@ -133,14 +122,14 @@
   ],
   "challengeHistory": [
     {
-      "id": 1,
+      "id": "1",
       "userId": "aff4",
       "successCount": 2,
       "participationCount": 3,
       "maxStreak": 2
     },
     {
-      "id": 2,
+      "id": "2",
       "userId": "aff5",
       "successCount": 1,
       "participationCount": 3,
@@ -149,7 +138,7 @@
   ],
   "challengeSuccess": [
     {
-      "id": 1,
+      "id": "1",
       "userId": "aff4",
       "year": 2025,
       "month": 4,
@@ -158,6 +147,13 @@
     {
       "id": "8be4",
       "userId": "aff5",
+      "year": 2025,
+      "month": 4,
+      "success": true
+    },
+    {
+      "id": "2c79",
+      "userId": null,
       "year": 2025,
       "month": 4,
       "success": true
