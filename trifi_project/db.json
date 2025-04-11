@@ -32,23 +32,13 @@
       "type": "지출",
       "date": "2025-04-10",
       "userId": "aff5",
-      "amount": 5000,
+      "amount": 50000,
       "category": "쇼핑",
       "payment": "현금",
       "description": "문구점",
       "fixed": false
     },
-    {
-      "id": "03d0",
-      "type": "수입",
-      "date": "2025-04-10",
-      "userId": "aff5",
-      "amount": 0,
-      "category": "",
-      "payment": "",
-      "description": "",
-      "fixed": false
-    },
+
     {
       "id": "cab2",
       "type": "수입",
@@ -133,28 +123,16 @@
       "endDate": "2025-04-10"
     },
     {
-      "id": "31a2",
-      "userId": "d1b4",
-      "type": "수입",
-      "category": "급여",
-      "amount": 12000,
+      "id": "f2b6",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "식비",
+      "amount": 100000,
       "payment": "카드",
-      "description": "23242",
+      "description": "밥",
       "date": "2025-04-11",
       "rotation": "매주",
-      "endDate": "2025-04-25"
-    },
-    {
-      "id": "89d9",
-      "userId": "d1b4",
-      "type": "수입",
-      "category": "급여",
-      "amount": 3123123,
-      "payment": "카드",
-      "description": "2313123",
-      "date": "2025-04-11",
-      "rotation": "매주",
-      "endDate": "2025-05-01"
+      "endDate": "2025-04-24"
     }
   ],
   "challengeAmount": [

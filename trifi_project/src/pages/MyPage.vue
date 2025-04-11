@@ -135,7 +135,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import RegisterReEdit from './RegisterReedit.vue';
+import RegisterReEdit from './RegisterReEdit.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);

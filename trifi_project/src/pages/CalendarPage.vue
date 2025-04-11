@@ -144,7 +144,6 @@
                 <span :class="event.type">
                   {{ formattedAmount(event) }}원
                 </span>
-                <!-- 기존 inline 수정/삭제 버튼은 제거 -->
               </div>
             </td>
           </tr>
@@ -165,7 +164,8 @@
     <!-- 등록 모달 (기존 RegisterEdit) -->
     <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
 
-    <!-- 수정 모달 (RegisterReedit) -->
+    <!-- 수정 모달 (RegisterReEdit) --> 
+    <!-- 여기서 isFixed 여부까지 'existingData'에 담아서 넘깁니다. -->
     <RegisterReEdit
       v-if="editModalOpen"
       :existingData="itemToEdit"
@@ -174,9 +174,13 @@
 
     <!-- (새로운) 이벤트 액션 팝업: 수정/삭제 -->
     <transition name="fade">
-      <div v-if="showActionMenu" class="action-overlay" @click.self="closeEventAction">
+      <div
+        v-if="showActionMenu"
+        class="action-overlay"
+        @click.self="closeEventAction"
+      >
         <div class="action-popup">
-          <!-- 선택된 이벤트 정보 표시 (원하시면 UI 변경 가능) -->
+          <!-- 선택된 이벤트 정보 표시 -->
           <h5>{{ currentEvent?.description || '이벤트' }} 항목을 수정 및 삭제 할까요?</h5>
           <div class="action-buttons">
             <button class="edit-btn" @click="confirmEdit">수정</button>
@@ -196,8 +200,6 @@ import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
 import RegisterReEdit from './RegisterReedit.vue';
 import Calculator from './Calculator.vue';
-
-defineOptions({ name: 'CalendarExample' });
 
 /** --- 날짜 헬퍼 함수들 --- **/
 function formatDateStr(dateObj) {
@@ -244,7 +246,6 @@ function generateDatesBetween(startDateStr, endDateStr, rotation) {
 }
 
 /** --- 전역 상태들 --- **/
-const selectedEventId = ref(null); // 클릭된 이벤트 ID
 const editModalOpen = ref(false); // RegisterReedit 모달 열림 여부
 const itemToEdit = ref(null); // 수정할 항목 데이터
 
@@ -260,17 +261,17 @@ const eventFilter = ref('all'); // 'all', '수입', '지출', '이체'
 const showCalculator = ref(false); // 계산기
 const isModalOpen = ref(false); // RegisterEdit(등록용) 모달
 
-let fetchInterval = null; // 폴링 interval
-
 /** (새로 추가) 이벤트 액션 팝업 관련 */
 const showActionMenu = ref(false);
 const currentEvent = ref(null); // 클릭한 이벤트(수정/삭제 대상)
 
+let fetchInterval = null;
+
 /** --- onMounted에서 데이터 fetch + interval 설정 --- **/
 onMounted(() => {
   fetchAll();
-  // 폴링 주기가 필요하면 원하는 ms로 지정
-  fetchInterval = setInterval(fetchAll);
+  // 필요하다면 폴링 주기를 원하시는 ms로
+  fetchInterval = setInterval(fetchAll); 
 });
 
 onUnmounted(() => {
@@ -302,7 +303,7 @@ async function fetchFixedExpenses() {
   try {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id;
-    if(!userId) return;
+    if (!userId) return;
     const res = await axios.get('http://localhost:3000/fixedExpenses', {
       params: { userId },
     });
@@ -334,7 +335,9 @@ const expandedFixedExpenses = computed(() => {
         amount: fe.amount,
         description: fe.description || '고정항목',
         type: fe.type, // "지출" or "수입"
-        isFixed: true,
+        isFixed: true, // <--- 고정 항목임을 표시
+        rotation: fe.rotation,
+        endDate: fe.endDate,
       });
     }
   }
@@ -354,11 +357,7 @@ const formattedMonth = computed(() => {
 const dayNames = computed(() => ['일', '월', '화', '수', '목', '금', '토']);
 
 const weeks = computed(() => {
-  const firstDayOfMonth = new Date(
-    currentYear.value,
-    currentMonth.value - 1,
-    1
-  );
+  const firstDayOfMonth = new Date(currentYear.value, currentMonth.value - 1, 1);
   const lastDayOfMonth = new Date(currentYear.value, currentMonth.value, 0);
   const lastDate = lastDayOfMonth.getDate();
   const startDay = firstDayOfMonth.getDay();
@@ -533,16 +532,17 @@ function closeEventAction() {
 }
 function confirmEdit() {
   if (!currentEvent.value) return;
-  editItem(currentEvent.value); // 아래 editItem 함수 재활용
+  // 수정 모달 열기
+  editItem(currentEvent.value);
   closeEventAction();
 }
 function confirmDelete() {
   if (!currentEvent.value) return;
-  deleteEvent(currentEvent.value.id); // 아래 deleteEvent 함수 재활용
+  deleteEvent(currentEvent.value.id);
   closeEventAction();
 }
 
-/** 삭제 로직 (기존) */
+/** 삭제 로직 */
 async function deleteEvent(id) {
   if (confirm('정말 삭제하시겠습니까?')) {
     try {
@@ -566,25 +566,24 @@ async function deleteEvent(id) {
 
 /** 수정 버튼 -> RegisterReEdit 모달 오픈 */
 function editItem(event) {
-  itemToEdit.value = event;
+  // RegisterReEdit에 넘겨줄 데이터를 구성
+  // 고정항목이면 isFixed = true, 'fixed-123-2025-04-10'처럼 되어 있으니 ID 분리 없이 그대로 넘겨주면 됩니다.
+  // RegisterReEdit 내부에서 isFixed 여부를 보고, 고정항목 API를 호출하도록 처리
+  itemToEdit.value = { ...event }; // 이벤트 객체 자체를 전달
   editModalOpen.value = true;
 }
 </script>
 
 <style scoped>
-/* 달력 컨테이너 */
+/* (사용자 기존 스타일 그대로 복사) */
 .calendar-container {
   width: 100%;
   margin: 0 auto;
 }
-
-/* 상단 헤더 */
 .header {
   display: flex;
   flex-direction: column;
 }
-
-/* 통계/요약 (필터) */
 .summary {
   text-align: center;
   margin-top: 1rem;
@@ -612,8 +611,6 @@ function editItem(event) {
 .summary-item.active {
   border-bottom: 3px solid currentColor;
 }
-
-/* 달력 테이블 */
 .calendar {
   width: 100%;
   border-collapse: collapse;
@@ -630,23 +627,17 @@ function editItem(event) {
   border: 1px solid #ddd;
   height: 120px;
   padding: 4px;
-  position: relative; /* 말풍선 위치 */
+  position: relative;
 }
-
-/* 이전/다음 달 날짜 회색 처리 */
 .not-current-month {
   color: #ccc;
 }
-
-/* 일/토요일 색상 */
 .sunday {
   color: red;
 }
 .saturday {
   color: blue;
 }
-
-/* 날짜 숫자 */
 .day-number {
   display: flex;
   margin-bottom: 4px;
@@ -666,8 +657,6 @@ function editItem(event) {
   color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
-
-/* 이벤트 표시 */
 .event {
   font-size: 0.9rem;
   margin-right: 4px;
@@ -676,21 +665,17 @@ function editItem(event) {
   padding: 0 2px;
 }
 .event.수입 {
-  background-color: #9cc0cb7c; /* 파란톤 */
+  background-color: #9cc0cb7c;
   color: blue;
 }
 .event.지출 {
-  background-color: rgba(255, 192, 225, 0.494); /* 핑크톤 */
+  background-color: rgba(255, 192, 225, 0.494);
   color: red;
 }
 .event.이체 {
   background-color: greenyellow;
   color: green;
 }
-
-/* (기존) 수정/삭제 버튼 박스는 제거했음 */
-
-/* 말풍선 팝업 */
 .popup-bubble {
   color: black;
   position: absolute;
@@ -727,8 +712,6 @@ function editItem(event) {
 .popup-item {
   margin-bottom: 6px;
 }
-
-/* + 버튼 (등록) */
 .add-button {
   position: fixed;
   right: 30px;
@@ -746,8 +729,6 @@ function editItem(event) {
 .add-button:hover {
   background-color: #fdb3b3;
 }
-
-/* 계산기 버튼 */
 .calc-button {
   position: fixed;
   right: 30px;
@@ -755,7 +736,7 @@ function editItem(event) {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  font-size: 24px; /* 아이콘 크기 */
+  font-size: 24px;
   color: black;
   cursor: pointer;
   border: 1px black solid;
@@ -764,15 +745,11 @@ function editItem(event) {
 .calc-button:hover {
   background-color: #fdb3b3;
 }
-
-/* 압정 표시 */
 .pin-line {
   margin-left: 4px;
   font-size: 12px;
   color: #444;
 }
-
-/* 계절별 배경 */
 .header.winter-bg {
   background: url('/src/assets/winter.jpg') center/cover no-repeat;
 }
@@ -785,8 +762,6 @@ function editItem(event) {
 .header.autumn-bg {
   background: url('src/assets/fall2.jpg') center/cover no-repeat;
 }
-
-/* ========== 새로 추가: 이벤트 액션 팝업(오버레이) ========== */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s;
@@ -795,13 +770,12 @@ function editItem(event) {
 .fade-leave-to {
   opacity: 0;
 }
-
 .action-overlay {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   background-color: rgba(0,0,0,0.5);
-  z-index: 9999; /* 맨 위 */
+  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -814,8 +788,6 @@ function editItem(event) {
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   text-align: center;
 }
-
-/* 팝업 안의 버튼 */
 .action-buttons {
   margin: 16px 0;
   display: flex;
