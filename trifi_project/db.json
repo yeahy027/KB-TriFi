@@ -39,64 +39,74 @@
       "fixed": false
     },
     {
-      "id": "6af5",
-      "type": "지출",
-      "date": "2025-04-06",
-      "userId": "d1b4",
-      "amount": 125400,
-      "category": "교통",
-      "payment": "카드",
-      "description": "택시",
+      "id": "03d0",
+      "type": "수입",
+      "date": "2025-04-10",
+      "userId": "aff5",
+      "amount": 0,
+      "category": "",
+      "payment": "",
+      "description": "",
       "fixed": false
     },
     {
-      "id": "e663",
+      "id": "cab2",
       "type": "수입",
-      "date": "2025-04-29",
-      "userId": "d1b4",
-      "amount": 100000000,
-      "category": "용돈",
+      "date": "2025-04-10",
+      "userId": "aff4",
+      "amount": 11113,
+      "category": "급여",
       "payment": "현금",
-      "description": "로또",
+      "description": "1122",
+      "fixed": false
+    },
+    {
+      "id": "75ad",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 0,
+      "category": "주거",
+      "payment": "",
+      "description": "ㄹㄴㅇㄹㄴㄹ",
+      "fixed": false
+    },
+    {
+      "id": "453e",
+      "type": "이체",
+      "date": "2025-04-11",
+      "userId": "d1b4",
+      "amount": 19999,
+      "category": "교통",
+      "payment": "",
+      "description": "ㄹㄴㅇㄹㅇ",
       "fixed": false
     }
   ],
   "fixedExpenses": [
     {
-      "id": "c84d",
+      "id": "825d",
+      "userId": "aff4",
+      "type": "지출",
+      "category": "기타",
+      "amount": 5000,
+      "payment": "페이",
+      "description": "넷플릭스",
+      "date": "2025-04-14",
+      "rotation": "매월",
+      "endDate": "2025-06-18"
+    },
+    {
+      "id": "9f92",
       "userId": "aff4",
       "type": "수입",
-      "category": "",
-      "amount": 11,
-      "payment": "카드",
-      "description": "33333",
-      "date": "2025-04-10",
-      "rotation": "매주",
-      "endDate": null
-    },
-    {
-      "id": "6a6b",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 1200000,
-      "payment": "카드",
-      "description": "용돈이지롱",
-      "date": "2025-04-11",
-      "rotation": "매주",
-      "endDate": "2025-05-08"
-    },
-    {
-      "id": "5c72",
-      "userId": "bd8d",
-      "type": "수입",
-      "category": "",
-      "amount": 213123,
+      "category": "용돈",
+      "amount": 300000,
       "payment": "현금",
-      "description": "123",
-      "date": "2025-04-10",
+      "description": "용돈",
+      "date": "2025-04-15",
       "rotation": "매주",
-      "endDate": "2025-04-25"
+      "endDate": "2025-04-30"
     },
     {
       "id": "853c",
@@ -121,6 +131,30 @@
       "date": "2025-04-10",
       "rotation": "매월",
       "endDate": "2025-04-10"
+    },
+    {
+      "id": "31a2",
+      "userId": "d1b4",
+      "type": "수입",
+      "category": "급여",
+      "amount": 12000,
+      "payment": "카드",
+      "description": "23242",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-04-25"
+    },
+    {
+      "id": "89d9",
+      "userId": "d1b4",
+      "type": "수입",
+      "category": "급여",
+      "amount": 3123123,
+      "payment": "카드",
+      "description": "2313123",
+      "date": "2025-04-11",
+      "rotation": "매주",
+      "endDate": "2025-05-01"
     }
   ],
   "challengeAmount": [
@@ -169,8 +203,8 @@
       "success": true
     },
     {
-      "id": "eb07",
-      "userId": "d1b4",
+      "id": "2c79",
+      "userId": null,
       "year": 2025,
       "month": 4,
       "success": true

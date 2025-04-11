@@ -28,12 +28,7 @@
         <!-- 입력 폼 -->
         <div class="form-box">
           <div class="form" v-if="activeTab !== '이체'">
-            <input
-              type="date"
-              v-model="form.date"
-              @blur="markTouched"
-              placeholder="날짜"
-            />
+            <input type="date" v-model="form.date" placeholder="날짜" />
             <p class="error-message" v-if="isTouched && !form.date">
               날짜를 입력하세요
             </p>
@@ -42,7 +37,6 @@
               type="text"
               :value="formattedAmount"
               @input="handleAmountInput($event.target.value)"
-              @blur="markTouched"
               placeholder="금액"
               :class="{ 'input-error': isTouched && form.amount === '' }"
             />
@@ -159,7 +153,11 @@
               출금 금액을 입력하세요
             </p>
 
-            <select v-model="form.category" class="category-select">
+            <select
+              v-if="activeTab === '이체'"
+              v-model="form.category"
+              class="category-select"
+            >
               <option disabled value="">카테고리를 선택하세요</option>
               <option value="식비">🍔 식비</option>
               <option value="교통">🚗 교통</option>
@@ -255,18 +253,18 @@ const route = useRoute();
 const isFormValid = computed(() => {
   if (activeTab.value === '이체') {
     return (
-      form.value.date !== '' &&
-      form.value.amount !== '' &&
-      form.value.category !== '' &&
-      form.value.description !== ''
+      form.value.date &&
+      form.value.from &&
+      form.value.category &&
+      form.value.description
     );
   }
 
   const baseValid =
-    form.value.date !== '' &&
-    form.value.amount !== '' &&
-    form.value.paymentMethod !== '' &&
-    form.value.description !== '';
+    form.value.date &&
+    form.value.amount &&
+    form.value.paymentMethod &&
+    form.value.description;
 
   if (activeTab.value === '지출' || activeTab.value === '수입') {
     if (!form.value.category) return false;
@@ -367,7 +365,7 @@ const submitForm = async () => {
   } else {
     /* 현재 로그인한 사람의 정보*/
     entry.userId = userStore.user.id;
-    entry.amount = Number(form.value.amount);
+    entry.amount = Number(form.value.from);
     entry.category = form.value.category;
     entry.payment = form.value.paymentMethod;
     entry.description = form.value.description;
