@@ -737,4 +737,18 @@ onMounted(async () => {
   100% { box-shadow: 0 0 5px red; }
 }
 
+/* 반응형 디자인 추가 */
+@media screen and (max-width: 768px) {
+  .challenge-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .section-card,
+  .right-card {
+    width: 100% !important;
+    margin: 0 auto;
+  }
+}
 </style>
