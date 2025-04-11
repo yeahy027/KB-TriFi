@@ -9,7 +9,7 @@ dayjs.extend(isSameOrAfter)
 
 // 지출만 필터링
 function getExpenses(transactions) {
-  return transactions.filter(tx => tx.type === '지출')
+  return transactions.filter(tx => tx.type === '지출' || tx.type === '이체')
 }
 
 // 고정 지출 중 '지출' 타입만 필터링
