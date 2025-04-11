@@ -89,7 +89,7 @@
         class="bg-white rounded p-3 shadow-sm mb-4 d-flex justify-content-between align-items-center"
       >
         <div>
-          <strong>전체 내역 {{ monthlyRecordsWithFixed.length }}건</strong>
+          <strong>전체 내역 {{ overallFilteredRecords.length }}건</strong>
         </div>
         <div class="d-flex gap-3 align-items-center">
           <button
@@ -386,7 +386,7 @@ onMounted(() => {
   fetchInterval = setInterval(() => {
     fetchRecords();
     fetchFixedExpenses();
-  }, 1000);
+  }, 100);
 
   document.addEventListener('click', handleClickOutside);
 });
@@ -490,6 +490,7 @@ const getCategoryClass = (category) => {
 };
 
 const categoryIcons = {
+  주거: '🏠',
   식비: '🍔',
   교통: '🚌',
   쇼핑: '👗',
@@ -503,42 +504,9 @@ const categoryIcons = {
   의료: '💊',
   공과금: '💡',
 };
-
-// 총 수입, 지출, 이체 내역 계산
-const totalIncome = computed(() => {
-  const normalIncome = monthlyRecords.value
-    .filter((r) => r.type === '수입')
-    .reduce((sum, r) => sum + Number(r.amount), 0);
-
-  const fixedIncome = fixedRecords.value
-    .filter((r) => r.type === '수입')
-    .reduce((sum, r) => sum + Number(r.amount), 0);
-
-  return normalIncome + fixedIncome;
-});
-
-const totalExpense = computed(() => {
-  const normalExpense = monthlyRecords.value
-    .filter((r) => r.type === '지출')
-    .reduce((sum, r) => sum + Number(r.amount), 0);
-
-  const fixedExpense = fixedRecords.value
-    .filter((r) => r.type === '지출')
-    .reduce((sum, r) => sum + Number(r.amount), 0);
-
-  return normalExpense + fixedExpense;
-});
-
-const totalTransfer = computed(() =>
-  monthlyRecords.value
-    .filter((r) => r.type === '이체')
-    .reduce((sum, r) => sum + Number(r.amount), 0)
-);
-
-
 // 엑셀 데이터 변환
 const downloadExcel = () => {
-  const excelData = monthlyRecords.value.map((record) => ({
+  const excelData = monthlyRecordsWithFixed.value.map((record) => ({
     날짜: record.date,
     결제수단: record.payment,
     분류: record.category,
@@ -546,7 +514,6 @@ const downloadExcel = () => {
     내용: record.description,
     유형: record.type,
   }));
-
    // 총합 정보 추가
   excelData.push({});
   excelData.push({ 내용: ' *총 지출', 금액: totalExpense.value });
@@ -613,15 +580,14 @@ const expenseCategories = ['식비', '교통', '쇼핑', '미용', '문화', '�
 const filterByCategory = (category) => {
   if (category === '전체') {
     selectedCategory.value = '';
-    filterType.value = '';
   } else {
     selectedCategory.value = category;
-    filterType.value = incomeCategories.includes(category)
-      ? '수입'
-      : '지출';
   }
   isCategoryDropdownOpen.value = false;
 };
+
+
+
 function editItem(event) {
   itemToEdit.value = event;
   editModalOpen.value = true;
@@ -629,7 +595,57 @@ function editItem(event) {
 
 
 const searchText = ref('');
+// 전체 월에 해당하는 고정 내역(필터 없이 날짜로만 제한)
+const allFixedRecords = computed(() => {
+  const selectedYear = currentMonth.value.getFullYear();
+  const selectedMonth = currentMonth.value.getMonth() + 1;
+  return fixedExpenses.value.filter((record) => {
+    const start = new Date(record.date);
+    const end = new Date(record.endDate);
+    return (
+      selectedYear >= start.getFullYear() &&
+      selectedMonth >= start.getMonth() + 1 &&
+      // 해당 월의 마지막 날 (월의 끝)
+      start <= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth() + 1, 0) &&
+      // 해당 월의 첫날
+      end >= new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth(), 1)
+    );
+  });
+});
 
+// 요약 총액 수정 (거래 데이터와 고정 내역 모두 필터와 무관하게 계산)
+const totalIncome = computed(() => {
+  const normalIncome = monthlyRecords.value
+    .filter(r => r.type === '수입')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+  const fixedIncome = allFixedRecords.value
+    .filter(r => r.type === '수입')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+  return normalIncome + fixedIncome;
+});
+
+const totalExpense = computed(() => {
+  const normalExpense = monthlyRecords.value
+    .filter(r => r.type === '지출')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+  const fixedExpense = allFixedRecords.value
+    .filter(r => r.type === '지출')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+  return normalExpense + fixedExpense;
+});
+
+const totalTransfer = computed(() => {
+  const normalTransfer = monthlyRecords.value
+    .filter(r => r.type === '이체')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+  const fixedTransfer = allFixedRecords.value
+    .filter(r => r.type === '이체')
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+  return normalTransfer + fixedTransfer;
+});
+const overallFilteredRecords = computed(() => {
+  return [...filteredRecords.value, ...fixedRecords.value];
+});
 
 </script>
 

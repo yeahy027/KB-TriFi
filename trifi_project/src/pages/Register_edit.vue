@@ -352,15 +352,20 @@ const submitForm = async () => {
   if (!isFormValid.value) {
     return;
   }
+
+  const transactionType = typeMap[activeTab.value];
+
   const entry = {
     type: typeMap[activeTab.value],
     date: form.value.date,
   };
 
-  if (activeTab.value === 'transfer') {
+
+  if (transactionType === '이체') {
     entry.amount = Number(form.value.amount);
     entry.payment='이체';
     entry.description = form.value.description;
+    entry.category = form.value.category;
   } else {
     /* 현재 로그인한 사람의 정보*/
     entry.userId = userStore.user.id;

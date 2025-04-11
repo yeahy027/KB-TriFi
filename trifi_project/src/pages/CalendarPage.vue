@@ -728,7 +728,7 @@ function editItem(event) {
   border: none;
   cursor: pointer;
   background-color: white;
-  border: 1px black solid;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .add-button:hover {
   background-color: #fdb3b3;
@@ -742,8 +742,9 @@ function editItem(event) {
   border-radius: 50%;
   font-size: 24px;
   color: black;
+  border: none;
   cursor: pointer;
-  border: 1px black solid;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   background-color: white;
 }
 .calc-button:hover {
