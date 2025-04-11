@@ -18,7 +18,7 @@
         </div>
         <!-- <label class="section-title">이번달 지출 목표</label> -->
         <p>[ {{ userName }} ] 님, 목표까지 화이팅이에요!</p>
-        <p>입력한 이번 달 지출 목표를 지켜봅시다🪄</p><br>
+        <p>입력한 이번 달 지출 목표를 지켜봅시다 🎉</p><br>
         <!-- 목표 금액 표시 -->
         <template v-if="!isGoalLoading">
           <template v-if="goalExists && spendingGoal !== null">
@@ -58,7 +58,7 @@
       <!-- (2) 지출 비율 카드 -->
       <div class="section-card left-card-2 grid-2">
         <label class="section-title">지출 비율</label>
-        <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다🪄</p>
+        <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다</p>
         <div class="pie-chart">
           <svg width="150" height="150" viewBox="0 0 36 36">
             <circle class="circle-bg" cx="18" cy="18" r="15.9155" fill="none" stroke="#eee" stroke-width="3" />
@@ -688,7 +688,8 @@ onMounted(async () => {
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  overflow: visible;
+  padding-bottom: 2px; /* 아래쪽 공간 확보 */
 }
 
 .ranking-list li {
@@ -728,8 +729,17 @@ onMounted(async () => {
 .my-rank {
   border: 2px solid rgb(255, 142, 142);
   animation: blink 1s infinite;
-  border-radius: 10px;
   padding: 5px;
+}
+
+.ranking-list li.my-rank {
+  /* background-color: rgba(255, 0, 0, 0.1); 빨간 강조 표시 */
+  border: 1px solid red;
+  border-radius: 8px;
+  margin: 2px 0;
+  z-index: 2;
+  position: relative;
+  
 }
 @keyframes blink {
   0% { box-shadow: 0 0 5px red; }
