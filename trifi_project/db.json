@@ -53,7 +53,7 @@
       "amount": 111130,
       "category": "급여",
       "payment": "현금",
-      "description": "1122",
+      "description": "일급",
       "fixed": false
     },
     {
@@ -62,20 +62,20 @@
       "date": "2025-04-11",
       "userId": "d1b4",
       "amount": 0,
-      "category": "주거",
-      "payment": "",
-      "description": "ㄹㄴㅇㄹㄴㄹ",
+      "category": "선물",
+      "payment": "카드",
+      "description": "여자친구 100일 선물",
       "fixed": false
     },
     {
       "id": "453e",
-      "type": "이체",
+      "type": "지출",
       "date": "2025-04-11",
       "userId": "d1b4",
       "amount": 19999,
       "category": "교통",
-      "payment": "",
-      "description": "ㄹㄴㅇㄹㅇ",
+      "payment": "카드",
+      "description": "지하철 이용",
       "fixed": false
     },
     {
@@ -85,7 +85,7 @@
       "userId": "b3b0",
       "amount": 200000,
       "category": "식비",
-      "payment": "",
+      "payment": "이체",
       "description": "밥",
       "fixed": false,
       "from": 20000
@@ -96,9 +96,9 @@
       "date": "2025-04-11",
       "userId": "aff4",
       "amount": 100889,
-      "category": "주거",
+      "category": "공과금",
       "payment": "카드",
-      "description": "1111",
+      "description": "공과금",
       "fixed": false
     },
     {
@@ -108,30 +108,8 @@
       "userId": "aff4",
       "amount": 10000,
       "category": "쇼핑",
-      "payment": "",
-      "description": "aa",
-      "fixed": false
-    },
-    {
-      "id": "82bd",
-      "type": "이체",
-      "date": "2025-04-11",
-      "userId": "aff4",
-      "amount": 1000000,
-      "category": "기타",
-      "payment": "",
-      "description": "머리",
-      "fixed": false
-    },
-    {
-      "id": "bdb0",
-      "type": "이체",
-      "date": "2025-04-11",
-      "userId": "aff4",
-      "amount": 10000000,
-      "category": "급여",
-      "payment": "",
-      "description": "급여",
+      "payment": "이체",
+      "description": "지하상가 반팔티 구입",
       "fixed": false
     },
     {
@@ -142,7 +120,7 @@
       "amount": 1000000,
       "category": "문화",
       "payment": "카드",
-      "description": "ㅁㅁㅁㅁ",
+      "description": "게임 현질",
       "fixed": false
     },
     {
@@ -153,7 +131,7 @@
       "amount": 100000,
       "category": "주거",
       "payment": "이체",
-      "description": "집",
+      "description": "집 변기 수리",
       "fixed": false
     },
     {
@@ -202,7 +180,7 @@
     },
     {
       "id": "60fc",
-      "type": "transfer",
+      "type": "이체",
       "userId": "d1b4",
       "date": "2025-04-11",
       "amount": 15000,
@@ -211,56 +189,13 @@
       "category": "식비"
     },
     {
-      "id": "beab",
-      "type": "이체",
-      "userId": "d1b4",
-      "date": "2025-04-11",
-      "amount": 100000,
-      "payment": "이체",
-      "description": "aa",
-      "category": "쇼핑"
-    },
-    {
-      "id": "f72e",
-      "type": "이체",
-      "date": "2025-04-11",
-      "userId": "aff4",
-      "amount": 100000,
-      "category": "쇼핑",
-      "payment": "",
-      "description": "옷샀음",
-      "fixed": false
-    },
-    {
-      "id": "525d",
-      "type": "이체",
-      "date": "2025-04-11",
-      "userId": "d1b4",
-      "amount": 170000,
-      "category": "선물",
-      "payment": "",
-      "description": "친구 생일선물",
-      "fixed": false
-    },
-    {
-      "id": "bd20",
-      "type": "이체",
-      "date": "2025-04-11",
-      "userId": "d1b4",
-      "amount": 2000000,
-      "category": "의료",
-      "payment": "",
-      "description": "병원비",
-      "fixed": false
-    },
-    {
       "id": "eb43",
       "type": "이체",
       "userId": "d1b4",
       "date": "2025-04-11",
       "amount": 3000000,
       "payment": "이체",
-      "description": "병원비2",
+      "description": "치과",
       "category": "의료"
     },
     {
