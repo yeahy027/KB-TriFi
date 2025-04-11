@@ -128,8 +128,8 @@
       "type": "이체",
       "date": "2025-04-08",
       "userId": "aff5",
-      "amount": 150000,
-      "category": "선물",
+      "amount": 100,
+      "category": "식비",
       "payment": "이체",
       "description": "당근거래",
       "fixed": false
@@ -240,6 +240,28 @@
       "payment": "현금",
       "description": "일급",
       "fixed": false
+    },
+    {
+      "id": "c749",
+      "type": "수입",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 30000,
+      "category": "기타",
+      "payment": "카드",
+      "description": "카드",
+      "fixed": false
+    },
+    {
+      "id": "7a42",
+      "type": "수입",
+      "date": "2025-04-12",
+      "userId": "aff5",
+      "amount": 20000,
+      "category": "급여",
+      "payment": "현금",
+      "description": "용돈",
+      "fixed": false
     }
   ],
   "fixedExpenses": [
@@ -273,13 +295,14 @@
       "id": "0940",
       "userId": "aff5",
       "type": "수입",
-      "category": "급여",
-      "amount": 3000000,
-      "payment": "현금",
+      "category": "",
+      "amount": 300000,
+      "payment": "",
       "description": "월급",
-      "date": "2025-01-13",
+      "date": "2025-04-13",
       "rotation": "매월",
-      "endDate": "2025-06-13"
+      "endDate": "2025-06-13",
+      "fixed": true
     }
   ],
   "challengeAmount": [

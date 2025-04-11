@@ -161,16 +161,17 @@
     <!-- 계산기 컴포넌트 -->
     <Calculator :visible="showCalculator" @close="showCalculator = false" />
 
-    <!-- 등록 모달 (기존 RegisterEdit) -->
-    <RegisterEdit v-if="isModalOpen" @close="isModalOpen = false" />
+    <RegisterEdit 
+  v-if="isModalOpen" 
+  @close="handleModalClose"
+/>
 
-    <!-- 수정 모달 (RegisterReEdit) --> 
-    <!-- 여기서 isFixed 여부까지 'existingData'에 담아서 넘깁니다. -->
-    <RegisterReEdit
-      v-if="editModalOpen"
-      :existingData="itemToEdit"
-      @close="editModalOpen = false"
-    />
+<RegisterReEdit
+  v-if="editModalOpen"
+  :existingData="itemToEdit"
+  @close="handleModalClose"
+/>
+
 
     <!-- (새로운) 이벤트 액션 팝업: 수정/삭제 -->
     <transition name="fade">
@@ -200,6 +201,7 @@ import AppLayout from '../components/AppLayout.vue';
 import RegisterEdit from '@/pages/Register_edit.vue';
 import RegisterReEdit from './RegisterReEdit.vue';
 import Calculator from './Calculator.vue';
+import { watch } from 'vue';
 
 /** --- 날짜 헬퍼 함수들 --- **/
 function formatDateStr(dateObj) {
@@ -264,54 +266,60 @@ const isModalOpen = ref(false); // RegisterEdit(등록용) 모달
 /** (새로 추가) 이벤트 액션 팝업 관련 */
 const showActionMenu = ref(false);
 const currentEvent = ref(null); // 클릭한 이벤트(수정/삭제 대상)
-
-let fetchInterval = null;
+const isLoading = ref(false);
 
 /** --- onMounted에서 데이터 fetch + interval 설정 --- **/
+
+// 유저정보 가져오기
+const fetchEvents = async () => {
+  isLoading.value = true;
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
+    if (!userId) return;
+
+    const res = await axios.get('/api/transactions', {
+      params: { userId }
+    });
+    events.value = res.data;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const fetchFixedExpenses = async () => {
+  isLoading.value = true;
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
+    if (!userId) return;
+
+    const res = await axios.get('/api/fixedExpenses', {
+      params: { userId }
+    });
+    fixedExpenses.value = res.data;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// 마운트 시 초기 fetch + 이벤트 등록
 onMounted(() => {
   fetchEvents();
   fetchFixedExpenses();
-  // 필요하다면 폴링 주기를 원하시는 ms로
-  fetchInterval = setInterval(()=>{
-    fetchEvents();
-    fetchFixedExpenses();
-  },100); 
+  // document.addEventListener('click', handleClickOutside);
 });
 
+// 언마운트 시 이벤트 제거
 onUnmounted(() => {
-  if (fetchInterval) clearInterval(fetchInterval);
-  fetchInterval=null;
+  // document.removeEventListener('click', handleClickOutside);
 });
 
-/** 일반 트랜잭션 불러오기 */
-async function fetchEvents() {
-  try {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const userId = user?.id;
-    if (!userId) return;
-    const res = await axios.get('/api/transactions', {
-      params: { userId },
-    });
-    events.value = res.data;
-  } catch (error) {
-    console.error('이벤트 목록 오류:', error);
-  }
-}
-
-/** 고정 항목 불러오기 */
-async function fetchFixedExpenses() {
-  try {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const userId = user?.id;
-    if (!userId) return;
-    const res = await axios.get('/api/fixedExpenses', {
-      params: { userId },
-    });
-    fixedExpenses.value = res.data;
-  } catch (error) {
-    console.error('고정 항목 목록 오류:', error);
-  }
-}
+// 월이 바뀌면 fetch 다시
+watch(currentMonth, () => {
+  fetchEvents();
+  fetchFixedExpenses();
+});
 
 /** --- 계절 배경을 위한 computed --- */
 const seasonClass = computed(() => {
@@ -547,22 +555,20 @@ async function deleteEvent(id) {
   if (confirm('정말 삭제하시겠습니까?')) {
     try {
       if (typeof id === 'string' && id.startsWith('fixed-')) {
-        // 고정 항목
         const realId = id.split('-')[1];
         await axios.delete(`/api/fixedExpenses/${realId}`);
-        fetchFixedExpenses(); // 다시 불러오기
+        await fetchFixedExpenses();
       } else {
-        // 일반 트랜잭션
         await axios.delete(`/api/transactions/${id}`);
-        events.value = events.value.filter((ev) => ev.id !== id);
+        await fetchEvents();
       }
       alert('삭제되었습니다.');
     } catch (error) {
-      console.error('삭제 오류:', error);
       alert('삭제 실패');
     }
   }
 }
+
 
 /** 수정 버튼 -> RegisterReEdit 모달 오픈 */
 function editItem(event) {
@@ -576,6 +582,13 @@ function editItem(event) {
   }
   editModalOpen.value = true;
 }
+async function handleModalClose() {
+  isModalOpen.value = false;
+  editModalOpen.value = false;
+  await fetchEvents();
+  await fetchFixedExpenses();
+}
+
 </script>
 
 <style scoped>
