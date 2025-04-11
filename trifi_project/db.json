@@ -31,7 +31,6 @@
       "description": "문구점",
       "fixed": false
     },
- 
     {
       "id": "cab2",
       "type": "수입",
@@ -41,6 +40,17 @@
       "category": "급여",
       "payment": "현금",
       "description": "1122",
+      "fixed": false
+    },
+    {
+      "id": "0345",
+      "type": "지출",
+      "date": "2025-04-11",
+      "userId": "aff5",
+      "amount": 10000000,
+      "category": "주거",
+      "payment": "현금",
+      "description": "주택청약",
       "fixed": false
     }
   ],

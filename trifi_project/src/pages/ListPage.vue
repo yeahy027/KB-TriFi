@@ -386,7 +386,7 @@ onMounted(() => {
   fetchInterval = setInterval(() => {
     fetchRecords();
     fetchFixedExpenses();
-  }, 1000);
+  }, 100);
 
   document.addEventListener('click', handleClickOutside);
 });
@@ -490,6 +490,7 @@ const getCategoryClass = (category) => {
 };
 
 const categoryIcons = {
+  주거: '🏠',
   식비: '🍔',
   교통: '🚌',
   쇼핑: '👗',

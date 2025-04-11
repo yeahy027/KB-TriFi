@@ -201,7 +201,7 @@ select[disabled] {
 }
 
 .yellow-btn {
-  background-color: #f4c542;
+  background-color: rgba(255,182,193,0.886);
   border: none;
   border-radius: 8px;
   padding: 8px 12px;
