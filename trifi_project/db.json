@@ -272,6 +272,7 @@
     {
       "id": "1",
       "userId": "aff4",
+      "nickname": "네비게이션",
       "successCount": 2,
       "participationCount": 3,
       "maxStreak": 2
@@ -279,6 +280,7 @@
     {
       "id": "2",
       "userId": "aff5",
+      "nickname": "홍순이",
       "successCount": 1,
       "participationCount": 3,
       "maxStreak": 1

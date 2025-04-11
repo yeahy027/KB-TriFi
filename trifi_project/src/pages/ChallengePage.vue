@@ -2,7 +2,7 @@
   <AppLayout>
     <!-- 상단 이미지 추가 -->
     <div class="challenge-header-image">
-      <img src="@/assets/002.png" alt="챌린지 상단 이미지" />
+      <img src="@/assets/003.png" alt="챌린지 상단 이미지" />
     </div>
 
     <div class="challenge-grid">
@@ -18,7 +18,7 @@
         </div>
         <!-- <label class="section-title">이번달 지출 목표</label> -->
         <p>[ {{ userName }} ] 님, 목표까지 화이팅이에요!</p>
-        <p>입력한 이번 달 지출 목표를 지켜봅시다🪄</p><br>
+        <p>입력한 이번 달 지출 목표를 지켜봅시다 🎉</p><br>
         <!-- 목표 금액 표시 -->
         <template v-if="!isGoalLoading">
           <template v-if="goalExists && spendingGoal !== null">
@@ -56,21 +56,9 @@
       </div>
 
       <!-- (2) 지출 비율 카드 -->
-      <!-- <div class="section-card left-card-2">
-        <label class="section-title">지출 비율</label>
-        <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다🪄</p>
-        <div class="pie-chart">
-          <svg width="100" height="100" viewBox="0 0 36 36">
-            <circle class="circle-bg" cx="18" cy="18" r="15.9155" fill="none" stroke="#eee" stroke-width="3" />
-            <circle class="circle" cx="18" cy="18" r="15.9155" fill="none" stroke="#FF6B6B" stroke-width="3" :stroke-dasharray="animatedPie + ', 100'" />
-          </svg>
-          <span class="pie-label">{{ spendingPercent }}%</span>
-        </div>
-      </div> -->
-      <!-- (2) 지출 비율 카드 -->
       <div class="section-card left-card-2 grid-2">
         <label class="section-title">지출 비율</label>
-        <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다🪄</p>
+        <p>입력한 이번 달 지출 목표 대비 현재 지출 상태 비율 입니다</p>
         <div class="pie-chart">
           <svg width="150" height="150" viewBox="0 0 36 36">
             <circle class="circle-bg" cx="18" cy="18" r="15.9155" fill="none" stroke="#eee" stroke-width="3" />
@@ -80,36 +68,21 @@
         </div>
       </div>
 
-
-      <!-- (3) 비교 정보 카드 -->
-      <!-- <div class="section-card left-card-3 grid-2">
-        <div class="info-block">
-          <label class="section-title">비슷한 나이대의 지출</label>
-          <button class="compare-button">확인하기</button>
-        </div>
-        <div class="info-block">
-          <label class="section-title">비슷한 월급 대비 지출</label>
-          <div class="ranking-circle">
-            상위<br />
-            <strong>{{ spendingRank }}%</strong>
-          </div>
-        </div>
-      </div> -->
-
       <!-- 오른쪽: 누적 성과 + 랭킹 -->
       <div class="right-card">
         <!-- 별 아이콘 -->
         <div class="ranking-header">⭐ 챌린지 순위표 ⭐</div>
         <ul class="ranking-list">
-          <!-- <li v-for="user in challengeRanking" :key="user.id">
-            {{ user.name }} - {{ user.savedPercent }}%
-          </li> -->
-          <!-- <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
-            <span>{{ index + 1 }}위 - </span>{{ user.name }} - {{ user.savedPercent }}%
-          </li> -->
-          <li v-for="(user, index) in rankedChallengeRanking" :key="user.id">
-            <span>{{ user.name }}</span>
-            <span class="percent">{{ user.savedPercent }}%</span>
+          <li
+            v-for="(user, index) in rankedChallengeRanking"
+            :key="user.id"
+            :class="{ 'my-rank': user.userId === userId }"
+          >
+            <span>{{ index + 1 }}등 - {{ user.nickname }}</span>
+            <span class="user-stat">
+              <strong>{{ user.successCount }}회 성공</strong>
+              <small class="streak">(최대 {{ user.maxStreak }}일 연속)</small>
+            </span>
           </li>
         </ul>
         <br>
@@ -143,6 +116,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import AppLayout from '@/components/AppLayout.vue'
 import { useUserStore } from '@/stores/userStore'
 
@@ -210,12 +184,21 @@ const checkChallengeStatus = async () => {
   const history = historyRes[0]
 
   if (currentSpending.value > spendingGoal.value) {
-    alert('💸 이번달 지출이 목표를 초과했어요! 챌린지 실패 😢')
+    Swal.fire({
+      icon: 'error',
+      title: '챌린지 실패!',
+      text: '💸 이번달 지출이 목표를 초과했어요! 챌린지 실패 😢'
+    })
 
     // 실패 → streak 초기화
     currentStreak.value = 0
   } else {
-    alert('🎉 이번달 챌린지를 성공했어요! 축하합니다 🥳')
+    Swal.fire({
+      icon: 'success',
+      title: '챌린지 성공!',
+      text: '🎉 이번달 챌린지를 성공했어요! 축하합니다 🥳'
+    })
+
 
     // 성공 처리
     await axios.post('/api/challengeSuccess', {
@@ -263,6 +246,7 @@ async function submitGoal() {
       // 최초 참여 시 challengeHistory 생성
       await axios.post(`/api/challengeHistory`, {
         userId,
+        nickname,
         successCount: 0,
         maxStreak: 0,
         participationCount: 1
@@ -309,40 +293,28 @@ async function fetchUserStats() {
   }
 }
 
-// 챌린지 순위표 불러오기
-// async function fetchChallengeRanking() {
-//   try {
-//     const { data } = await axios.get('/api/users')
-//     const ranked = data
-//       .map(user => ({
-//         id: user.id,
-//         name: user.name,
-//         savedPercent: ((user.challengeSuccessCount || 0) / (user.challengeParticipation || 1) * 100).toFixed(1)
-//       }))
-//       .sort((a, b) => b.savedPercent - a.savedPercent)
-
-//     challengeRanking.value = ranked
-//   } catch (err) {
-//     console.error('순위 불러오기 실패:', err)
-//   }
-// }
-
 // 챌린지 순위표 계산
 const rankedChallengeRanking = computed(() => {
-  return challengeRanking.value
-    .map(user => ({
-      id: user.id,
-      name: user.name,
-      savedPercent: ((user.challengeSuccessCount || 0) / (user.challengeParticipation || 1) * 100).toFixed(1)
-    }))
-    .sort((a, b) => b.savedPercent - a.savedPercent)
+  const ranked = [...challengeRanking.value]
+    .sort((a, b) => {
+      if (b.successCount !== a.successCount) {
+        return b.successCount - a.successCount
+      }
+      if (b.maxStreak !== a.maxStreak) {
+        return b.maxStreak - a.maxStreak
+      }
+      return 0 // 같으면 동일한 순위
+    })
+    .slice(0, 3) // 상위 3명만
+  console.log("rankedChallengeRanking: ", rankedChallengeRanking)
+  return ranked
 })
 
 
 // 챌린지 순위표 불러오기
 async function fetchChallengeRanking() {
   try {
-    const { data } = await axios.get('/api/users')
+    const { data } = await axios.get('/api/challengeHistory')
     challengeRanking.value = data
   } catch (err) {
     console.error('순위 불러오기 실패:', err)
@@ -399,17 +371,20 @@ onMounted(async () => {
   isGoalLoading.value = true
   await fetchGoal()
   await fetchTotalSpending()
-  await calculateDaysLeft()
-  await fetchUserStats()
-  // const { data } = await axios.get(/api/challengeAmount?userId=${userId})
-  // if (data.length > 0) {
-  //   spendingGoal.value = data[0].amount
-  //   startDate.value = data[0].date
-  //   calculateDaysLeft()
-  // }
   await fetchChallengeRanking()
-  await checkChallengeStatus()
+  await fetchUserStats()
+  // await checkChallengeStatus()
+  calculateDaysLeft()
   isGoalLoading.value = false
+
+  // ✅ 목표 초과 시 알림
+  if (goalExists.value && currentSpending.value > spendingGoal.value) {
+    Swal.fire({
+      icon: 'warning',
+      title: '목표 초과!',
+      text: 'FLEX 해버리셨네요.. 다음 챌린지에 다시 도전해봅시다! 💸'
+    })
+  }
 })
 </script>
 
@@ -424,15 +399,6 @@ onMounted(async () => {
 }
 
 /* 그리드 구성 */
-/* .challenge-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: repeat(3, 220px);
-  gap: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-} */
 
 .challenge-grid {
   display: grid;
@@ -595,28 +561,6 @@ onMounted(async () => {
 }
 
 /* progress 컨테이너 부분 */
-/* .progress-container {
-  background: #eee;
-  height: 40px;
-  border-radius: 7px;
-  overflow: hidden;
-  margin-bottom: 8px;
-  position: relative;
-}
-.progress-bar {
-  height: 60px;
-  background-color: #FF6B6B;
-  width: 0%;
-  transition: width 0.5s ease;
-}
-.progress-text {
-  font-size: 16px;
-  color: #ffffff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-} */
 .progress-container {
   position: relative;
   margin-bottom: 10px;
@@ -634,10 +578,7 @@ onMounted(async () => {
   border-radius: 10px;
   transition: width 1s ease-in-out;
 }
-/* .progress-text {
-  margin-top: 5px;
-  font-size: 14px;
-} */
+
 .progress-text {
   font-size: 16px;
   color: #ffffff;
@@ -751,7 +692,9 @@ onMounted(async () => {
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  overflow: visible;
+  padding-bottom: 2px; /* 아래쪽 공간 확보 */
+  text-align: center;
 }
 
 .ranking-list li {
@@ -760,6 +703,7 @@ onMounted(async () => {
   padding: 12px 20px;
   border-bottom: 1px solid #f0f0f0;
   font-size: 16px;
+  align-items: center;
 }
 
 .ranking-list li:last-child {
@@ -783,9 +727,62 @@ onMounted(async () => {
   color: #444;
 }
 
-.ranking-list li .percent {
+/* .ranking-list li .percent {
   color: #FF6B6B;
   font-weight: bold;
+} */
+
+.user-stat {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #666; /* 너무 진하지 않게 */
 }
 
+.user-stat strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.user-stat .streak {
+  font-size: 12px;
+  color: #999;
+}
+
+
+.my-rank {
+  border: 2px solid rgb(255, 142, 142);
+  animation: blink 1s infinite;
+  padding: 5px;
+}
+
+.ranking-list li.my-rank {
+  /* background-color: rgba(255, 0, 0, 0.1); 빨간 강조 표시 */
+  border: 1px solid red;
+  border-radius: 8px;
+  margin: 2px 0;
+  z-index: 2;
+  position: relative;
+  
+}
+@keyframes blink {
+  0% { box-shadow: 0 0 5px red; }
+  50% { box-shadow: 0 0 10px red; }
+  100% { box-shadow: 0 0 5px red; }
+}
+
+/* 반응형 디자인 추가 */
+@media screen and (max-width: 768px) {
+  .challenge-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .section-card,
+  .right-card {
+    width: 100% !important;
+    margin: 0 auto;
+  }
+}
 </style>
