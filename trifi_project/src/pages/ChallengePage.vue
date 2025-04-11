@@ -382,7 +382,7 @@ onMounted(async () => {
     Swal.fire({
       icon: 'warning',
       title: '목표 초과!',
-      text: '목표 금액보다 플렉스 해버리셨네요.. 다음 챌린지에 다시 도전해봅시다! 💸'
+      text: 'FLEX 해버리셨네요.. 다음 챌린지에 다시 도전해봅시다! 💸'
     })
   }
 })
