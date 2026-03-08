@@ -38,4 +38,4 @@ Vue.js 와 bootstrap5 를 활용하여 지출과 수입을 관리하는 가계�
 <br>
 
 ## 기술 스택
-Vue.js
+Vue.js, Bootstrap5
